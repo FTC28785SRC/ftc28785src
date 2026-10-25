@@ -7,103 +7,103 @@
       , drag = null;
     var library = [{
         id: 'opening',
-        name: 'Opening volley',
+        name: 'Đợt bắn mở màn',
         quantity: 4,
-        note: 'Leave the wall and shoot your four preloaded pollen.',
+        note: 'Rời tường và bắn bốn quả POLLEN đã nạp sẵn.',
         steps: ['leave', 'hivePollen']
     }, {
         id: 'ground',
-        name: 'Ground-to-hive cycle',
-        note: 'Collect available floor pollen, travel to the hive, then shoot.',
+        name: 'Chu kỳ từ sàn lên HIVE',
+        note: 'Thu thập POLLEN trên sàn, di chuyển đến HIVE rồi bắn.',
         steps: ['collectPollenGround', 'hivePollen']
     }, {
         id: 'spill',
-        name: 'Recycle hive spills',
-        note: 'Collect settled pollen from a tipped hive and shoot it back. Needs available spills.',
+        name: 'Thu hồi bóng rơi từ HIVE',
+        note: 'Thu thập POLLEN đã rơi và ổn định sau khi HIVE nghiêng, rồi bắn lại. Cần có bóng rơi để thu thập.',
         steps: ['collectPollenGround', 'hivePollen'],
         source: 'spill'
     }, {
         id: 'flowerHive',
-        name: 'Flower-to-hive cycle',
-        note: 'Take accessible pollen from the chosen flower bottom, then shoot into the hive.',
+        name: 'Chu kỳ từ FLOWER lên HIVE',
+        note: 'Lấy POLLEN có thể tiếp cận ở đáy FLOWER đã chọn rồi bắn vào HIVE.',
         steps: ['collectPollenFlower', 'hivePollen']
     }, {
         id: 'nectarHive',
-        name: 'Nectar-to-hive cycle',
-        note: 'Collect released nectar of your alliance and shoot. Needs available nectar.',
+        name: 'Chu kỳ NECTAR lên HIVE',
+        note: 'Thu thập NECTAR đã được giải phóng của liên minh bạn rồi bắn. Cần có NECTAR.',
         steps: ['collectNectar', 'hiveNectar']
     }, {
         id: 'claim',
-        name: 'Claim a flower',
-        note: 'Collect one available alliance nectar and place it in the chosen flower. Last minute only.',
+        name: 'Giành quyền sở hữu FLOWER',
+        note: 'Thu thập một NECTAR sẵn có của liên minh và đặt vào FLOWER đã chọn. Chỉ thực hiện trong phút cuối.',
         steps: ['collectNectar', 'flowerNectar'],
         quantity: 1
     }, {
         id: 'fill',
-        name: 'Fill a flower with pollen',
-        note: 'Collect floor pollen and fill the chosen flower. Scoring depends on ownership.',
+        name: 'Đổ POLLEN vào FLOWER',
+        note: 'Thu thập POLLEN trên sàn và đổ vào FLOWER đã chọn. Điểm số phụ thuộc vào quyền sở hữu.',
         steps: ['collectPollenGround', 'flowerPollen']
     }, {
         id: 'disrupt',
-        name: 'Score, disrupt, retreat',
-        note: 'Collect pollen, shoot, then attempt a brief push while an opponent shoots. TELEOP only; the attempt may be skipped.',
+        name: 'Ghi điểm, gây gián đoạn, rút lui',
+        note: 'Thu thập POLLEN, bắn rồi thử đẩy nhẹ khi đối thủ đang bắn. Chỉ trong TELEOP; hành động có thể bị bỏ qua.',
         steps: ['collectPollenGround', 'hivePollen', 'defendShooter']
     }, {
         id: 'autoPark',
-        name: 'Finish AUTO parked',
-        note: 'Put this after your AUTO cycles. Travel time still counts.',
+        name: 'Kết thúc TỰ ĐỘNG bằng cách đỗ',
+        note: 'Đặt sau các chu kỳ TỰ ĐỘNG. Thời gian di chuyển vẫn được tính.',
         steps: ['parkAuto']
     }, {
         id: 'park',
-        name: 'Finish the match parked',
-        note: 'Put this at the end of the last driver minute.',
+        name: 'Kết thúc trận bằng cách đỗ',
+        note: 'Đặt ở cuối phút TELEOP cuối cùng.',
         steps: ['parkTeleop'],
         last: true
     }];
     library.forEach(b => {
-        b.category = ['opening', 'autoPark', 'park'].includes(b.id) ? 'Opening & finish' : ['claim', 'fill'].includes(b.id) ? 'Flower control' : b.id === 'disrupt' ? 'Defense' : 'Hive cycles';
+        b.category = ['opening', 'autoPark', 'park'].includes(b.id) ? 'Mở đầu & kết thúc' : ['claim', 'fill'].includes(b.id) ? 'Kiểm soát FLOWER' : b.id === 'disrupt' ? 'Phòng thủ' : 'Chu kỳ HIVE';
     }
     );
     library.push({
         id: 'heldPollen',
-        category: 'Opening & finish',
-        name: 'Shoot held pollen',
-        note: 'Shoot pollen already carried. No collection; useful after a partial cycle.',
+        category: 'Mở đầu & kết thúc',
+        name: 'Bắn POLLEN đang giữ',
+        note: 'Bắn POLLEN robot đang mang. Không cần thu thập; hữu ích sau một chu kỳ chưa hoàn tất.',
         steps: ['hivePollen']
     }, {
         id: 'spillNectar',
-        category: 'Recovery & supply',
-        name: 'Recover spilled nectar',
-        note: 'Collect your alliance nectar from settled hive spills and shoot it back.',
+        category: 'Thu hồi & tiếp tế',
+        name: 'Thu hồi NECTAR bị rơi',
+        note: 'Thu thập NECTAR của liên minh đã rơi và ổn định sau khi HIVE nghiêng, rồi bắn lại.',
         steps: ['collectNectar', 'hiveNectar'],
         source: 'spill'
     }, {
         id: 'loadingHive',
-        category: 'Recovery & supply',
-        name: 'Loading-zone nectar cycle',
-        note: 'Collect released nectar from the loading zone and shoot at the hive.',
+        category: 'Thu hồi & tiếp tế',
+        name: 'Chu kỳ NECTAR từ KHU NẠP',
+        note: 'Thu thập NECTAR đã được giải phóng ở KHU NẠP rồi bắn vào HIVE.',
         steps: ['collectNectar', 'hiveNectar'],
         source: 'loading'
     }, {
         id: 'spillFlower',
-        category: 'Recovery & supply',
-        name: 'Send spilled pollen to a flower',
-        note: 'Recover settled hive pollen and place it in your selected flower.',
+        category: 'Thu hồi & tiếp tế',
+        name: 'Đưa POLLEN rơi vào FLOWER',
+        note: 'Thu hồi POLLEN từ HIVE đã nghiêng và đặt vào FLOWER đã chọn.',
         steps: ['collectPollenGround', 'flowerPollen'],
         source: 'spill'
     }, {
         id: 'spillClaim',
-        category: 'Recovery & supply',
-        name: 'Claim with recovered nectar',
-        note: 'Use one settled alliance nectar from a hive spill to claim the chosen flower. Last minute only.',
+        category: 'Thu hồi & tiếp tế',
+        name: 'Giành FLOWER bằng NECTAR thu hồi',
+        note: 'Dùng một NECTAR của liên minh đã rơi từ HIVE để giành FLOWER đã chọn. Chỉ trong phút cuối.',
         steps: ['collectNectar', 'flowerNectar'],
         source: 'spill',
         quantity: 1
     }, {
         id: 'claimFill',
-        category: 'Flower control',
-        name: 'Claim, then fill',
-        note: 'Place one alliance nectar, then collect floor pollen and fill that flower. Last minute only; ownership may change later.',
+        category: 'Kiểm soát FLOWER',
+        name: 'Giành quyền sở hữu rồi đổ đầy',
+        note: 'Đặt một NECTAR của liên minh, sau đó thu thập POLLEN trên sàn và đổ vào FLOWER đó. Chỉ trong phút cuối; quyền sở hữu có thể thay đổi.',
         steps: [{
             type: 'collectNectar',
             quantity: 1
@@ -113,9 +113,9 @@
         }, 'collectPollenGround', 'flowerPollen']
     }, {
         id: 'fillClaim',
-        category: 'Flower control',
-        name: 'Fill, then secure ownership',
-        note: 'Place floor pollen first, then put one alliance nectar on top. Last minute only.',
+        category: 'Kiểm soát FLOWER',
+        name: 'Đổ đầy rồi xác lập quyền sở hữu',
+        note: 'Đổ POLLEN trên sàn vào trước, sau đó đặt NECTAR của liên minh lên trên. Chỉ trong phút cuối.',
         steps: ['collectPollenGround', 'flowerPollen', {
             type: 'collectNectar',
             quantity: 1
@@ -125,9 +125,9 @@
         }]
     }, {
         id: 'twoClaims',
-        category: 'Flower control',
-        name: 'Claim two neighboring flowers',
-        note: 'Collect and place one nectar in the chosen flower, then repeat at the next numbered flower. Last minute only.',
+        category: 'Kiểm soát FLOWER',
+        name: 'Giành hai FLOWER liền kề',
+        note: 'Thu thập và đặt một NECTAR vào FLOWER đã chọn, rồi lặp lại với FLOWER kế tiếp theo số. Chỉ trong phút cuối.',
         steps: [{
             type: 'collectNectar',
             quantity: 1
@@ -144,30 +144,30 @@
         }]
     }, {
         id: 'flowerTransfer',
-        category: 'Flower control',
-        name: 'Transfer flower pollen',
-        note: 'Take accessible pollen from the selected flower bottom and fill the next numbered flower. Check ownership before using it.',
+        category: 'Kiểm soát FLOWER',
+        name: 'Chuyển POLLEN giữa các FLOWER',
+        note: 'Lấy POLLEN có thể tiếp cận ở đáy FLOWER đã chọn và đổ vào FLOWER kế tiếp theo số. Kiểm tra quyền sở hữu trước khi thực hiện.',
         steps: ['collectPollenFlower', {
             type: 'flowerPollen',
             nextFlower: true
         }]
     }, {
         id: 'alternating',
-        category: 'Mixed scoring',
-        name: 'Alternate pollen and nectar hive cycles',
-        note: 'Run a floor-pollen cycle, then a released-nectar cycle. Resource availability still limits both.',
+        category: 'Kết hợp ghi điểm',
+        name: 'Luân phiên POLLEN và NECTAR vào HIVE',
+        note: 'Thực hiện chu kỳ POLLEN trên sàn, sau đó là chu kỳ NECTAR đã giải phóng. Nguồn tài nguyên sẵn có vẫn giới hạn cả hai.',
         steps: ['collectPollenGround', 'hivePollen', 'collectNectar', 'hiveNectar']
     }, {
         id: 'hiveFlower',
-        category: 'Mixed scoring',
-        name: 'Hive first, then flower',
-        note: 'Shoot a floor-pollen batch at the hive, then collect another batch for the selected flower.',
+        category: 'Kết hợp ghi điểm',
+        name: 'Bắn vào HIVE rồi đến FLOWER',
+        note: 'Bắn một lô POLLEN trên sàn vào HIVE, sau đó thu thập lô khác để đưa vào FLOWER đã chọn.',
         steps: ['collectPollenGround', 'hivePollen', 'collectPollenGround', 'flowerPollen']
     }, {
         id: 'flowerHiveClaim',
-        category: 'Mixed scoring',
-        name: 'Empty flower, score hive, claim flower',
-        note: 'Shoot accessible flower pollen into the hive, then place one released nectar in that flower. Last minute only.',
+        category: 'Kết hợp ghi điểm',
+        name: 'Lấy POLLEN từ FLOWER, ghi điểm HIVE rồi giành FLOWER',
+        note: 'Bắn POLLEN có thể tiếp cận từ FLOWER vào HIVE, sau đó đặt một NECTAR đã giải phóng vào FLOWER đó. Chỉ trong phút cuối.',
         steps: ['collectPollenFlower', 'hivePollen', {
             type: 'collectNectar',
             quantity: 1
@@ -177,9 +177,9 @@
         }]
     }, {
         id: 'lightBlock',
-        category: 'Defense',
-        name: 'Score, briefly block a route',
-        note: 'Complete a pollen hive cycle, hold a transit spot for about one second, then retreat. TELEOP only.',
+        category: 'Phòng thủ',
+        name: 'Ghi điểm, chặn lối trong thời gian ngắn',
+        note: 'Hoàn tất một chu kỳ POLLEN vào HIVE, chặn một vị trí di chuyển khoảng một giây rồi rút lui. Chỉ trong TELEOP.',
         steps: ['collectPollenGround', 'hivePollen', {
             type: 'defendLane',
             defenseLevel: 'low',
@@ -187,9 +187,9 @@
         }]
     }, {
         id: 'strongBlock',
-        category: 'Defense',
-        name: 'Score, contest a route',
-        note: 'Complete a pollen hive cycle, hold a transit spot for at most two seconds, then retreat. TELEOP only.',
+        category: 'Phòng thủ',
+        name: 'Ghi điểm, tranh chấp lối di chuyển',
+        note: 'Hoàn tất một chu kỳ POLLEN vào HIVE, chặn một vị trí di chuyển tối đa hai giây rồi rút lui. Chỉ trong TELEOP.',
         steps: ['collectPollenGround', 'hivePollen', {
             type: 'defendLane',
             defenseLevel: 'high',
@@ -197,9 +197,9 @@
         }]
     }, {
         id: 'disruptRecover',
-        category: 'Defense',
-        name: 'Disrupt, then resume scoring',
-        note: 'Shoot a collected pollen batch, attempt a brief shooting disruption, retreat, then run another pollen cycle. TELEOP only.',
+        category: 'Phòng thủ',
+        name: 'Gây gián đoạn rồi tiếp tục ghi điểm',
+        note: 'Bắn một lô POLLEN đã thu thập, thử gây gián đoạn ngắn khi đối thủ bắn, rút lui rồi thực hiện chu kỳ POLLEN tiếp theo. Chỉ trong TELEOP.',
         steps: ['collectPollenGround', 'hivePollen', 'defendShooter', 'collectPollenGround', 'hivePollen']
     });
     function stepType(step) {
@@ -215,7 +215,7 @@
     function expand(id, options) {
         var b = library.find(b => b.id === id);
         if (!b)
-            throw Error('Unknown block');
+            throw Error('Không tìm thấy khối hành động.');
         return b.steps.map(step => {
             var type = stepType(step)
               , a = typeof step === 'string' ? {
@@ -269,7 +269,7 @@
     var host = document.createElement('section');
     host.className = 'recipe-builder';
     host.setAttribute('aria-labelledby', 'recipeTitle');
-    host.innerHTML = '<h2 id="recipeTitle">Build a strategy recipe</h2><p>Choose the alliance, robot and phase above. Add complete blocks below, arrange their order, then test the match. Each robot has its own recipe.</p><div class="recipe-options"><label>Block family <select id="recipeCategory"><option value="all">All block types</option>' + ['Opening & finish', 'Hive cycles', 'Recovery & supply', 'Flower control', 'Mixed scoring', 'Defense'].map(c => '<option>' + c + '</option>').join('') + ' </select></label><label>Cycles to add <select id="recipeRepeat">' + [1, 2, 3, 4, 5, 6].map(n => '<option>' + n + '</option>').join('') + '</select></label><label>Balls per cycle <select id="recipeQuantity">' + [4, 3, 2, 1].map(n => '<option>' + n + '</option>').join('') + '</select></label><label>Flower target <select id="recipeFlower">' + [1, 2, 3, 4].map(n => '<option value="' + n + '">Flower ' + n + '</option>').join('') + '</select></label></div><p class="fine">Travel is included automatically. Blocks request up to the selected ball count; resources and the four-ball capacity still apply. Claim a flower uses one nectar. Opening and parking blocks are added once.</p><div class="recipe-workspace"><section class="recipe-shelf" aria-labelledby="recipeShelfTitle"><h3 id="recipeShelfTitle">Reusable blocks</h3><p id="recipeCatalogHint" class="fine"></p><div class="recipe-library" id="recipeLibrary" tabindex="0" aria-label="Reusable block library"></div></section><section class="recipe-canvas" aria-labelledby="recipeContext"><h3 id="recipeContext"></h3><div class="recipe-tools"><button type="button" class="btn" id="recipeClearRobot">Clear robot recipe</button></div><p class="fine">Clear robot recipe removes this robot&#39;s AUTO and both TELEOP phases. Uploaded files stay available.</p><p>Drag a block here to append it, or drop it on a recipe block to insert before it. Use Move up and Move down on a phone or keyboard.</p><ol id="recipeList" class="recipe-list"></ol><p id="recipeFeedback" role="status"></p><button class="btn btn-primary" id="recipeTest">Test full match</button> <button class="btn" id="recipeDetails" aria-expanded="false">Show individual actions</button></section></div>';
+    host.innerHTML = '<h2 id="recipeTitle">Xây dựng công thức chiến thuật</h2><p>Chọn liên minh, robot và giai đoạn ở phía trên. Thêm các khối hành động bên dưới, sắp xếp thứ tự rồi chạy thử trận đấu. Mỗi robot có công thức riêng.</p><div class="recipe-options"><label>Nhóm hành động <select id="recipeCategory"><option value="all">Tất cả nhóm</option>' + ['Mở đầu & kết thúc', 'Chu kỳ HIVE', 'Thu hồi & tiếp tế', 'Kiểm soát FLOWER', 'Kết hợp ghi điểm', 'Phòng thủ'].map(c => '<option>' + c + '</option>').join('') + ' </select></label><label>Số chu kỳ cần thêm <select id="recipeRepeat">' + [1, 2, 3, 4, 5, 6].map(n => '<option>' + n + '</option>').join('') + '</select></label><label>Số bóng mỗi chu kỳ <select id="recipeQuantity">' + [4, 3, 2, 1].map(n => '<option>' + n + '</option>').join('') + '</select></label><label>FLOWER mục tiêu <select id="recipeFlower">' + [1, 2, 3, 4].map(n => '<option value="' + n + '">FLOWER ' + n + '</option>').join('') + '</select></label></div><p class="fine">Thời gian di chuyển được tự động tính. Khối sử dụng tối đa số bóng đã chọn; nguồn tài nguyên và giới hạn bốn bóng vẫn được áp dụng. Giành quyền sở hữu FLOWER cần một NECTAR. Khối mở đầu và đỗ chỉ được thêm một lần.</p><div class="recipe-workspace"><section class="recipe-shelf" aria-labelledby="recipeShelfTitle"><h3 id="recipeShelfTitle">Khối có thể tái sử dụng</h3><p id="recipeCatalogHint" class="fine"></p><div class="recipe-library" id="recipeLibrary" tabindex="0" aria-label="Thư viện khối hành động"></div></section><section class="recipe-canvas" aria-labelledby="recipeContext"><h3 id="recipeContext"></h3><div class="recipe-tools"><button type="button" class="btn" id="recipeClearRobot">Xóa công thức robot</button></div><p class="fine">Xóa toàn bộ công thức TỰ ĐỘNG và hai giai đoạn TELEOP của robot này. Các tệp đã tải lên vẫn được giữ.</p><p>Kéo khối vào đây để thêm vào cuối, hoặc thả lên một khối trong công thức để chèn vào trước. Trên điện thoại hoặc bằng bàn phím, hãy dùng nút di chuyển lên/xuống.</p><ol id="recipeList" class="recipe-list"></ol><p id="recipeFeedback" role="status"></p><button class="btn btn-primary" id="recipeTest">Chạy thử cả trận</button> <button class="btn" id="recipeDetails" aria-expanded="false">Hiển thị từng hành động</button></section></div>';
     $('.builder-grid').before(host);
     var detailed = $('.builder-grid');
     detailed.id = 'recipeActionDetails';
@@ -305,7 +305,7 @@
           , at = before == null ? actions().length : list.slice(0, before).reduce( (n, g) => n + g.actions.length, 0)
           , next = actions().slice();
         next.splice(at, 0, ...added);
-        commit(next, 'Added ' + count + ' ' + b.name + ' block' + (count === 1 ? '' : 's') + '. Review warnings before trusting the score.');
+        commit(next, 'Đã thêm ' + count + ' khối "' + b.name + '". Hãy xem lại cảnh báo trước khi dựa vào điểm số.');
         $('#recipeLibrary [data-recipe="' + id + '"]')?.focus({
             preventScroll: true
         });
@@ -336,15 +336,15 @@
                 target--;
             list.splice(target, 0, g);
         }
-        commit(list.flatMap(g => g.actions), 'Recipe updated. All four robot plans are re-simulated.');
+        commit(list.flatMap(g => g.actions), 'Đã cập nhật công thức. Cả bốn kế hoạch robot đã được mô phỏng lại.');
     }
     function render() {
         $('#recipeFeedback').textContent = '';
         var zone = $('#paletteSegment').value
           , gs = groups(actions());
-        $('#recipeContext').textContent = root.BBUI._plan.alliance.toUpperCase() + ' robot ' + (Number($('#paletteRobot').value) + 1) + ' / ' + $('#paletteSegment').selectedOptions[0].text + ' / ' + gs.length + ' blocks';
+        $('#recipeContext').textContent = 'Liên minh ' + (root.BBUI._plan.alliance === 'red' ? 'ĐỎ' : 'XANH') + ' · Robot ' + (Number($('#paletteRobot').value) + 1) + ' / ' + $('#paletteSegment').selectedOptions[0].text + ' / ' + gs.length + ' khối';
         var choices = library.filter(b => available(b, zone) && ($('#recipeCategory').value === 'all' || b.category === $('#recipeCategory').value));
-        $('#recipeCatalogHint').textContent = choices.length + ' blocks available for this phase and family. Scroll the library for more choices; click a block to add it.';
+        $('#recipeCatalogHint').textContent = choices.length + ' khối phù hợp với giai đoạn và nhóm đã chọn. Cuộn thư viện để xem thêm; nhấn vào khối để thêm.';
         var lib = $('#recipeLibrary');
         lib.replaceChildren();
         choices.forEach(b => {
@@ -374,22 +374,22 @@
             title.textContent = (i + 1) + '. ' + g.name;
             li.append(title);
             var info = document.createElement('p');
-            info.textContent = g.actions.map(a => R.ACTIONS[a.type].label + (a.quantity ? ' (up to ' + a.quantity + ')' : '') + (a.flower ? ' / flower ' + a.flower : '') + (a.source === 'spill' ? ' / hive spills' : a.source === 'loading' ? ' / loading zone' : '') + (a.defenseLevel ? ' / ' + a.defenseLevel + ' defense' : '')).join(' \u2192 ');
+            info.textContent = g.actions.map(a => R.ACTIONS[a.type].label + (a.quantity ? ' (tối đa ' + a.quantity + ')' : '') + (a.flower ? ' / FLOWER ' + a.flower : '') + (a.source === 'spill' ? ' / bóng rơi từ HIVE' : a.source === 'loading' ? ' / KHU NẠP' : '') + (a.defenseLevel ? ' / phòng thủ ' + (a.defenseLevel === 'low' ? 'nhẹ' : 'mạnh') : '')).join(' \u2192 ');
             li.append(info);
             var flags = root.BBUI.recipeFlags || {}
               , issues = g.actions.filter(a => flags[a.uid] && (flags[a.uid].blocked || flags[a.uid].illegal || flags[a.uid].overrun || flags[a.uid].ignored));
             if (issues.length) {
                 var warning = document.createElement('p');
                 warning.className = 'recipe-warning';
-                warning.textContent = issues.length + ' flagged action(s): ' + Array.from(new Set(issues.map(a => flags[a.uid].message || 'Check timing, inventory or rules in individual actions.'))).join(' ');
+                warning.textContent = issues.length + ' hành động có cảnh báo: ' + Array.from(new Set(issues.map(a => flags[a.uid].message || 'Hãy kiểm tra thời gian, vật phẩm đang giữ hoặc luật trong phần hành động chi tiết.'))).join(' ');
                 li.append(warning);
             }
             var timing = document.createElement('p');
-            timing.textContent = 'Simulated block time: ' + g.actions.reduce( (sum, a) => sum + (flags[a.uid]?.duration || 0), 0).toFixed(1) + ' s (including modeled travel and waits).';
+            timing.textContent = 'Thời gian mô phỏng khối: ' + g.actions.reduce( (sum, a) => sum + (flags[a.uid]?.duration || 0), 0).toFixed(1) + ' giây (đã tính thời gian di chuyển và chờ).';
             li.append(timing);
             var tools = document.createElement('div');
             tools.className = 'recipe-tools';
-            [['up', 'Move up'], ['down', 'Move down'], ['copy', 'Repeat block'], ['delete', 'Remove']].forEach( ([act,label]) => {
+            [['up', 'Di chuyển lên'], ['down', 'Di chuyển xuống'], ['copy', 'Lặp lại khối'], ['delete', 'Xóa']].forEach( ([act,label]) => {
                 var b = document.createElement('button');
                 b.type = 'button';
                 b.className = 'btn';
@@ -406,7 +406,7 @@
         if (!gs.length) {
             var empty = document.createElement('li');
             empty.className = 'recipe-empty';
-            empty.textContent = 'Your recipe starts here. Click or drag a block above.';
+            empty.textContent = 'Công thức của bạn sẽ bắt đầu ở đây. Nhấn hoặc kéo một khối vào từ thư viện phía trên.';
             ol.append(empty);
         }
     }
@@ -470,7 +470,7 @@
     );
     function clear(scope) {
         if (root.BBUI.clearRecipes(scope)) {
-            $('#recipeFeedback').textContent = scope === 'all' ? 'All four robot plans cleared. Add a block to start rebuilding.' : "This robot's full recipe is cleared. Add a block to start rebuilding.";
+            $('#recipeFeedback').textContent = scope === 'all' ? 'Đã xóa công thức của cả bốn robot. Thêm một khối để bắt đầu xây dựng lại.' : 'Đã xóa toàn bộ công thức của robot này. Thêm một khối để bắt đầu xây dựng lại.';
         } else
             $('#recipeFeedback').textContent = $('#status').textContent;
     }
@@ -478,7 +478,7 @@
     $('#recipeDetails').onclick = function() {
         detailed.hidden = !detailed.hidden;
         this.setAttribute('aria-expanded', String(!detailed.hidden));
-        this.textContent = detailed.hidden ? 'Show individual actions' : 'Hide individual actions';
+        this.textContent = detailed.hidden ? 'Hiển thị từng hành động' : 'Ẩn từng hành động';
     }
     ;
     $('#recipeTest').onclick = () => {

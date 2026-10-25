@@ -10,6 +10,29 @@
   var R = root.BBRules;
   var SIM = root.BBScoring;
   var FIELD = root.BBField;
+  var startAudio = new root.Audio(encodeURI('FIRST Tech Challenge FTC Match Timer (DECODE) - STRΛTOS.mp3'));
+  startAudio.preload = 'none';
+  function playStartAudio() {
+    startAudio.currentTime = 0;
+    try {
+      var playback = startAudio.play();
+      if (playback && typeof playback.catch === 'function') playback.catch(reportAudioError);
+    } catch (error) {
+      reportAudioError(error);
+    }
+  }
+  function stopStartAudio() {
+    startAudio.pause();
+    startAudio.currentTime = 0;
+  }
+  function reportAudioError(error) {
+    console.error('Không thể phát âm thanh bắt đầu trận FTC.', error);
+    var message = 'Không thể phát âm thanh bắt đầu trận. Hãy kiểm tra tệp âm thanh và thử lại.';
+    var status = [document.getElementById('dsStatus'), document.getElementById('status')].find(function (node) {
+      return node && node.getClientRects().length;
+    });
+    if (status) status.textContent = message;
+  }
 
   /* ---------------- plan state ---------------- */
   var uidSeq = 1;
@@ -619,6 +642,7 @@
 
   function startPlayback() {
     if (!result.events.length) { return; }
+    playStartAudio();
     play.running = true;
     $('#playBtn').textContent = '⏸ Tạm dừng';
     $('#playBtn').setAttribute('aria-label', 'Tạm dừng phát lại');
@@ -635,6 +659,7 @@
   function finishPlayback() {
     play.running = false;
     clearTimeout(play.timer);
+    stopStartAudio();
     FIELD.clearFx();
     $('#playBtn').textContent = '▶ Chạy kế hoạch';
     $('#playBtn').setAttribute('aria-label', 'Chạy kế hoạch');
@@ -651,6 +676,7 @@
     play.pausedMid=false;
     play.running = false;
     clearTimeout(play.timer);
+    stopStartAudio();
     play.idx = -1;
     var b = $('#playBtn');
     if (b) { b.textContent = '▶ Chạy kế hoạch'; b.setAttribute('aria-label', 'Chạy kế hoạch'); }
@@ -860,6 +886,7 @@
     play.pausedMid=false;
     play.running = false;
     clearTimeout(play.timer);
+    stopStartAudio();
     FIELD.clearFx();
     $('#playBtn').textContent = '▶ Chạy kế hoạch';
     $('#playBtn').setAttribute('aria-label', 'Chạy kế hoạch');
@@ -999,6 +1026,7 @@
         if(def.once==="teleop"&&plan.robots[ri].zones[zone==="teleopEarly"?"teleopLate":"teleopEarly"].some(x=>x.type===a.type)){say("Robot này đã có thành tích đó trong giai đoạn điều khiển còn lại.","warn");return false;}}}
     plan.robots[ri].zones[zone]=actions.map(a=>Object.assign({},a,{uid:a.uid||uid()}));refresh({});return true;
   }, get _plan() { return plan; }, get _plans() { return plans; }, _simulate: function () { return root.BBMatch.simulate(plans, simOptions()); } };
+  root.BBZStartAudio = { play: playStartAudio, stop: stopStartAudio };
 })(typeof window !== 'undefined' ? window : globalThis);
 /* Page controls: editor, driver station, gamepads and Build Bot. */
 (function () {
@@ -1008,6 +1036,8 @@ const $ = (id) => document.getElementById(id);
 const KEY = 'bbz-practice-sim-v1';
 const STEP = 1 / 120;
 const MAX_PROGRAMS = 30, MAX_CODE = 60000;
+const playStartAudio = () => window.BBZStartAudio.play();
+const stopStartAudio = () => window.BBZStartAudio.stop();
 
 const state = { robot: BBZ.defaultRobot(), programs: [], open: 0, auto: -1, tele: -1, speed: 1 };
 let world = null;
@@ -1272,8 +1302,8 @@ function runOpen() {
   if (matchOn || world.mode === 'over' || fresh) { endOpMode(); world.reset(); clearLog(); rebuildHw(); }
   matchOn = false;
   world.mode = fresh ? 'autotest' : 'practice';            /* an autonomous run on its own is scored as AUTO */
-  if (startOpMode(p)) { setStatus('Đang chạy "' + p.name + '"' + (fresh ? ' từ vị trí xuất phát' : '') + '. Nhấn Dừng khi bạn muốn kết thúc.'); addLog('info', 'Đã chạy ' + p.name + (fresh ? ' trên sân mới (luyện tập, không tính giờ).' : ' (luyện tập, không tính giờ).')); }
-  else { world.mode = 'idle'; setStatus('Chương trình gặp sự cố. Hãy kiểm tra thông báo bên dưới trình soạn thảo.'); }
+  if (startOpMode(p)) { playStartAudio(); setStatus('Đang chạy "' + p.name + '"' + (fresh ? ' từ vị trí xuất phát' : '') + '. Nhấn Dừng khi bạn muốn kết thúc.'); addLog('info', 'Đã chạy ' + p.name + (fresh ? ' trên sân mới (luyện tập, không tính giờ).' : ' (luyện tập, không tính giờ).')); }
+  else { stopStartAudio(); world.mode = 'idle'; setStatus('Chương trình gặp sự cố. Hãy kiểm tra thông báo bên dưới trình soạn thảo.'); }
 }
 const sfx = (name) => { try { if (BBZ.Sound) BBZ.Sound.play(name); } catch (e) { /* sound is optional */ } };
 let countTimer = 0;
@@ -1292,6 +1322,7 @@ function showCount(text) {
 }
 /* Competition-style start: the field resets, "3, 2, 1" counts down with beeps, then the charge call starts AUTO. */
 function runMatch() {
+  playStartAudio();
   endOpMode();
   world.reset(); clearLog(); rebuildHw();
   matchOn = false; world.mode = 'idle';
@@ -1327,7 +1358,7 @@ function beginMatch() {
     countTimer = 0;
     const ok = startOpMode(p);
     countTimer = keep;
-    if (!ok) { matchOn = false; world.mode = 'idle'; setStatus('Chương trình Tự động gặp sự cố. Hãy sửa rồi thử lại.'); return; }
+    if (!ok) { stopStartAudio(); matchOn = false; world.mode = 'idle'; setStatus('Chương trình Tự động gặp sự cố. Hãy sửa rồi thử lại.'); return; }
     setStatus('TỰ ĐỘNG: đang chạy "' + p.name + '".');
   } else setStatus('TỰ ĐỘNG: chưa chọn chương trình, robot sẽ chờ.');
 }
@@ -1343,6 +1374,7 @@ function onPhase() {
     else setStatus(p ? 'Chương trình TeleOp gặp sự cố. Đồng hồ trận đấu vẫn chạy.' : 'TELEOP: chưa chọn chương trình TeleOp.');
   } else if (world.mode === 'over') {
     endOpMode(); matchOn = false;
+    stopStartAudio();
     const s = world.score();
     sfx('buzzerLong');
     addLog('good', 'Trận đấu kết thúc. Điểm cuối: ' + s.total + ', số lần nghiêng HIVE: ' + s.tips + '.');
@@ -1351,6 +1383,7 @@ function onPhase() {
 }
 function stopAll() {
   const was = runner || matchOn || countTimer;
+  stopStartAudio();
   endOpMode();
   if (matchOn) { matchOn = false; addLog('info', 'Trận đấu đã dừng sớm.'); }
   endPractice();
@@ -1358,6 +1391,7 @@ function stopAll() {
   if (was) setStatus('Đã dừng. Sân giữ nguyên trạng thái; nhấn Đặt lại sân để bắt đầu mới.');
 }
 function resetField() {
+  stopStartAudio();
   endOpMode(); matchOn = false;
   world.reset(); clearLog(); rebuildHw();
   tele.pending = []; tele.shown = null; tele.dirty = true;
@@ -1371,13 +1405,15 @@ function simStep() {
       if (runner.step(world.time)) {
         const name = runProg ? runProg.name : 'Program';
         endOpMode();
+        stopStartAudio();
         if (endPractice()) setStatus('"' + name + '" đã chạy xong.' + (world.autoDone ? ' Xem điểm đã ghi trên bảng điểm.' : ''));
         addLog('info', name + ' đã chạy đến cuối mã.');
-      } else if (stopReq) { endOpMode(); endPractice(); setStatus('Chương trình yêu cầu dừng.'); }
+      } else if (stopReq) { endOpMode(); endPractice(); stopStartAudio(); setStatus('Chương trình yêu cầu dừng.'); }
     } catch (e) {
       const prog = runProg;
       endOpMode();
       endPractice();
+      stopStartAudio();
       showError(e, prog);
       setStatus('Chương trình đã dừng do có lỗi.');
     }

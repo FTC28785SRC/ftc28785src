@@ -2,7 +2,8 @@
     'use strict';
     var $ = s => document.querySelector(s)
       , demoTitle = ''
-      , strategies = null;
+      , strategies = null
+      , activeProcess = 'explore';
     function screen(name, focus) {
         if (!['watch', 'edit', 'scores', 'help'].includes(name))
             return;
@@ -70,30 +71,53 @@
         help.appendChild(reference);
         main.appendChild(help);
         help.appendChild($('.notes'));
-        var disclaimer = $('.unofficial-strip');
-        $('footer').prepend(disclaimer);
         var actions = $('#demoActions');
         actions.appendChild($('#demoBtn'));
         actions.appendChild($('#randomOpponentBtn'));
-        actions.insertAdjacentHTML('beforeend', '<button class="btn btn-ghost" data-screen="edit">Xây dựng chiến lược của riêng tôi →</button>');
+        actions.insertAdjacentHTML('beforeend', '<button class="btn btn-outline-glow welcome-build-cta" data-screen="edit">Xây dựng chiến lược của riêng tôi <span aria-hidden="true">→</span></button>');
+        $('#welcomeRunBtn').addEventListener('click', function() {
+            if ($('#playBtn').disabled)
+                return;
+            screen('watch', false);
+            $('#playBtn').click();
+        });
+        $('#playSpeed').addEventListener('change', updateDuration);
+        document.querySelectorAll('.process-card').forEach(function(card) {
+            card.addEventListener('click', function() {
+                var action = card.dataset.action;
+                if (action === 'demo') {
+                    activeProcess = 'explore';
+                    updateProcessCards();
+                    ($('#matchMode').value === 'opponent' ? $('#randomOpponentBtn') : $('#demoBtn')).click();
+                } else if (action === 'edit') {
+                    activeProcess = 'build';
+                    updateProcessCards();
+                    screen('edit', true);
+                } else if (action === 'run' && !$('#welcomeRunBtn').disabled) {
+                    activeProcess = 'compare';
+                    updateProcessCards();
+                    $('#welcomeRunBtn').click();
+                }
+            });
+        });
         $('#editPanel .builder-head').appendChild($('#clearBtn'));
         var theme = document.createElement('label');
         theme.className = 'theme-choice';
-        theme.innerHTML = 'Giao diện <select id="themeChoice"><option value="system">Hệ thống</option><option value="dark">Tối</option><option value="light">Sáng</option></select>';
+        theme.innerHTML = 'Giao diện <select id="themeChoice"><option value="system">Hệ thống</option><option value="dark" selected>Tối</option><option value="light">Sáng</option></select>';
         var headerActions = document.createElement('div');
         headerActions.className = 'header-actions';
         var contacts = document.createElement('nav');
         contacts.className = 'header-contacts';
-        contacts.setAttribute('aria-label', 'Liên hệ Digitron Dragons');
+        contacts.setAttribute('aria-label', 'Liên hệ Science Robotics Club');
         document.querySelectorAll('.team-contact-links a').forEach(function(source) {
-            var platform = source.classList.contains('contact-instagram') ? 'instagram' : source.classList.contains('contact-youtube') ? 'youtube' : 'email';
+            var platform = source.classList.contains('contact-instagram') ? 'instagram' : source.classList.contains('contact-facebook') ? 'facebook' : 'email';
             var link = source.cloneNode(true);
             link.className = 'header-contact contact-' + platform;
             link.querySelector('.contact-copy').remove();
             link.querySelector('.contact-arrow').remove();
             link.title = {
                 instagram: 'Instagram',
-                youtube: 'YouTube',
+                facebook: 'Facebook',
                 email: 'Email'
             }[platform] + ': ' + source.querySelector('.contact-handle').textContent;
             contacts.appendChild(link);
@@ -113,14 +137,65 @@
         });
         document.addEventListener('click', function(e) {
             var b = e.target.closest('[data-screen]');
-            if (b)
+            if (b) {
+                if (b.dataset.screen === 'edit') {
+                    activeProcess = 'build';
+                    updateProcessCards();
+                }
                 screen(b.dataset.screen, true);
+            }
+            if (e.target.closest('#playBtn') && !$('#playBtn').disabled) {
+                activeProcess = 'compare';
+                updateProcessCards();
+            }
         });
         screen('watch', false);
         $('.skip').href = '#editPanel';
         $('#showDefenseSpots').addEventListener('change', function() {
             root.BBField.showDefenseSpots(this.checked);
         });
+        updateDuration();
+        measureFps();
+    }
+    function updateProcessCards() {
+        document.querySelectorAll('.process-card').forEach(function(card) {
+            var active = card.dataset.processStep === activeProcess;
+            card.classList.toggle('is-active', active);
+            if (active)
+                card.setAttribute('aria-current', 'step');
+            else
+                card.removeAttribute('aria-current');
+            card.querySelector('.process-badge').textContent = active ? 'Đang hoạt động' : card.dataset.processStep === 'compare' ? ($('#welcomeRunBtn').disabled ? 'Sẵn sàng' : 'Có thể chạy') : 'Tiếp theo';
+        });
+    }
+    function updateDuration() {
+        var speed = Number($('#playSpeed').value) || 1;
+        var match = root.BBRules.MATCH;
+        var seconds = Math.round((match.autoSeconds + match.transitionSeconds + match.teleopSeconds) / speed);
+        $('#telemetryDuration').textContent = Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0') + ' · ' + speed + '×';
+    }
+    function measureFps() {
+        var frames = 0
+          , lastSample = 0;
+        document.addEventListener('visibilitychange', function() {
+            frames = 0;
+            lastSample = 0;
+            $('#telemetryFps').textContent = document.hidden ? '—' : 'Đang đo';
+        });
+        if (document.hidden)
+            $('#telemetryFps').textContent = '—';
+        function sample(now) {
+            frames += 1;
+            if (!lastSample)
+                lastSample = now;
+            if (now - lastSample >= 1000) {
+                $('#telemetryFps').textContent = document.hidden ? '—' : Math.round(frames * 1000 / (now - lastSample)) + ' FPS';
+                frames = 0;
+                lastSample = now;
+            }
+            requestAnimationFrame(sample);
+        }
+        requestAnimationFrame(sample);
     }
     function filter() {
         var robot = $('#paletteRobot').value
@@ -192,6 +267,13 @@
         ));
         filter();
         $('#stepCount').textContent = count ? '(' + count + ')' : '';
+        var progress = Math.min(count, 96);
+        $('#planProgressLabel').textContent = count + ' / 96 bước';
+        $('#planProgress').setAttribute('aria-valuenow', String(progress));
+        $('#planProgressFill').style.width = Math.min(progress / 96 * 100, 100) + '%';
+        $('#welcomeRunBtn').disabled = count === 0 || $('#playBtn').disabled;
+        activeProcess = count ? 'build' : 'explore';
+        updateProcessCards();
         var failures = Object.values(match.results).reduce( (n, r) => n + Object.values(r.flags).filter(f => f.blocked || f.illegal).length, 0);
         $('#demoSummary').textContent = count ? (demoTitle ? demoTitle + '. ' : 'Chiến thuật đã sẵn sàng. ') + count + ' bước. ' + (failures ? failures + ' bước có cảnh báo, cần xem lại trong mục Chỉnh sửa chiến thuật. ' : '') + 'Nhấn Chạy kế hoạch để xem mô phỏng hoặc mở Chỉnh sửa chiến thuật để thay đổi các bước.' : 'Chưa có bước nào. Hãy thử một trận mẫu hoặc tạo chu kỳ thu thập và ghi điểm đầu tiên.';
         $('#modeNote').textContent = practice ? 'Bạn điều khiển liên minh ' + (own === 'red' ? 'ĐỎ' : 'XANH') + ' ' + (mode === 'single' ? '· Robot ' + (+$('#singleRobot').value + 1) : '· Robot 1 và 2') + '. Các robot còn lại không tham gia chế độ luyện tập này.' : mode === 'opponent' ? 'Bạn điều khiển liên minh ' + (own === 'red' ? 'ĐỎ' : 'XANH') + '. Tạo đối thủ khác sẽ giữ nguyên kế hoạch của liên minh bạn.' : 'Liên minh của bạn là ' + (own === 'red' ? 'ĐỎ' : 'XANH') + '. Hai liên minh cùng thi đấu; bạn có thể xem và chỉnh sửa kế hoạch của cả hai trong mục Chỉnh sửa chiến thuật.';

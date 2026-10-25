@@ -7,21 +7,40 @@
 <meta name="description" content="Công cụ lập chiến lược trận đấu BIOBUZZ của FIRST Tech Challenge 2026-2027, do người hâm mộ xây dựng để kéo thả và mô phỏng từng pha trận đấu.">
 <meta name="color-scheme" content="light dark">
 <script src="js/analsy.js?v=1"></script>
-<link rel="stylesheet" href="css/style.css?v=tutorial-page-honey-2">
-<link rel="stylesheet" href="css/mobile.css?v=mobile-video-first-1" media="(max-width: 700px)">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ffc93c'/%3E%3Cpath d='M6 12h20M6 20h20' stroke='%231a1a1a' stroke-width='4'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css?v=tutorial-page-honey-3">
+<link rel="stylesheet" href="css/app.css?v=ftc-studio-1">
+<link rel="stylesheet" href="css/mobile.css?v=mobile-tactical-intro-2" media="(max-width: 700px)">
+<link rel="icon" type="image/png" href="js/favicon.png">
 </head>
 <body>
 <a class="skip" href="#builder">Bỏ qua đến trình xây dựng kế hoạch</a>
+<div class="bee bee-1" aria-hidden="true">
+  <svg viewBox="0 0 100 100"><use href="#i-bee"></use></svg>
+</div>
+<div class="bee bee-2" aria-hidden="true">
+  <svg viewBox="0 0 100 100"><use href="#i-bee"></use></svg>
+</div>
+<div class="bee bee-3" aria-hidden="true">
+  <svg viewBox="0 0 100 100"><use href="#i-bee"></use></svg>
+</div>
+<div class="bee bee-4" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#i-bee"></use></svg></div>
+<div class="bee bee-5" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#i-bee"></use></svg></div>
+<div class="bee bee-6" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#i-bee"></use></svg></div>
+<div class="bee bee-7" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#i-bee"></use></svg></div>
+<div class="bee bee-8" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#i-bee"></use></svg></div>
+<div class="bee bee-9" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#i-bee"></use></svg></div>
+<div class="bee bee-10" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#i-bee"></use></svg></div>
 
 <!-- ============ original inline icon set (no external images) ============ -->
 <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-bee" viewBox="0 0 100 100"><ellipse cx="45" cy="35" rx="15" ry="10" fill="#fff4cf" stroke="#49300a" stroke-width="2" transform="rotate(-20 45 35)"/><ellipse cx="55" cy="35" rx="15" ry="10" fill="#fff4cf" stroke="#49300a" stroke-width="2" transform="rotate(20 55 35)"/><rect x="30" y="45" width="40" height="30" rx="15" fill="#ffb000" stroke="#49300a" stroke-width="3"/><path d="M42 46v28m10-29v30m10-30v29" stroke="#49300a" stroke-width="5"/><circle cx="38" cy="55" r="2.5" fill="#241800"/><path d="m70 60 10 0-10 5z" fill="#49300a"/></symbol>
   <symbol id="i-pollen" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="currentColor"/></symbol>
   <symbol id="i-nectar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/><circle cx="9.5" cy="9.5" r="2.4" fill="rgba(255,255,255,.55)"/></symbol>
   <symbol id="i-leave" viewBox="0 0 24 24"><path d="M3 4v16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M8 12h11M14 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-park" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9 17V7h3.6a3.2 3.2 0 0 1 0 6.4H9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-robot" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="12" r="1.6" fill="currentColor"/><circle cx="15" cy="12" r="1.6" fill="currentColor"/><path d="M12 6V3M8 19v2M16 19v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
   <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.5 22 20H2z" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/><path d="M12 9.5v4.6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.25" fill="currentColor"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.8v14.4L19 12z" fill="currentColor"/></symbol>
   <symbol id="i-hive" viewBox="0 0 24 24"><path d="M12 2.5 19 6.5v8L12 18.5 5 14.5v-8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M5 20.5h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
   <symbol id="i-flower" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9"><ellipse cx="12" cy="6.6" rx="2.7" ry="4"/><ellipse cx="12" cy="6.6" rx="2.7" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="6.6" rx="2.7" ry="4" transform="rotate(120 12 12)"/></g><circle cx="12" cy="12" r="2.6" fill="currentColor"/></symbol>
   <symbol id="i-garden" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="12" r="1.8" fill="currentColor"/><circle cx="13" cy="12" r="1.8" fill="currentColor"/><circle cx="18" cy="12" r="1.8" fill="currentColor"/></symbol>
@@ -35,9 +54,7 @@
 <!-- ============================ HEADER ============================ -->
 <header class="topbar">
   <div class="topbar-id">
-    <span class="logo" aria-hidden="true">
-      <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" class="logo-disc"/><path d="M7 15h26M7 25h26" class="logo-band"/><circle cx="20" cy="20" r="17" class="logo-ring"/></svg>
-    </span>
+    <span class="logo"><img src="src-logo.png" alt="Logo Science Robotics Club"></span>
     <div>
       <h1>SRC</h1>
       <p class="tagline">MÔ PHỎNG CHIẾN LƯỢC</p>
@@ -47,18 +64,18 @@
 
 </header>
 
-<p class="unofficial-strip">
-  <strong>Công cụ không chính thức do người hâm mộ xây dựng.</strong> Không liên kết, xác nhận hoặc được kiểm duyệt bởi <em>FIRST</em>.
-  Giá trị điểm được trích từ Sổ tay thi đấu công khai &mdash; hãy kiểm tra mọi thứ quan trọng với tài liệu chính thức.
-</p>
-
-
-<section class="welcome welcome-with-video" aria-label="Giới thiệu công cụ lập kế hoạch">
+<section class="welcome welcome-with-video tactical-intro" aria-label="Giới thiệu công cụ lập kế hoạch">
   <div class="welcome-copy">
-    <p>Khám phá chiến lược robot, xem trận đấu mô phỏng và tìm ra điều phù hợp với đội của bạn.</p>
+    <p class="eyebrow">SCIENCE ROBOTICS CLUB · FTC STRATEGY LAB</p>
+    <h2 id="welcomeTitle">Lập chiến thuật.<br><span>Chinh phục sân đấu.</span></h2>
+    <p class="welcome-intro">Khám phá chiến lược robot, chạy mô phỏng trực quan và tinh chỉnh kế hoạch của đội qua từng bước.</p>
     <div id="demoActions" class="welcome-actions"></div>
     <p class="welcome-note">Miễn phí khám phá. Không cần tài khoản.</p>
-    <ol class="welcome-steps" aria-label="Cách thức hoạt động"><li><strong>Khám phá</strong><span>Bắt đầu với bản demo</span></li><li><strong>Xây dựng</strong><span>Sắp xếp các bước robot</span></li><li><strong>So sánh</strong><span>Thử nghiệm và tinh chỉnh</span></li></ol>
+    <ol class="welcome-steps" aria-label="Quy trình xây dựng chiến lược">
+      <li><button type="button" class="process-card is-active" data-process-step="explore" aria-current="step" data-action="demo"><span class="process-card-top"><span class="process-number">01</span><span class="process-badge">Đang hoạt động</span></span><svg class="process-icon" aria-hidden="true"><use href="#i-hive"></use></svg><strong>Khám phá</strong><span>Bắt đầu với trận mẫu</span></button></li>
+      <li><button type="button" class="process-card" data-process-step="build" data-action="edit"><span class="process-card-top"><span class="process-number">02</span><span class="process-badge">Tiếp theo</span></span><svg class="process-icon" aria-hidden="true"><use href="#i-robot"></use></svg><strong>Xây dựng</strong><span>Sắp xếp bước robot</span></button></li>
+      <li><button type="button" class="process-card" data-process-step="compare" data-action="run"><span class="process-card-top"><span class="process-number">03</span><span class="process-badge">Sẵn sàng</span></span><svg class="process-icon" aria-hidden="true"><use href="#i-park"></use></svg><strong>So sánh</strong><span>Chạy thử và tinh chỉnh</span></button></li>
+    </ol>
   </div>
   <section id="videoTutorial" class="tutorial-inline" aria-labelledby="tutorialTitle" tabindex="-1">
     <h3 id="tutorialTitle">Xem video hướng dẫn của Dragonflow</h3>
@@ -68,6 +85,20 @@
     <p class="tutorial-footer"><span>Học cách xây dựng, thử nghiệm và lưu kế hoạch robot. Nếu lời thoại video là tiếng Anh, bật CC rồi chọn dịch tự động sang tiếng Việt (nếu có).</span> <a href="https://www.youtube.com/watch?v=-3p6wPDzCws" target="_blank" rel="noopener noreferrer">Mở trên YouTube &#8599;</a></p>
   </section>
   <p id="demoSummary" role="status" class="demo-summary">Chưa có kế hoạch nào được tải. Một bản demo sẽ điền các bước robot cho bạn.</p>
+  <section class="tactical-status" aria-label="Trạng thái chiến thuật">
+    <div class="tactical-progress">
+      <div class="tactical-progress-heading"><strong>Tiến độ kế hoạch</strong><span id="planProgressLabel">0 / 96 bước</span></div>
+      <div id="planProgress" class="progress-track" role="progressbar" aria-label="Số bước kế hoạch" aria-valuemin="0" aria-valuemax="96" aria-valuenow="0"><span id="planProgressFill"></span></div>
+    </div>
+    <div class="tactical-telemetry" aria-label="Dữ liệu mô phỏng">
+      <span class="telemetry-chip"><i class="telemetry-dot" aria-hidden="true"></i> FPS <strong id="telemetryFps">Đang đo</strong></span>
+      <span class="telemetry-chip" title="Thời lượng trận theo đồng hồ mô phỏng">Thời lượng <strong id="telemetryDuration">2:38 · 1×</strong></span>
+    </div>
+    <div class="tactical-actions">
+      <button type="button" id="welcomeRunBtn" class="btn btn-primary" disabled><svg aria-hidden="true"><use href="#i-play"></use></svg>Chạy kế hoạch</button>
+      <button type="button" id="welcomeEditBtn" class="btn btn-outline-glow" data-screen="edit"><svg aria-hidden="true"><use href="#i-robot"></use></svg>Chỉnh sửa chiến thuật</button>
+    </div>
+  </section>
 </section>
 <section class="match-setup" aria-labelledby="setupTitle">
   <div class="setup-heading"><h2 id="setupTitle">Không gian trận đấu của bạn</h2><p>Chọn người chơi, rồi xem demo hoặc xây dựng kế hoạch.</p></div>
@@ -362,22 +393,22 @@
 <!-- ============================ SOURCES ============================ -->
 <footer class="sources">
   <section class="team-contact" aria-labelledby="teamContactTitle">
-    <h2 id="teamContactTitle">Kết nối với Digitron Dragons</h2>
+    <h2 id="teamContactTitle">Kết nối với Science Robotics Club</h2>
     <p>Theo dõi đội, chia sẻ chiến thuật hoặc liên hệ với chúng tôi.</p>
     <div class="team-contact-links">
-      <a class="contact-card contact-instagram" href="https://www.instagram.com/digitrondragons_35816/" target="_blank" rel="noopener noreferrer" aria-label="Theo dõi Digitron Dragons trên Instagram (mở trong thẻ mới)">
+      <a class="contact-card contact-instagram" href="https://www.instagram.com/ftc28785_src/" target="_blank" rel="noopener noreferrer" aria-label="Theo dõi Science Robotics Club trên Instagram (mở trong thẻ mới)">
         <span class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>
-        <span class="contact-copy"><span class="contact-prompt">Theo dõi hành trình</span><span class="contact-handle">@digitrondragons_35816</span></span>
+        <span class="contact-copy"><span class="contact-prompt">Theo dõi hành trình</span><span class="contact-handle">@ftc28785_src</span></span>
         <span class="contact-arrow" aria-hidden="true">&#8599;</span>
       </a>
-      <a class="contact-card contact-youtube" href="https://www.youtube.com/@digitrondragons" target="_blank" rel="noopener noreferrer" aria-label="Xem kênh YouTube của Digitron Dragons (mở trong thẻ mới)">
-        <span class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4" fill="currentColor"/><path d="m10 8 6 4-6 4z" fill="#b91c1c"/></svg></span>
-        <span class="contact-copy"><span class="contact-prompt">Xem video của đội</span><span class="contact-handle">@digitrondragons</span></span>
+      <a class="contact-card contact-facebook" href="https://www.facebook.com/srcthachthat" target="_blank" rel="noopener noreferrer" aria-label="Theo dõi SRC Thạch Thất trên Facebook (mở trong thẻ mới)">
+        <span class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.3V13h2.8v8z"/></svg></span>
+        <span class="contact-copy"><span class="contact-prompt">Theo dõi đội trên Facebook</span><span class="contact-handle">SRC Thạch Thất</span></span>
         <span class="contact-arrow" aria-hidden="true">&#8599;</span>
       </a>
-      <a class="contact-card contact-email" href="mailto:digitrondragons@gmail.com" aria-label="Gửi email cho Digitron Dragons qua digitrondragons@gmail.com">
+      <a class="contact-card contact-email" href="mailto:scienceroboticsclub@gmail.com" aria-label="Gửi email cho Science Robotics Club qua scienceroboticsclub@gmail.com">
         <span class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m3.5 6 8.5 7 8.5-7"/></svg></span>
-        <span class="contact-copy"><span class="contact-prompt">Liên hệ với đội</span><span class="contact-handle">digitrondragons@gmail.com</span></span>
+        <span class="contact-copy"><span class="contact-prompt">Liên hệ với đội</span><span class="contact-handle">scienceroboticsclub@gmail.com</span></span>
         <span class="contact-arrow" aria-hidden="true">&#8599;</span>
       </a>
     </div>
@@ -392,7 +423,6 @@
       Các ví dụ HIVE nghiêng dùng để xây dựng ước tính độ đầy được lấy từ những video này.</li>
     <li><a href="https://ftc-resources.firstinspires.org/ftc/game" rel="noopener noreferrer">Tài nguyên trò chơi chính thức</a></li>
   </ul>
-  <p class="disclaim">Đây là công cụ lập kế hoạch không chính thức do người hâm mộ xây dựng. Công cụ không liên kết, được <em>FIRST</em> chứng thực hay đánh giá. Điểm số được chép từ Sổ tay thi đấu công khai; hãy đối chiếu với sổ tay chính thức trước khi dựa vào thông tin quan trọng.</p>
   <p class="disclaim">Các mã luật được nhắc đến: G410, G417, G418 và mức phạt LỖI NHẸ / LỖI NẶNG. Công cụ không sử dụng mã luật nào khác. Hình minh họa được tự thiết kế; không sao chép hình dựng, dữ liệu CAD hoặc khung hình video của <em>FIRST</em>.</p>
   <p class="disclaim">Chiến thuật được lưu thành tệp JSON trên thiết bị của bạn. Tệp tải lên được đọc cục bộ trong trình duyệt và không gửi lên máy chủ. Không cần tài khoản. Website đã xuất bản sử dụng Google Analytics để thống kê lượt truy cập và lượt xem công cụ lập kế hoạch; dịch vụ này có thể dùng cookie và xử lý thông tin thiết bị, kết nối. Nội dung chiến thuật, tên tệp, tên riêng và địa chỉ email không được đưa vào sự kiện phân tích. Cá nhân hóa quảng cáo và Google Signals đã tắt. Video nhúng kết nối với YouTube khi trình phát tải, dịch vụ này có thể xử lý dữ liệu xem và kết nối. Nhà cung cấp dịch vụ lưu trữ website có thể xử lý nhật ký kết nối thông thường.</p>
 </footer>
