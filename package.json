@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "description": "Local Blockly runtime for the FTC robot simulator",
+  "dependencies": {
+    "blockly": "13.4.0"
+  }
+}

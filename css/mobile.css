@@ -1,0 +1,150 @@
+/* Local phone-layout iteration. Every rule is scoped to phone widths.
+   Desktop geometry, typography and behavior are intentionally untouched. */
+@media (max-width:700px) {
+ html { scroll-behavior:auto; }
+ body { padding:0 12px calc(92px + env(safe-area-inset-bottom)); font-size:14px; }
+ .topbar { gap:8px; padding:12px 0 8px; }
+ .topbar-id { gap:8px; }
+ .topbar h1 { font-size:16px; line-height:1.25; max-width:32ch; margin:0; }
+ .logo svg { width:32px; height:32px; }
+ .tagline { display:none; }
+ .mobile-fold { border:1px solid var(--line); border-radius:12px; background:var(--panel); margin:8px 0; min-width:0; }
+ .mobile-fold > summary { cursor:pointer; padding:13px 12px; font-size:14px; font-weight:750; min-height:46px; }
+ .mobile-fold[open] > summary { border-bottom:1px solid var(--line); margin-bottom:8px; }
+ #mobileSettings { width:100%; margin:0; }
+ #mobileSettings .topbar-controls { border:0; margin:0; padding:4px 12px; gap:12px; }
+ #mobileSettings .theme-choice { padding:12px; display:flex; align-items:center; justify-content:space-between; margin:0; }
+ #mobileSettings #modeNote { padding:0 12px 12px; margin:0; }
+ input:not([type="range"]):not([type="checkbox"]),select { font-size:16px !important; min-height:44px; }
+ button,summary { touch-action:manipulation; }
+ .btn { min-height:44px; }
+ .welcome { padding:12px; gap:8px; margin:0 0 10px; border-radius:12px; }
+ .welcome .eyebrow { display:none; }
+ #welcomeTitle { font-size:18px; letter-spacing:0; margin:0; }
+ .welcome > div:first-child > p:last-child { display:none; }
+ .welcome-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+ .welcome-actions .btn { font-size:12px; padding:8px; }
+ .demo-summary { font-size:12px; line-height:1.4; padding-top:8px; }
+ body[data-mobile-view="edit"] .welcome,body[data-mobile-view="scores"] .welcome,body[data-mobile-view="help"] .welcome { display:none; }
+ #status { font-size:12px; margin:0; min-height:0; }
+ #status:empty { display:none; }
+ .workspace-nav { position:fixed; inset:auto 0 0; z-index:60; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; padding:8px 8px calc(8px + env(safe-area-inset-bottom)); background:var(--panel); border-top:1px solid var(--line); box-shadow:0 -4px 20px #00000012; }
+ .workspace-nav .btn { font-size:0; min-width:0; padding:8px 2px; height:48px; border-radius:10px; }
+ .workspace-nav .btn span { display:none; }
+ .workspace-nav .btn::after { font-size:13px; font-weight:800; }
+ .workspace-nav [data-screen="watch"]::after { content:"Watch"; }
+ .workspace-nav [data-screen="edit"]::after { content:"Edit"; }
+ .workspace-nav [data-screen="scores"]::after { content:"Scores"; }
+ .workspace-nav [data-screen="help"]::after { content:"Help"; }
+ #watchPanel,#editPanel,#scoresPanel,#helpPanel,#lanes { scroll-margin-top:12px; }
+ #watchPanel { display:flex; flex-direction:column; gap:8px; }
+ #watchPanel > .match-card { order:0; padding:10px 12px; }
+ #watchPanel > .match-card h2,#watchPanel > .match-card .fine,#watchPanel > .match-card small { display:none; }
+ #watchPanel .match-scores { margin:0; gap:8px; }
+ #watchPanel .match-scores strong { display:inline; font-size:24px; margin-left:6px; }
+ #watchPanel .match-scores span { font-size:10px; letter-spacing:0; }
+ #watchPanel #matchOutcome { margin:2px 0 0; font-size:11px; text-align:center; }
+ .board-wrap { padding:10px; min-width:0; box-shadow:none; }
+ .board-head { margin-bottom:6px; }
+ .board-head h2 { font-size:13px; letter-spacing:.02em; }
+ .board-sub { display:none; }
+ .match-clock { margin:8px 0; display:flex; gap:5px; font-size:12px; }
+ .match-clock label { display:none; }
+ .match-clock select { max-width:114px; font-size:12px !important; min-height:36px; padding:6px; }
+ .playbar { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px; margin:6px 0; }
+ .playbar .btn { padding:8px 3px; font-size:11px; min-width:0; }
+ #playSlider { grid-column:1/-1; width:100%; min-width:0; height:30px; }
+ .playbar label { position:absolute; }
+ /* Reserve two lines so changing playback descriptions cannot move the field.
+    Longer descriptions remain available by scrolling inside this fixed area. */
+ #playLabel { font-size:11px; line-height:1.4; height:2.8em; min-height:2.8em; overflow-y:auto; overflow-wrap:anywhere; margin-bottom:8px; }
+ .orientation-key { font-size:10px; padding:4px 0; }
+ .view-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; margin:6px 0; }
+ .view-controls .btn { padding:6px 3px; font-size:11px; }
+ .view-controls > span { display:none; }
+ .mobile-field-tools { display:flex; align-items:center; gap:10px; margin:6px 0; }
+ .mobile-field-tools .btn { font-size:12px; padding:6px 10px; flex-shrink:0; }
+ .mobile-field-tools span { font-size:11px; color:var(--ink-dim); }
+ .board { width:100%; max-width:100%; overflow-x:auto; border-radius:8px; overscroll-behavior-x:contain; }
+ .board #fieldSvg { display:block; width:100%; }
+ .board.mobile-enlarged #fieldSvg { width:620px; min-width:620px; }
+ .field-explanation { font-size:12px; min-height:0; padding:8px 10px; margin:8px 0; }
+ .mobile-fold > .field-key,.mobile-fold > .hive-readouts,.mobile-fold > .field-hint,.mobile-fold > .estimate-callout,.mobile-fold > .defense-explainer { margin:10px; }
+ .watch-summary { width:100%; }
+ .plan-preview { border:0; padding:10px; }
+ .plan-preview h2 { font-size:14px; }
+ .robot-preview p { font-size:12px; }
+ .preview-edit { padding:10px 0; min-height:44px; }
+ #editPanel .builder-head h2 { font-size:16px; }
+ #editPanel .builder-head > .btn { margin:4px 4px 4px 0; font-size:12px; }
+ #editPanel .builder-head .mobile-fold p { padding:0 12px; font-size:13px; }
+ .editor-switch { margin:8px 0; padding:10px; gap:6px; }
+ .editor-switch > strong { font-size:12px; }
+ .editor-switch label { display:flex; align-items:center; gap:8px; font-size:12px; width:100%; }
+ .editor-switch select { flex:1; }
+ .editor-switch > span { font-size:11px; }
+ .edit-targets { display:grid; grid-template-columns:1fr 1fr; gap:5px 10px; padding:10px; margin:8px 0; }
+ .edit-targets label { font-size:12px; }
+ .edit-targets label[for="paletteRobot"] { grid-column:1; grid-row:1; }
+ #paletteRobot { grid-column:1; grid-row:2; }
+ .edit-targets label[for="paletteSegment"] { grid-column:2; grid-row:1; }
+ #paletteSegment { grid-column:2; grid-row:2; }
+ .edit-targets select { width:100%; min-width:0; }
+ .builder-grid { display:flex; flex-direction:column; gap:8px; }
+ #mobileAddStep,#lanes { width:100%; margin:0; }
+ #mobileAddStep .palette { border:0; padding:10px; }
+ #mobileAddStep .palette > h3,#mobileAddStep .palette > .fine { display:none; }
+ .pal-card { padding:12px 10px; }
+ .pal-title { font-size:14px; }
+ .pal-value { font-size:12px; }
+ .lane { padding:10px; }
+ .zone { padding:10px; }
+ .card { gap:8px; padding:12px 8px; }
+ .card-title { font-size:14px; line-height:1.4; }
+ .card-options { gap:8px; }
+ .card-option { font-size:12px; flex-wrap:wrap; }
+ .card-option select { max-width:100%; }
+ .card-tools { gap:8px; }
+ .icobtn { width:44px; height:44px; }
+ .card-note,.card-warn,.zone-blurb,.zone-clock,.badge { font-size:12px; }
+ .zone-add { grid-template-columns:minmax(0,1fr) auto; }
+ .zone-add-select { width:100%; min-width:0; }
+ .help-panel,.scorecard { padding:12px; }
+ .help-grid { grid-template-columns:minmax(0,1fr); gap:10px; }
+ footer { padding-bottom:20px; }
+}
+@media(max-width:700px) {
+ #watchPanel > * { width:100%; max-width:100%; min-width:0; }
+ .board-wrap { overflow:hidden; }
+}
+/* Keep every live region above the field stable, not only its description. */
+@media(max-width:700px) {
+ body { overflow-anchor:none; }
+ .match-clock { display:grid; grid-template-columns:minmax(0,1fr) 114px; min-height:36px; }
+ #matchClock { min-width:0; margin:0; height:36px; line-height:18px; overflow:auto; }
+ #watchPanel .match-scores > div { display:grid; grid-template-rows:15px 30px; min-width:0; }
+ #watchPanel .match-scores strong { display:block; margin:0; font-size:24px; line-height:30px; white-space:nowrap; }
+ #watchPanel .match-scores span { white-space:nowrap; }
+ #watchPanel #matchOutcome { height:17px; line-height:17px; overflow:auto; }
+ #status,#status:empty { display:block; height:34px; min-height:34px; line-height:17px; overflow:auto; }
+ .field-explanation { height:76px; overflow:auto; }
+}
+
+/* Keep the intro compact and place settings with the match workspace. */
+@media(max-width:700px) {
+ .topbar { margin-bottom:14px; padding-block:12px; }
+ .welcome-with-video { padding:16px; gap:20px; }
+ .welcome-copy #welcomeTitle { font-size:2rem; }
+ .welcome-copy .welcome-actions { margin-top:16px; }
+ .welcome-steps { margin-top:16px; padding-top:12px; gap:8px; }
+ .welcome-steps span { font-size:.7rem; }
+ .tutorial-inline { padding:10px; border-radius:12px; }
+ .tutorial-footer { font-size:.75rem; }
+ .match-setup { margin-top:16px; padding:12px; }
+ .setup-heading { margin-bottom:10px; }
+ .match-setup .mobile-fold { margin:0; }
+}
+
+@media(max-width:700px) {
+ .welcome-with-video .tutorial-inline { order:-1; }
+}

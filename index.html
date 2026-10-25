@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi" data-alliance="red">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trình mô phỏng chiến lược trận đấu FTC BIOBUZZ của Dragonflow</title>
+<meta name="description" content="Công cụ lập chiến lược trận đấu BIOBUZZ của FIRST Tech Challenge 2026-2027, do người hâm mộ xây dựng để kéo thả và mô phỏng từng pha trận đấu.">
+<meta name="color-scheme" content="light dark">
+<script src="js/analsy.js?v=1"></script>
+<link rel="stylesheet" href="css/style.css?v=tutorial-page-honey-2">
+<link rel="stylesheet" href="css/mobile.css?v=mobile-video-first-1" media="(max-width: 700px)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ffc93c'/%3E%3Cpath d='M6 12h20M6 20h20' stroke='%231a1a1a' stroke-width='4'/%3E%3C/svg%3E">
+</head>
+<body>
+<a class="skip" href="#builder">Bỏ qua đến trình xây dựng kế hoạch</a>
+
+<!-- ============ original inline icon set (no external images) ============ -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-pollen" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="currentColor"/></symbol>
+  <symbol id="i-nectar" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/><circle cx="9.5" cy="9.5" r="2.4" fill="rgba(255,255,255,.55)"/></symbol>
+  <symbol id="i-leave" viewBox="0 0 24 24"><path d="M3 4v16" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M8 12h11M14 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-park" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9 17V7h3.6a3.2 3.2 0 0 1 0 6.4H9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-robot" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="12" r="1.6" fill="currentColor"/><circle cx="15" cy="12" r="1.6" fill="currentColor"/><path d="M12 6V3M8 19v2M16 19v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.5 22 20H2z" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/><path d="M12 9.5v4.6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.25" fill="currentColor"/></symbol>
+  <symbol id="i-hive" viewBox="0 0 24 24"><path d="M12 2.5 19 6.5v8L12 18.5 5 14.5v-8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M5 20.5h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-flower" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9"><ellipse cx="12" cy="6.6" rx="2.7" ry="4"/><ellipse cx="12" cy="6.6" rx="2.7" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="6.6" rx="2.7" ry="4" transform="rotate(120 12 12)"/></g><circle cx="12" cy="12" r="2.6" fill="currentColor"/></symbol>
+  <symbol id="i-garden" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="12" r="1.8" fill="currentColor"/><circle cx="13" cy="12" r="1.8" fill="currentColor"/><circle cx="18" cy="12" r="1.8" fill="currentColor"/></symbol>
+  <!-- COLLECT glyphs: the element drops into an open carrier. Same pollen/nectar
+       shapes as above, so a collect card reads as the element it picks up. -->
+  <symbol id="i-collect-pollen" viewBox="0 0 24 24"><circle cx="12" cy="5.2" r="3.4" fill="currentColor"/><path d="M12 9.8v4.2M9.4 11.9 12 14.5l2.6-2.6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 14.5v4a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></symbol>
+  <symbol id="i-collect-nectar" viewBox="0 0 24 24"><circle cx="12" cy="5.4" r="4.4" fill="currentColor"/><circle cx="10.3" cy="3.9" r="1.2" fill="rgba(255,255,255,.55)"/><path d="M12 10.8v3.4M9.6 12.4 12 14.8l2.4-2.4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 14.5v4a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></symbol>
+  <symbol id="i-collect-flower" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><ellipse cx="12" cy="4.2" rx="2" ry="3"/><ellipse cx="12" cy="4.2" rx="2" ry="3" transform="rotate(60 12 7)"/><ellipse cx="12" cy="4.2" rx="2" ry="3" transform="rotate(120 12 7)"/></g><circle cx="12" cy="7" r="1.9" fill="currentColor"/><path d="M12 11v3.2M9.8 12.6 12 14.8l2.2-2.2" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 14.5v4a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></symbol>
+</svg>
+
+<!-- ============================ HEADER ============================ -->
+<header class="topbar">
+  <div class="topbar-id">
+    <span class="logo" aria-hidden="true">
+      <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" class="logo-disc"/><path d="M7 15h26M7 25h26" class="logo-band"/><circle cx="20" cy="20" r="17" class="logo-ring"/></svg>
+    </span>
+    <div>
+      <h1>SRC</h1>
+      <p class="tagline">MÔ PHỎNG CHIẾN LƯỢC</p>
+    </div>
+  </div>
+
+
+</header>
+
+<p class="unofficial-strip">
+  <strong>Công cụ không chính thức do người hâm mộ xây dựng.</strong> Không liên kết, xác nhận hoặc được kiểm duyệt bởi <em>FIRST</em>.
+  Giá trị điểm được trích từ Sổ tay thi đấu công khai &mdash; hãy kiểm tra mọi thứ quan trọng với tài liệu chính thức.
+</p>
+
+
+<section class="welcome welcome-with-video" aria-label="Giới thiệu công cụ lập kế hoạch">
+  <div class="welcome-copy">
+    <p>Khám phá chiến lược robot, xem trận đấu mô phỏng và tìm ra điều phù hợp với đội của bạn.</p>
+    <div id="demoActions" class="welcome-actions"></div>
+    <p class="welcome-note">Miễn phí khám phá. Không cần tài khoản.</p>
+    <ol class="welcome-steps" aria-label="Cách thức hoạt động"><li><strong>Khám phá</strong><span>Bắt đầu với bản demo</span></li><li><strong>Xây dựng</strong><span>Sắp xếp các bước robot</span></li><li><strong>So sánh</strong><span>Thử nghiệm và tinh chỉnh</span></li></ol>
+  </div>
+  <section id="videoTutorial" class="tutorial-inline" aria-labelledby="tutorialTitle" tabindex="-1">
+    <h3 id="tutorialTitle">Xem video hướng dẫn của Dragonflow</h3>
+    <div id="tutorialPlayer" class="tutorial-player">
+      <iframe src="https://www.youtube-nocookie.com/embed/-3p6wPDzCws?playsinline=1&amp;rel=0" title="Video hướng dẫn sử dụng trình mô phỏng chiến lược FTC BIOBUZZ của Dragonflow" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+    </div>
+    <p class="tutorial-footer"><span>Học cách xây dựng, thử nghiệm và lưu kế hoạch robot. Nếu lời thoại video là tiếng Anh, bật CC rồi chọn dịch tự động sang tiếng Việt (nếu có).</span> <a href="https://www.youtube.com/watch?v=-3p6wPDzCws" target="_blank" rel="noopener noreferrer">Mở trên YouTube &#8599;</a></p>
+  </section>
+  <p id="demoSummary" role="status" class="demo-summary">Chưa có kế hoạch nào được tải. Một bản demo sẽ điền các bước robot cho bạn.</p>
+</section>
+<section class="match-setup" aria-labelledby="setupTitle">
+  <div class="setup-heading"><h2 id="setupTitle">Không gian trận đấu của bạn</h2><p>Chọn người chơi, rồi xem demo hoặc xây dựng kế hoạch.</p></div>
+  <div class="topbar-controls">
+    <label>Phong cách phòng thủ demo <select id="defenseTactic"><option value="mixed">Kết hợp cả hai kiểu</option><option value="contact">Đẩy ngắn trong lúc bắn</option><option value="lane">Chặn lối di chuyển</option></select></label>
+<label>1. Chọn chế độ trận đấu <select id="matchMode">
+<option value="single">Luyện tập với một robot</option><option value="alliance">Luyện tập với hai robot của bạn</option><option value="competitive" selected>Lập kế hoạch cho cả hai liên minh đối đầu</option><option value="opponent">Liên minh của bạn đối đầu với đối thủ ngẫu nhiên</option>
+</select></label>
+<label>2. Liên minh của bạn <select id="playingAlliance"><option value="red">Đỏ</option><option value="blue">Xanh</option></select></label>
+<label id="singleRobotLabel" hidden>Robot <select id="singleRobot"><option value="0">1</option><option value="1">2</option></select></label>
+<button type="button" id="randomOpponentBtn" class="btn" hidden>Thử đối thủ khác</button>
+<button type="button" id="demoBtn"  class="btn btn-primary">Thử trận demo</button>
+    <button type="button" id="clearBtn" class="btn btn-ghost">Xóa</button>
+  </div>
+<p id="modeNote" class="setup-note">Hai liên minh thi đấu. Phòng thủ tiếp xúc là ước tính: đẩy ngắn, đổi vị trí và nhắm lại; không có hình phạt tự động vì bóng trượt.</p>
+</section>
+<nav class="workspace-nav" aria-label="Chế độ lập kế hoạch">
+  <button class="btn" data-screen="watch" aria-pressed="true">1. Xem trận đấu</button>
+  <button class="btn" data-screen="edit" aria-pressed="false">2. Chỉnh sửa chiến lược <span id="stepCount"></span></button>
+  <button class="btn" data-screen="scores" aria-pressed="false">3. Chi tiết điểm</button>
+  <button class="btn" data-screen="help" aria-pressed="false">Cách chơi</button>
+</nav>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+
+<noscript>
+  <p class="noscript">Công cụ lập kế hoạch cần JavaScript để hoạt động. Hãy bật JavaScript để dùng trình mô phỏng hoặc <a href="https://www.youtube.com/watch?v=-3p6wPDzCws">xem video hướng dẫn trên YouTube</a>.</p>
+</noscript>
+
+<!-- ============================ STAGE ============================ -->
+<main>
+<section id="watchPanel" class="stage" aria-label="Sân đấu và bảng điểm">
+
+  <!-- ---------------- field board ---------------- -->
+  <div class="board-wrap">
+    <div class="board-head">
+      <h2>Xem trận đấu: chiến lược và robot FTC trên cùng một sân</h2>
+<p class="board-sub">Lập kế hoạch trận đấu, lắp robot và chạy FTC Blocks hoặc Java trên cùng sân này.</p>
+    </div>
+
+    <div class="orientation-key" aria-label="Hướng sân"><span class="side-red">Liên minh đỏ · trái</span><span>Góc nhìn khán giả</span><span class="side-blue">Liên minh xanh · phải</span></div>
+    <div class="view-controls" role="group" aria-label="Máy ảnh sân">
+      <button id="viewAngled" type="button" class="btn" aria-pressed="true">Khung 3D</button>
+      <button id="viewHives" type="button" class="btn" aria-pressed="false">Tập trung vào tổ</button>
+      <button id="viewTop" type="button" class="btn" aria-pressed="false">Góc nhìn trên cao</button>
+      <span>Hình học minh họa · hướng khán giả cố định</span>
+    </div>
+    <div class="board">
+      <svg id="fieldSvg" data-alliance="red" aria-label="Sơ đồ góc nghiêng của cả hai liên minh trên sân BIOBUZZ, với tổ nâng cao và hiện tượng nghiêng động."></svg>
+    </div>
+
+    <div class="field-key"><span><i class="key-pollen"></i>POLLEN</span><span><i class="key-nectar"></i>NECTAR (màu liên minh)</span><span>Viền vàng = Ô hướng lên</span></div>
+    <div class="hive-readouts" aria-label="Trạng thái tổ">
+      <div class="readout-red"><strong>TỔ ĐỎ</strong><span id="redHiveReadout"></span></div>
+      <div class="readout-blue"><strong>TỔ XANH</strong><span id="blueHiveReadout"></span></div>
+    </div>
+    <p class="field-hint">R1 / R2 = robot liên minh đỏ. B1 / B2 = robot liên minh xanh. P = số POLLEN đang giữ; N = số NECTAR đang giữ. Hai HIVE dùng chung chân đỡ nhưng nghiêng độc lập. Robot có thể đi qua khoảng trống giữa các chân đỡ. Viền vàng đánh dấu Ô hướng lên. Bóng rơi sẽ nằm tại vị trí tiếp đất; robot cần thời gian để di chuyển và thu thập. Góc nhìn tập trung vào HIVE phóng to Ô; góc nhìn từ trên cho thấy vị trí trên mặt sân.</p>
+
+    <details class="defense-explainer"><summary>Ý nghĩa của &ldquo;chặn lối di chuyển&rdquo; là gì?</summary>
+<p>Một robot tạm thời đứng chặn đường của đối thủ. Đối thủ có thể đi vòng hoặc chờ. Nó tiêu tốn thời gian, không trực tiếp mang điểm. Sau đó, robot phòng thủ sẽ rời đi.</p>
+<p><strong>&ldquo;Lối di chuyển&rdquo; là đường đi của robot trên sân, không phải làn thi đấu được đánh dấu.</strong> Chặn lối không gây ảnh hưởng nếu không có đối thủ cần đi qua. Hành động này không đẩy robot đang bắn.</p>
+<label><input id="showDefenseSpots" type="checkbox"> Hiển thị bốn vị trí chặn ví dụ trên sân</label>
+<p>Vòng vàng = robot đang chặn. Đường chấm xanh/đỏ = lộ trình dự kiến của đối thủ. Hãy dùng chế độ trên cao để nhìn rõ vị trí hơn.</p>
+</details>
+<p id="fieldExplanation" class="field-explanation" aria-live="off">Trong quá trình phát, giải thích phòng thủ xuất hiện ở đây.</p>
+<div class="match-clock"><strong id="matchClock">TỰ ĐỘNG · còn 0:30</strong><label for="playSpeed">Tốc độ phát</label><select id="playSpeed"><option value="1">1× thời gian thực</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select></div>
+    <div class="playbar">
+      <button type="button" id="resetBtn" class="btn btn-ghost" aria-label="Khởi động lại từ đầu">&#9198; Khởi động lại</button>
+      <button type="button" id="stepBack" class="btn btn-ghost" aria-label="Bước trước">&#9664; Lùi</button>
+      <button type="button" id="playBtn" class="btn btn-primary" aria-label="Phát kế hoạch">&#9654; Phát kế hoạch</button>
+      <button type="button" id="stepFwd" class="btn btn-ghost" aria-label="Bước tiếp theo">Bước tiếp theo &#9654;&#124;</button>
+      <label class="vh" for="playSlider">Bước kế hoạch</label>
+      <input type="range" id="playSlider" min="0" max="0" value="0" step="1">
+    </div>
+    <p id="playLabel" class="playlabel">Chưa có hành động nào được lên kế hoạch</p>
+    <div id="phaseTrack" class="phase-track" aria-hidden="true">
+      <span data-seg="auto">TỰ ĐỘNG 0:30</span><span class="gap">8&nbsp;s</span><span data-seg="teleopEarly">TELEOP 60&nbsp;s đầu</span><span data-seg="teleopLate">TELEOP 60&nbsp;s cuối &middot; FLOWERS hợp lệ</span>
+    </div>
+
+    <aside class="estimate-callout">
+      <h3>&#9888; Ngưỡng làm HIVE nghiêng trên sân là giá trị ước tính</h3>
+      <p><strong>Ngưỡng nghiêng được ước tính từ các ví dụ trong video giới thiệu chính thức. Sổ tay cho biết vị trí thực tế ảnh hưởng đến kết quả; hãy xem đây là ước lượng lập kế hoạch, không phải công thức chính thức.</strong></p>
+      <details class="estimate-details"><summary>Xem mô hình độ đầy và các giả định</summary>
+      <p class="fine">Mô hình: POLLEN tương ứng <span data-fill="HIVE.units.pollen"></span> đơn vị độ đầy, NECTAR tương ứng <span data-fill="HIVE.units.nectar"></span> đơn vị,
+      HIVE nghiêng ở mức <span data-fill="HIVE.threshold"></span>. Mô hình khớp chính xác ví dụ trong video: &ldquo;khoảng 8&nbsp;POLLEN&rdquo; (8&times;5&nbsp;=&nbsp;40) và
+      &ldquo;5&nbsp;NECTAR&rdquo; (5&times;8&nbsp;=&nbsp;40). Ví dụ thứ ba &ldquo;3&nbsp;POLLEN và 3&nbsp;NECTAR&rdquo; đạt
+      39/40 trong mô hình này, thiếu một đơn vị để nghiêng. Chênh lệch này được nêu rõ, không bị lược bỏ.</p>
+      <p class="fine">Đồng hồ độ đầy bắt đầu ở <strong>0</strong>, không tính 3&nbsp;NECTAR được đặt sẵn trong Ô hướng lên khi trận bắt đầu.
+      Nếu tính 3 quả đó, độ đầy sẽ là 24/40 trước khi robot bắn, khiến mô hình không còn khớp các ví dụ trong video. Tài liệu hiện có không xác định cách hiểu nào là đúng.
+      Khi HIVE nghiêng, Ô cũng trút hết bóng; phần độ đầy vượt quá 40 không được giữ lại, vì vậy thứ tự bắn làm thay đổi điểm số.
+      Điểm số tuân theo sổ tay; hình học, thứ tự hành động và hoạt ảnh nghiêng chỉ mang tính minh họa.</p>
+      </details>
+    </aside>
+  </div>
+
+  <!-- ---------------- scoreboard ---------------- -->
+  <div class="scorewrap">
+    <section class="match-card" aria-labelledby="matchTitle">
+      <h2 id="matchTitle">Đối đầu trực tiếp</h2>
+      <div class="match-scores"><div class="match-red"><span>LIÊN MINH ĐỎ</span><strong id="redMatchScore">0</strong><small id="redMatchMeta"></small></div><span class="versus">VS</span><div class="match-blue"><span>LIÊN MINH XANH</span><strong id="blueMatchScore">0</strong><small id="blueMatchMeta"></small></div></div>
+      <p id="matchOutcome">Kết quả dự kiến: hòa</p>
+      <p class="fine">Bao gồm điểm phạt đối thủ. Trong quá trình phát, tổng điểm dự kiến nếu trận đấu kết thúc ở bước đó.</p>
+    </section>
+    <div class="scorecard">
+      <div class="score-head">
+        <h2 id="selectedScoreTitle">Phân tích điểm của ĐỎ</h2>
+        <span id="scoreLiveTag" class="live-tag" hidden>trực tiếp &middot; giữa trận</span>
+      </div>
+      <div class="score-grid">
+        <div class="sc"><span class="sc-label">TỰ ĐỘNG</span><span id="scoreAuto" class="sc-val">0</span></div>
+        <div class="sc"><span class="sc-label">ĐIỀU KHIỂN</span><span id="scoreTeleop" class="sc-val">0</span></div>
+        <div class="sc sc-total"><span class="sc-label">TỔNG</span><span id="scoreTotal" class="sc-val">0</span></div>
+      </div>
+
+      <table class="breakdown">
+        <caption class="vh">Phân tích điểm, TỰ ĐỘNG</caption>
+        <thead><tr><th scope="col">TỰ ĐỘNG</th><th scope="col" class="num">#</th><th scope="col" class="num">mỗi cái</th><th scope="col" class="num">điểm</th></tr></thead>
+        <tbody id="breakAuto"></tbody>
+      </table>
+      <table class="breakdown">
+        <caption class="vh">Phân tích điểm, ĐIỀU KHIỂN</caption>
+        <thead><tr><th scope="col">ĐIỀU KHIỂN</th><th scope="col" class="num">#</th><th scope="col" class="num">mỗi cái</th><th scope="col" class="num">điểm</th></tr></thead>
+        <tbody id="breakTeleop"></tbody>
+      </table>
+      <p class="src-note">Giá trị điểm: Bảng 10-2 trong Manual. Dòng phân tích thể hiện kế hoạch cuối cùng; tổng cao nhất theo trình phát.</p>
+    </div>
+
+    <div class="scorecard">
+      <div class="score-head"><h2>Điểm xếp hạng</h2><span class="rp-total">RP kế hoạch cuối: <strong id="rpTotal">0</strong></span></div>
+
+      <div class="rp" id="swarmRow">
+        <div class="rp-top"><span class="rp-name">SWARM</span><span id="swarmVal" class="rp-val">0 / 16 điểm</span><span id="swarmChk" class="rp-chk"></span></div>
+        <div class="rp-track"><span id="swarmBar" class="rp-bar"></span></div>
+        <p class="rp-note">Tổng điểm LEAVE + PARK của <em>cả hai</em> robot. Một robot riêng tối đa chỉ đạt 3+5+5&nbsp;=&nbsp;13, nên RP này cần hai robot.</p>
+      </div>
+
+      <div class="rp" id="poll1Row">
+        <div class="rp-top"><span class="rp-name">POLLINATOR 1</span><span id="poll1Val" class="rp-val">0 / 4 TIPS</span><span id="poll1Chk" class="rp-chk"></span></div>
+        <div class="rp-track"><span id="poll1Bar" class="rp-bar"></span></div>
+        <p class="rp-note">TIPS là sự kiện của cả TỔ, nên đây là một bộ đếm cho cả liên minh, không phải mỗi robot.</p>
+      </div>
+
+      <div class="rp" id="poll2Row">
+        <div class="rp-top"><span class="rp-name">POLLINATOR 2</span><span id="poll2Val" class="rp-val">0 / 7 TIPS</span><span id="poll2Chk" class="rp-chk"></span></div>
+        <div class="rp-track"><span id="poll2Bar" class="rp-bar"></span></div>
+      </div>
+
+      <div class="rp"><div class="rp-top"><span class="rp-name">THẮNG / HÒA</span><span id="outcomeRP" class="rp-val">1 RP · kế hoạch cuối</span></div><p class="rp-note">Thắng: 3 RP. Hòa: 1 RP. Dựa trên cả hai kế hoạch cuối, bao gồm điểm phạt.</p></div>
+      <p class="src-note">Ngưỡng là tầng &ldquo;All Other Events&rdquo; trong Bảng&nbsp;10-3. Ngưỡng của khu vực và chung kết được liệt kê là TBA trong nguồn và không dùng ở đây.</p>
+    </div>
+
+    <div class="scorecard" id="penaltyBox" hidden>
+      <h2 class="warn-h"><svg class="ico" aria-hidden="true"><use href="#i-warn"></use></svg> Phạt bạn đang nhận</h2>
+      <p id="penaltyText"></p>
+    </div>
+
+    <div class="scorecard" id="advisoryBox" hidden>
+      <h2 class="advis-h">Nên kiểm tra</h2>
+      <p id="advisoryText"></p>
+    </div>
+
+    <div class="scorecard statcard">
+      <h2>Trạng thái sân</h2>
+      <dl class="stats">
+        <div><dt>TIPS TỔ</dt><dd id="statTips">0</dd></div>
+        <div><dt>Độ đầy Ô <span class="est">ước tính</span></dt><dd id="statFill">0 / 40</dd></div>
+        <div><dt>Phần tử trong Ô trên cao</dt><dd id="statCell">0</dd></div>
+        <div><dt>Ô trên cao</dt><dd id="statCellUp">Ô A</dd></div>
+        <div><dt>VƯỜN của bạn</dt><dd id="statGarden">0</dd></div>
+        <div><dt>NECTAR đang chơi</dt><dd id="statNectarPlay">3</dd></div>
+        <div><dt>NECTAR dự phòng</dt><dd id="statNectarReserve">5</dd></div>
+        <div><dt>NECTAR rơi <span class="est">có thể thu thập</span></dt><dd id="statNectarLoose">0</dd></div>
+      </dl>
+      <h3>HOA</h3>
+      <ul id="flowerStats" class="flowerstats"></ul>
+      <h3>Robot <span class="fine">&mdash; và mỗi robot đang cầm gì</span></h3>
+      <ul id="robotStats" class="robotstats"></ul>
+      <p class="fine"><strong>NECTAR là tài nguyên khan hiếm và trình lập kế hoạch hiện đang bắt buộc tuân thủ.</strong>
+      <span data-fill="SETUP.nectarInUpCellPerAlliance"></span> bắt đầu ở trong Ô trên cao của bạn &mdash; là một phần của độ đầy ban đầu của TỔ, không phải thứ robot cầm &mdash; và <span data-fill="SETUP.nectarReservePerAlliance"></span> nằm ngoài sân với HUMAN PLAYER của bạn. Mỗi HIVE TIP giải phóng một; mốc 60 giây sẽ giải phóng tất cả số còn lại. <em>NECTAR rơi</em> đếm số đã được giải phóng, hoặc rơi ra khỏi Ô đã nghiêng, và chưa được nhặt. Yêu cầu robot Thu thập NECTAR khi con số đó bằng 0 và hành động sẽ bị gắn cờ và giải thích thay vì được tính điểm.</p>
+      <p class="fine">Mỗi robot bắt đầu cầm <span data-fill="INVENTORY.pollenPreloadedPerRobot"></span> POLLEN đã nạp trước và không có NECTAR, đó là lý do POLLEN là thứ duy nhất robot có thể bắn ngay khi bắt đầu TỰ ĐỘNG. POLLEN trên mặt sàn có thể thu thập ở bất cứ lúc nào. <strong>Một robot có thể mang tối đa bốn quả bóng.</strong> Thu thập và ghi điểm theo từng lô tối đa bốn quả.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BUILDER ============================ -->
+<section id="builder" class="builder" aria-label="Trình lập kế hoạch">
+  <div class="builder-head">
+    <h2>Xây dựng chiến lược cho robot của bạn</h2>
+    <p><strong>1. Chọn robot và pha.</strong> <strong>2. Thêm các khối có thể tái sử dụng.</strong> <strong>3. Kiểm tra trận đấu đầy đủ.</strong>
+    Sắp xếp và lặp lại toàn bộ chu kỳ. Mỗi robot theo chuỗi lệnh của mình theo thứ tự, trong khi các robot còn lại chơi cùng lúc.</p>
+    <p>Bắt đầu TỰ ĐỘNG bằng <strong>Đòn bắn mở đầu</strong>, thêm <strong>chu kỳ từ mặt sàn đến tổ</strong>, rồi kết thúc bằng <strong>Hoàn thành TỰ ĐỘNG với đậu</strong>.
+    Kiểm tra thời gian mô phỏng và cảnh báo. Mở <strong>Hiển thị hành động từng cá nhân</strong> để tinh chỉnh chi tiết.</p>
+    <button type="button" class="btn" data-screen="watch">Xem chiến lược đã cập nhật</button>
+  </div>
+
+  <details class="timing-settings"><summary>Nâng cao: thay đổi tốc độ robot và thời gian hành động</summary>
+    <div class="timing-grid">
+      <label>Nhóm thu thập, tối đa 4 (s)<input id="collectSeconds" type="number" min="0.1" max="30" step="0.1" value="2"></label>
+      <label>Đòn bắn tổ, 1–4 bóng (s)<input id="volleySeconds" type="number" min="0.6" max="30" step="0.1" value="2"></label>
+      <label>Đặt hoa / mỗi bóng (s)<input id="flowerSeconds" type="number" min="0.3" max="30" step="0.1" value="1.5"></label>
+      <label>Di chuyển đến nơi thu thập (s)<input id="collectionTravelSeconds" type="number" min="0.1" max="30" step="0.1" value="1"></label>
+      <label>Quay lại ghi điểm (s)<input id="returnTravelSeconds" type="number" min="0.1" max="30" step="0.1" value="2"></label>
+      <label>Khoảng cách chuyến tham chiếu (in)<input id="referenceDistanceInches" type="number" min="6" max="144" step="1" value="48"></label>
+      <label>Nghiêng tổ (s)<input id="tiltSeconds" type="number" min="0.1" max="4" step="0.1" value="4"></label>
+      <label>Đặt xuống mặt đất (s)<input id="settleSeconds" type="number" min="0.1" max="10" step="0.1" value="1"></label>
+      <label>Sức chứa của kế hoạch<input id="capacity" type="number" min="4" max="4" step="1" value="4"></label>
+    </div><p class="fine">Quãng đường theo khoảng cách và tuyến đường quanh khung. Một chuyến tham chiếu 48 inch mất 1 s để thu thập hoặc 2 s để quay lại. Thu nhận là 2 s cho mỗi lô tối đa bốn quả, cộng thêm thời gian di chuyển giữa các quả. Robot có thể thu thập bóng đã ổn định khi tổ nghiêng trong 4 s; bóng vỡ phải rơi và ổn định trước khi nhặt. G407 giới hạn robot ở bốn phần tử được điều khiển.</p>
+    <div id="timingSummary" class="timing-summary"></div>
+  </details>
+  <div class="editor-switch"><strong id="editingAlliance">Kế hoạch liên minh ĐỎ</strong>
+  <label>Kế hoạch để xem hoặc chỉnh sửa <select id="editorAlliance"><option value="red">Đỏ</option><option value="blue">Xanh</option></select></label>
+  <span id="editorContext">Xem kế hoạch không thay đổi liên minh của bạn.</span></div>
+  <div class="builder-grid">
+    <!-- palette -->
+    <aside class="palette">
+      <h3>Thêm một bước</h3><p class="fine">Nhấn một hành động bên dưới. Kéo thả là tùy chọn.</p>
+      <div class="pal-target">
+        <label for="paletteRobot">Robot cần chỉnh sửa</label>
+        <select id="paletteRobot"><option value="0">Robot 1</option><option value="1">Robot 2</option></select>
+        <label for="paletteSegment">Pha cần chỉnh sửa</label>
+        <select id="paletteSegment"><option value="auto" selected>TỰ ĐỘNG - 30 giây đầu</option>
+          <option value="teleopLate">ĐIỀU KHIỂN &middot; 60 s cuối</option>
+          <option value="teleopEarly">ĐIỀU KHIỂN &middot; 60 s đầu</option>
+        </select>
+      </div>
+
+      <h4 class="pal-group-h">TỰ ĐỘNG &middot; tự động <span>30 giây đầu</span></h4>
+      <div id="palette-auto" class="pal-list"></div>
+
+      <h4 class="pal-group-h">ĐIỀU KHIỂN &middot; người điều khiển <span>120 giây tiếp theo</span></h4>
+      <div id="palette-teleop" class="pal-list"></div>
+
+      <div id="bin" class="bin">
+        <svg class="ico" aria-hidden="true"><use href="#i-warn"></use></svg>
+        Kéo hành động đã đặt vào đây để xóa
+      </div>
+
+      <p class="fine">POLLEN sớm có thể được đặt vào một FLOWER và vẫn ghi điểm theo manual. NECTAR đặt trước 60 giây cuối sẽ bị gắn cờ, vẫn tính điểm nếu hợp lệ và mang theo hình phạt lớn G410 mỗi NECTAR.</p>
+    </aside>
+
+    <!-- robot lanes -->
+    <div id="lanes" class="lanes"></div>
+  </div>
+</section>
+
+<!-- ============================ ASSUMPTIONS ============================ -->
+<section class="notes" aria-label="Các giả định và giới hạn">
+  <h2>Giả định và giới hạn của công cụ</h2>
+
+  <div class="notegrid">
+    <article>
+      <h3>Giá trị ước tính</h3>
+      <p>Đây là mô phỏng lập kế hoạch với hình học minh họa, thời gian di chuyển và thu thập ước tính, cùng <strong>mô hình ước tính độ đầy/ngưỡng nghiêng của HIVE</strong>
+      (POLLEN&nbsp;<span data-fill="HIVE.units.pollen"></span>&nbsp;đơn vị, NECTAR&nbsp;<span data-fill="HIVE.units.nectar"></span>&nbsp;đơn vị,
+      nghiêng ở mức&nbsp;<span data-fill="HIVE.threshold"></span>). Sổ tay không đưa ra công thức và cho biết vị trí, cách bóng rơi quyết định kết quả.
+      Điểm số tuân theo sổ tay. Thời gian di chuyển và tác động của trọng lực chỉ là ước tính; mô phỏng không tính va chạm robot hay ma sát bóng đo được.</p>
+    </article>
+
+    <article>
+      <h3>Các robot hoạt động đồng thời</h3><p>Bốn robot di chuyển cùng lúc. Quãng đường, thời gian thu thập, bắn và chờ HIVE nghiêng quyết định thứ tự hoàn thành và quyền sở hữu FLOWER. TỰ ĐỘNG kết thúc sau 30 giây. ĐIỀU KHIỂN kéo dài liên tục 120 giây: hành động ở phút đầu có thể kết thúc sau mốc 60 giây, rồi các hành động phút cuối tiếp tục ngay, không tạm dừng. HIVE cần 4 giây để nghiêng; robot vẫn có thể thu thập trong lúc chờ.</p>
+    </article>
+
+    <article>
+      <h3>FLOWER dùng chung</h3><p>NECTAR được ghi điểm sau cùng sẽ xác định quyền sở hữu. Liên minh sở hữu FLOWER được tính điểm cho mọi bóng đã đặt trong đó, kể cả bóng do đối thủ đưa vào. NECTAR đầu tiên quyết định liên minh nhận điểm thưởng đáy; quyền này được giữ đến hết trận. Cả hai kế hoạch cùng sử dụng bốn FLOWER.</p>
+    </article>
+
+    <article>
+      <h3>Bóng có số lượng giới hạn</h3><p>Mô phỏng theo dõi đủ 40 POLLEN và 16 NECTAR, gồm bóng nạp sẵn, bóng trong FLOWER, VƯỜN, Ô của HIVE và bóng dự trữ. Bóng rơi phải chạm đất, nảy và ổn định trước khi được nhặt. Robot di chuyển đến vị trí bóng rơi. Robot chỉ được lấy POLLEN ở đáy FLOWER (G418) và chỉ thu thập NECTAR của liên minh mình. Khi thu thập, bóng được bỏ khỏi vị trí ghi điểm trước đó.</p>
+    </article>
+
+    <article>
+      <h3>ĐỖ được tính riêng ở hai giai đoạn</h3>
+      <p>Bảng 10-2 ghi điểm ĐỖ riêng cho TỰ ĐỘNG và ĐIỀU KHIỂN, được đánh giá ở hai thời điểm khác nhau. Robot đỗ ở cuối TỰ ĐỘNG, rời đi rồi đỗ lại khi trận kết thúc sẽ nhận cả hai thành tích, tổng cộng 10 điểm. Cách hiểu này giúp liên minh đạt ĐXH SWARM: hai robot có thể ghi 3+5+5 điểm mỗi robot, tổng 26 điểm, vượt ngưỡng 16. Nếu chỉ tính một lần đỗ thì cả liên minh chỉ có thể đạt đúng 16 điểm, khiến SWARM trở thành điều kiện chỉ có thể đạt hoặc không.</p>
+    </article>
+
+    <article>
+      <h3>Giai đoạn chuyển tiếp 8 giây</h3>
+      <p>Trận đấu gồm 30 giây TỰ ĐỘNG, 8 giây chuyển tiếp, rồi 2 phút ĐIỀU KHIỂN. Công cụ không đặt hành động trong thời gian chuyển tiếp và không dự đoán điểm số ở giai đoạn này; hãy tham khảo sổ tay để biết quy định.</p>
+    </article>
+
+    <article>
+      <h3>G410 và quy định về POLLEN</h3>
+      <p>G410 nêu rõ quy định áp dụng cho <strong>NECTAR</strong>: đưa NECTAR vào FLOWER trước 60 giây cuối sẽ bị LỖI NẶNG cho mỗi quả. Có thể đưa POLLEN vào FLOWER sớm hơn và vẫn được tính điểm, tùy thuộc vào các hình phạt có thể áp dụng.</p>
+    </article>
+
+    <article>
+      <h3>Mô phỏng chiến thuật, không phải mô phỏng vật lý</h3><p>Công cụ mô phỏng HIVE, tài nguyên, FLOWER, VƯỜN, hình phạt và kết quả trận đấu của cả hai liên minh. Công cụ không mô phỏng tránh va chạm, tiếp xúc phòng thủ, thu thập NECTAR của liên minh đối thủ hoặc vị trí hữu hạn của từng POLLEN trên sàn. Hành động THU THẬP POLLEN đại diện cho các bóng có thể nhặt trên sân.</p>
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- ============================ SOURCES ============================ -->
+<footer class="sources">
+  <section class="team-contact" aria-labelledby="teamContactTitle">
+    <h2 id="teamContactTitle">Kết nối với Digitron Dragons</h2>
+    <p>Theo dõi đội, chia sẻ chiến thuật hoặc liên hệ với chúng tôi.</p>
+    <div class="team-contact-links">
+      <a class="contact-card contact-instagram" href="https://www.instagram.com/digitrondragons_35816/" target="_blank" rel="noopener noreferrer" aria-label="Theo dõi Digitron Dragons trên Instagram (mở trong thẻ mới)">
+        <span class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>
+        <span class="contact-copy"><span class="contact-prompt">Theo dõi hành trình</span><span class="contact-handle">@digitrondragons_35816</span></span>
+        <span class="contact-arrow" aria-hidden="true">&#8599;</span>
+      </a>
+      <a class="contact-card contact-youtube" href="https://www.youtube.com/@digitrondragons" target="_blank" rel="noopener noreferrer" aria-label="Xem kênh YouTube của Digitron Dragons (mở trong thẻ mới)">
+        <span class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4" fill="currentColor"/><path d="m10 8 6 4-6 4z" fill="#b91c1c"/></svg></span>
+        <span class="contact-copy"><span class="contact-prompt">Xem video của đội</span><span class="contact-handle">@digitrondragons</span></span>
+        <span class="contact-arrow" aria-hidden="true">&#8599;</span>
+      </a>
+      <a class="contact-card contact-email" href="mailto:digitrondragons@gmail.com" aria-label="Gửi email cho Digitron Dragons qua digitrondragons@gmail.com">
+        <span class="contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m3.5 6 8.5 7 8.5-7"/></svg></span>
+        <span class="contact-copy"><span class="contact-prompt">Liên hệ với đội</span><span class="contact-handle">digitrondragons@gmail.com</span></span>
+        <span class="contact-arrow" aria-hidden="true">&#8599;</span>
+      </a>
+    </div>
+  </section>
+  <h2>Nguồn tham khảo</h2>
+  <ul>
+    <li><strong>FIRST Tech Challenge 2026-2027 Competition Manual, BIOBUZZ presented by RTX, Version 1 (published 2026-09-12)
+      &mdash; Section 10, Game Details, Table 10-2 and Table 10-3.</strong> Mọi giá trị điểm và ngưỡng Điểm xếp hạng trên trang này đều lấy từ tài liệu đó.</li>
+    <li>Video giới thiệu chính thức trên kênh YouTube của <em>FIRST</em> Tech Challenge:
+      <a href="https://youtu.be/sUH3z5a5S9I" rel="noopener noreferrer">BIOBUZZ presented by RTX Game Animation</a> and
+      <a href="https://youtu.be/47X9sYnPijw" rel="noopener noreferrer">BIOBUZZ presented by RTX Field Walkthrough</a>.
+      Các ví dụ HIVE nghiêng dùng để xây dựng ước tính độ đầy được lấy từ những video này.</li>
+    <li><a href="https://ftc-resources.firstinspires.org/ftc/game" rel="noopener noreferrer">Tài nguyên trò chơi chính thức</a></li>
+  </ul>
+  <p class="disclaim">Đây là công cụ lập kế hoạch không chính thức do người hâm mộ xây dựng. Công cụ không liên kết, được <em>FIRST</em> chứng thực hay đánh giá. Điểm số được chép từ Sổ tay thi đấu công khai; hãy đối chiếu với sổ tay chính thức trước khi dựa vào thông tin quan trọng.</p>
+  <p class="disclaim">Các mã luật được nhắc đến: G410, G417, G418 và mức phạt LỖI NHẸ / LỖI NẶNG. Công cụ không sử dụng mã luật nào khác. Hình minh họa được tự thiết kế; không sao chép hình dựng, dữ liệu CAD hoặc khung hình video của <em>FIRST</em>.</p>
+  <p class="disclaim">Chiến thuật được lưu thành tệp JSON trên thiết bị của bạn. Tệp tải lên được đọc cục bộ trong trình duyệt và không gửi lên máy chủ. Không cần tài khoản. Website đã xuất bản sử dụng Google Analytics để thống kê lượt truy cập và lượt xem công cụ lập kế hoạch; dịch vụ này có thể dùng cookie và xử lý thông tin thiết bị, kết nối. Nội dung chiến thuật, tên tệp, tên riêng và địa chỉ email không được đưa vào sự kiện phân tích. Cá nhân hóa quảng cáo và Google Signals đã tắt. Video nhúng kết nối với YouTube khi trình phát tải, dịch vụ này có thể xử lý dữ liệu xem và kết nối. Nhà cung cấp dịch vụ lưu trữ website có thể xử lý nhật ký kết nối thông thường.</p>
+</footer>
+
+<script src="js/rule.js?v=vi-3"></script>
+<script src="js/scoring.js"></script>
+<script src="js/world.js?v=vi-2"></script>
+<script src="js/bot3d.js?v=under-hive-1"></script>
+<script src="js/block.js?v=vi-2"></script>
+<script src="js/vendor/blockly/blockly_compressed.js?v=13.4.0"></script>
+<script src="js/vendor/blockly/blocks_compressed.js?v=13.4.0"></script>
+<script src="js/vendor/blockly/javascript_compressed.js?v=13.4.0"></script>
+<script src="js/vendor/blockly/vi.js?v=13.4.0-vi-1"></script>
+<script src="js/ftcblock.js?v=vi-2"></script>
+<script src="js/interup.js?v=1"></script>
+<script src="js/traffic.js"></script>
+<script src="js/time_match.js"></script>
+<script src="js/demo.js?v=empty-phase-1"></script>
+<script src="js/flied3d.js?v=under-hive-1"></script>
+<script src="js/strategy_states.js?v=2"></script>
+<script src="js/ui.js?v=ftc-blocks-vi-4"></script>
+<script src="js/beginner.js?v=shared-field-2"></script>
+<script>window.BBEase.init(); window.BBUI.init();</script>
+<script src="js/video_turiol.js?v=4"></script>
+<script src="js/recpis.js?v=clear-recipes-2"></script>
+<script src="js/mobile.js?v=mobile-video-first-1"></script>
+<script src="js/strategy_file.js?v=14"></script>
+<script src="js/home.js?v=vi-1"></script>
+<script src="js/app.js?v=tutorial-page-vi-2"></script>
+</body>
+</html>
