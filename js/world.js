@@ -199,6 +199,8 @@ function defaultRobot() {
   return {
     name: 'Ong Khởi Đầu', alliance: 'red', start: 'hive', drive: 'mecanum', motor: 'gb312', wheel: 'w104',
     realistic: true, width: 17, length: 17, paint: 'steel',
+    tuning: { drive: 100, turn: 100, shooter: 100, intake: 100 },
+    cad: '', cadFacing: 0,
     tools: { intake: true, launcher: true, lift: true, imu: true, distance: true, camera: false },
     kit: { intake: 'roller', launcher: 'flywheel', lift: 'slide' },
     layout: defaultLayout(),
@@ -219,6 +221,14 @@ function sanitizeRobot(o) {
   d.wheel = pick(o.wheel, WHEELS, 'w104');
   d.paint = pick(o.paint, PAINTS, 'steel');
   d.realistic = o.realistic !== false;
+  if (o.tuning && typeof o.tuning === 'object') {
+    Object.keys(d.tuning).forEach((key) => {
+      const value = o.tuning[key];
+      if (typeof value === 'number' && isFinite(value)) d.tuning[key] = clamp(Math.round(value / 5) * 5, 25, 175);
+    });
+  }
+  d.cad = typeof o.cad === 'string' ? o.cad.slice(0, 120) : '';
+  d.cadFacing = o.cadFacing === 1 || o.cadFacing === 2 || o.cadFacing === 3 ? o.cadFacing : 0;
   const dim = (v, def) => (typeof v === 'number' && isFinite(v)) ? clamp(Math.round(v * 2) / 2, 12, 18) : def;
   d.width = dim(o.width, 17); d.length = dim(o.length, 17);
   if (o.tools && typeof o.tools === 'object') Object.keys(TOOLS).forEach((t) => { if (typeof o.tools[t] === 'boolean') d.tools[t] = o.tools[t]; });
@@ -253,7 +263,7 @@ function turnK(cfg) {
   return cfg.drive === 'mecanum' ? (cfg.width - 2) / 2 + (cfg.length - 5) / 2 : (cfg.width - 2) / 2;
 }
 function ticksPerInch(cfg) { return MOTORS[cfg.motor].tpr / (Math.PI * WHEELS[cfg.wheel].d) / DRIVES[cfg.drive].kf; }
-function topSpeed(cfg) { return 0.85 * MOTORS[cfg.motor].rpm / 60 * Math.PI * WHEELS[cfg.wheel].d * DRIVES[cfg.drive].kf; }
+function topSpeed(cfg) { return 0.85 * MOTORS[cfg.motor].rpm / 60 * Math.PI * WHEELS[cfg.wheel].d * DRIVES[cfg.drive].kf * ((cfg.tuning && cfg.tuning.drive) || 100) / 100; }
 function liftMax(cfg) { return cfg && cfg.kit.lift === 'arm' ? 24 : LIFT_MAX_IN; }
 function liftTicksPerInch(cfg) { return cfg && cfg.kit.lift === 'arm' ? 60 : MECH_MOTOR.tpr / (Math.PI * LIFT_SPOOL_IN); }
 
@@ -342,7 +352,7 @@ class Motor {
   constructor(role, name, spec, opt) {
     opt = opt || {};
     this.role = role; this.name = name; this.rpm = spec.rpm; this.tpr = spec.tpr;
-    this.tps = spec.rpm / 60 * spec.tpr;
+    this.tps = spec.rpm / 60 * spec.tpr * (opt.speedScale || 1);
     this.mount = opt.mount || 1; this.gain = opt.gain || 1; this.tau = opt.tau || 0.1;
     this.min = opt.min; this.max = opt.max;
     this.raw = 0; this.off = 0; this.u = 0;
@@ -420,7 +430,7 @@ class World {
     this.time = 0; this.mode = 'idle'; this.clock = 0; this.enabled = false; this.endgame = false;
     this.events = []; this.phaseChanged = false; this.crossed = false;
     this.autoLeave = false; this.autoPark = false; this.autoDone = false; this.fouls = 0;
-    this.wheelSpeed = spec.rpm / 60 * Math.PI * WHEELS[c.wheel].d;
+    this.wheelSpeed = spec.rpm / 60 * Math.PI * WHEELS[c.wheel].d * c.tuning.drive / 100;
     this.turnK = turnK(c); this.drv = DRIVES[c.drive];
     this.pp = {}; Object.keys(PARTS).forEach((k) => { this.pp[k] = partPos(c, k); });
     this.tagAt = -1; this.tagList = [];
@@ -432,7 +442,7 @@ class World {
         if (ROLES[d.role] && (d.role === 'intake')) m = new Motor(d.role, d.name, MECH_MOTOR, { tau: 0.12 });
         else if (d.role === 'launcher' || d.role === 'launcher2') m = new Motor(d.role, d.name, LAUNCH_MOTOR, { tau: c.kit.launcher === 'dual' ? 0.32 : 0.45 });
         else if (d.role === 'lift') m = new Motor(d.role, d.name, c.kit.lift === 'arm' ? { rpm: 312, tpr: 288 } : MECH_MOTOR, { tau: 0.08, min: 0, max: liftMax(c) * liftTicksPerInch(c) });
-        else m = new Motor(d.role, d.name, spec, { tau: 0.1, gain: 0.85, mount: (c.realistic && (d.role === 'fl' || d.role === 'bl' || d.role === 'left')) ? -1 : 1 });
+        else m = new Motor(d.role, d.name, spec, { tau: 0.1, gain: 0.85, speedScale: c.tuning.drive / 100, mount: (c.realistic && (d.role === 'fl' || d.role === 'bl' || d.role === 'left')) ? -1 : 1 });
         this.m[d.role] = m; this.motorList.push(m);
         this.devices.set(d.name, { kind: 'motor', dev: m, api: motorApi(m) });
       } else if (d.kind === 'servo') {
@@ -580,6 +590,7 @@ class World {
       const l = M.left.u * M.left.mount * ws, rr = M.right.u * M.right.mount * ws;
       vx = (l + rr) / 2; om = (rr - l) / (2 * this.turnK);
     }
+    om *= c.tuning.turn / 100;
     const ox = r.x, oy = r.y, oth = r.th, cs = Math.cos(r.th), sn = Math.sin(r.th);
     r.x += (vx * cs - vy * sn) * dt; r.y += (vx * sn + vy * cs) * dt; r.th += om * dt;
     this.collideRobot();
@@ -646,14 +657,14 @@ class World {
     r.intakeT -= dt;
     if (this.m.intake) {
       const u = this.m.intake.u, fast = kit.intake === 'wheels';
-      r.roll += u * dt * 14;
+      r.roll += u * dt * 14 * this.cfg.tuning.intake / 100;
       if (u > 0.25 && held.length < 4 && r.intakeT <= 0) {
         const got = fast ? this.reachable(3.4, 0.62) : this.reachable(2.2, 1);
-        if (got) { this.take(got); r.intakeT = (fast ? 0.17 : 0.28) / Math.max(u, 0.3); }
+        if (got) { this.take(got); r.intakeT = (fast ? 0.17 : 0.28) / (Math.max(u, 0.3) * this.cfg.tuning.intake / 100); }
       } else if (u < -0.25 && held.length && r.intakeT <= 0) {
         const b = held.pop(), p = this.sidePoint(this.pp.intake.face, b.r + 0.4, 0);
-        b.st = 'floor'; b.x = p.x; b.y = p.y; b.vx = r.vx + Math.cos(p.a) * 16 * -u; b.vy = r.vy + Math.sin(p.a) * 16 * -u;
-        r.intakeT = 0.3;
+        b.st = 'floor'; b.x = p.x; b.y = p.y; b.vx = r.vx + Math.cos(p.a) * 16 * -u * this.cfg.tuning.intake / 100; b.vy = r.vy + Math.sin(p.a) * 16 * -u * this.cfg.tuning.intake / 100;
+        r.intakeT = 0.3 / (this.cfg.tuning.intake / 100);
       }
     }
     if (this.s.claw) {
@@ -669,7 +680,7 @@ class World {
       r.clawShut = shut;
     }
     if (this.m.launcher) {
-      r.spin += this.m.launcher.u * dt * 40;
+      r.spin += this.m.launcher.u * dt * 40 * this.cfg.tuning.shooter / 100;
       if (this.s.feeder) {
         const up = this.s.feeder.actual >= 0.5;
         if (up && !r.feederUp && held.length) this.launch();
@@ -699,9 +710,9 @@ class World {
     if (i < 0) return;
     const b = r.held.splice(i, 1)[0];
     let range, spread;
-    if (kit === 'catapult') { range = CATAPULT_RANGE * rnd(0.985, 1.015); spread = 1.4; }
+    if (kit === 'catapult') { range = CATAPULT_RANGE * this.cfg.tuning.shooter / 100 * rnd(0.985, 1.015); spread = 1.4; }
     else {
-      const f = kit === 'dual' ? Math.max(0, (this.m.launcher.u + (this.m.launcher2 ? this.m.launcher2.u : 0)) / 2) : Math.max(0, this.m.launcher.u);
+      const f = (kit === 'dual' ? Math.max(0, (this.m.launcher.u + (this.m.launcher2 ? this.m.launcher2.u : 0)) / 2) : Math.max(0, this.m.launcher.u)) * this.cfg.tuning.shooter / 100;
       range = (f < 0.15 ? 9 : 12 + 78 * f * f) * (kit === 'dual' ? rnd(0.99, 1.01) : rnd(0.98, 1.02));
       spread = kit === 'dual' ? 0.4 : 1;
     }
@@ -1208,7 +1219,8 @@ function drawField(ctx, w, px, col) {
     ctx.globalAlpha = 1;
   }
   ctx.save(); ctx.translate(r.x, r.y); ctx.rotate(r.th);
-  drawRobot(ctx, cfg, { intake: w.m.intake ? w.m.intake.u : 0, launcher: w.m.launcher ? w.m.launcher.u : 0, spin: r.spin, roll: r.roll, lift: w.liftHeight(),
+  const customModel = cfg.cad && BBZ.CAD3D && BBZ.CAD3D.drawTop(ctx, cfg);
+  if (!customModel) drawRobot(ctx, cfg, { intake: w.m.intake ? w.m.intake.u : 0, launcher: w.m.launcher ? w.m.launcher.u : 0, spin: r.spin, roll: r.roll, lift: w.liftHeight(),
     claw: w.s.claw ? w.s.claw.actual : 0, cata: r.cataShow, held: r.held.map((b) => b.type) }, col);
   ctx.restore();
   /* pieces in the air */

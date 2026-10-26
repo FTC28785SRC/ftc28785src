@@ -55,6 +55,12 @@
       '</section>' +
       '<section id="view-build" class="studio-view" hidden>' +
         '<div class="studio-toolbar"><label>Tên robot <input id="botName" maxlength="40"></label><button type="button" class="btn" id="btnResetBot">Đặt lại robot</button></div>' +
+        '<section class="studio-card robot-tuning" aria-label="Thông số robot"><h2>Thông số mô phỏng</h2><div class="tuning-grid">' +
+          '<label>Tốc độ di chuyển <output id="driveTuneOut"></output><input type="range" id="driveTune" min="25" max="175" step="5"></label>' +
+          '<label>Tốc độ xoay <output id="turnTuneOut"></output><input type="range" id="turnTune" min="25" max="175" step="5"></label>' +
+          '<label>Tốc độ bắn <output id="shooterTuneOut"></output><input type="range" id="shooterTune" min="25" max="175" step="5"></label>' +
+          '<label>Tốc độ hút / nhả <output id="intakeTuneOut"></output><input type="range" id="intakeTune" min="25" max="175" step="5"></label>' +
+        '</div><p class="hint">100% là mức mặc định. Thông số chỉ ảnh hưởng đến vật lý trong mô phỏng.</p></section>' +
         '<div class="studio-layout build-layout">' +
           '<section class="studio-card"><h2>Hệ truyền động</h2><div id="driveList" class="drive-list"></div>' +
             '<label>Loại động cơ <select id="motorSel"></select></label><label>Kích thước bánh xe <select id="wheelSel"></select></label>' +
@@ -62,7 +68,7 @@
             '<label>Chiều dài <input type="range" id="lengthRange" min="12" max="18" step=".5"><output id="lengthOut"></output></label>' +
             '<label id="realisticBox"><input type="checkbox" id="realistic"> Phản hồi động cơ thực tế</label>' +
             '<h3>Màu khung</h3><div id="paintList" class="paint-list"></div></section>' +
-          '<section class="studio-card"><h2>Xem trước robot</h2><div class="preview-tools"><button type="button" class="btn" data-vm="3d">Góc nhìn 3D</button><button type="button" class="btn" data-vm="top">Góc nhìn trên</button><button type="button" class="btn" id="btnTurnPart">Xoay bộ phận đã chọn</button><button type="button" class="btn" id="btnResetLayout">Đặt lại bố cục</button></div>' +
+          '<section class="studio-card"><h2>Xem trước robot</h2><div class="cad-upload"><label for="cadFile">Tải mô hình CAD (.GLB, .OBJ hoặc .STL)</label><input type="file" id="cadFile" accept=".glb,.obj,.stl,model/gltf-binary,model/obj,model/stl"><button type="button" class="btn" id="btnRemoveCad" hidden>Xóa mô hình CAD</button><button type="button" class="btn" id="btnRotateCad" hidden>Xoay hướng CAD: 0°</button><p id="cadStatus" role="status">Mô hình CAD được dùng làm hình hiển thị; điều khiển và cơ cấu vẫn chạy theo mô phỏng.</p></div><div class="preview-tools"><button type="button" class="btn" data-vm="3d">Góc nhìn 3D</button><button type="button" class="btn" data-vm="top">Góc nhìn trên</button><button type="button" class="btn" id="btnTurnPart">Xoay bộ phận đã chọn</button><button type="button" class="btn" id="btnResetLayout">Đặt lại bố cục</button></div>' +
             '<canvas id="preview" width="720" height="720" tabindex="0" aria-label="Mô hình robot tương tác. Kéo để xoay hoặc sắp xếp các bộ phận."></canvas>' +
             '<p id="layoutMsg" role="status"></p><div id="partList" class="part-list"></div><h3>Mẫu robot</h3><div id="presetList" class="preset-list"></div></section>' +
           '<aside class="studio-card"><h2>Cơ cấu và cảm biến</h2><div id="toolList" class="tool-list"></div><h3>Cảm biến</h3><div id="sensorList" class="tool-list"></div>' +

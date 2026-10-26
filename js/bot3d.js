@@ -330,7 +330,7 @@ function draw(cv, cfg, o) {
   const col = o.colors || BBZ.colors(), ctx = cv.getContext('2d'), W = cv.width, H = cv.height;
   const yaw = o.yaw === undefined ? -0.9 : o.yaw, pitch = o.pitch === undefined ? 0.5 : o.pitch;
   const ca = Math.cos(yaw), sa = Math.sin(yaw), ce = Math.cos(pitch), se = Math.sin(pitch);
-  const faces = model(cfg, o.only), part = o.only && o.only !== 'drive';
+  const faces = o.cad && !o.only && BBZ.CAD3D ? BBZ.CAD3D.faces(cfg) : model(cfg, o.only), part = o.only && o.only !== 'drive';
   /* centres and sizes the picture on what is shown */
   let mid = [0, 0, o.only ? 2 : 5], reach = o.only ? 11.5 : 14.2;
   if (part) {

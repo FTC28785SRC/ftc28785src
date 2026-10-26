@@ -84,6 +84,57 @@
   grid-template-columns: minmax(230px, .8fr) minmax(320px, 1.2fr) minmax(280px, 1fr);
   align-items: start;
 }
+.robot-tuning {
+  margin: 0 0 14px;
+}
+.tuning-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px 16px;
+}
+.tuning-grid label {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0;
+}
+.tuning-grid input {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+.tuning-grid output {
+  color: var(--ally);
+  font-weight: 700;
+}
+.cad-upload {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 6px 10px;
+  margin: 0 0 12px;
+}
+.cad-upload label {
+  margin: 0;
+  font-weight: 700;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.cad-upload input {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.cad-upload button {
+  justify-self: start;
+}
+.cad-upload p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--ink-dim);
+  font-size: .8rem;
+  overflow-wrap: break-word;
+}
 .studio-card {
   min-width: 0;
   padding: 14px;
@@ -109,7 +160,8 @@
 .studio-card li,
 .studio-card th,
 .studio-card td {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 .studio-card h2 {
   margin-top: 0;
@@ -368,11 +420,25 @@ body[data-field-mode="ftc"] #fieldWrap {
 }
 .drive-list button,
 .part-list button {
-  display: flex;
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
   align-items: center;
   gap: 8px;
   width: 100%;
   text-align: left;
+}
+.drive-list button > canvas {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  flex: none;
+}
+.drive-list button > b,
+.drive-list button > span {
+  grid-column: 2;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 .drive-list button[aria-pressed="true"],
 .part-list button[aria-pressed="true"] {

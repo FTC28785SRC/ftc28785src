@@ -16,9 +16,13 @@
     startAudio.currentTime = 0;
     try {
       var playback = startAudio.play();
-      if (playback && typeof playback.catch === 'function') playback.catch(reportAudioError);
+      if (playback && typeof playback.then === 'function') {
+        return playback.then(function () { return true; }).catch(function (error) { reportAudioError(error); return false; });
+      }
+      return Promise.resolve(true);
     } catch (error) {
       reportAudioError(error);
+      return Promise.resolve(false);
     }
   }
   function stopStartAudio() {
@@ -55,7 +59,7 @@
   }
   var result = null;          // latest simulate() output
   var eventByUid = {};
-  var play = { idx: -1, timer: null, running: false };
+  var play = { idx: -1, timer: null, running: false, starting: false };
 
   var $ = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
@@ -641,14 +645,19 @@
   }
 
   function startPlayback() {
-    if (!result.events.length) { return; }
-    playStartAudio();
-    play.running = true;
-    $('#playBtn').textContent = '⏸ Tạm dừng';
-    $('#playBtn').setAttribute('aria-label', 'Tạm dừng phát lại');
-    document.body.classList.add('is-playing');
-    if (play.idx >= result.events.length - 1) { play.idx = -1; showStep(-1, false); }
-    if (play.pausedMid) { play.pausedMid=false; var wait=showStep(play.idx,true,true); play.timer=setTimeout(tick,Math.max(16,wait)); } else tick();
+    if (!result.events.length || play.running || play.starting) { return; }
+    play.starting = true;
+    $('#playBtn').textContent = 'Đang đồng bộ âm thanh...';
+    playStartAudio().then(function () {
+      if (!play.starting) return;
+      play.starting = false;
+      play.running = true;
+      $('#playBtn').textContent = '⏸ Tạm dừng';
+      $('#playBtn').setAttribute('aria-label', 'Tạm dừng phát lại');
+      document.body.classList.add('is-playing');
+      if (play.idx >= result.events.length - 1) { play.idx = -1; showStep(-1, false); }
+      if (play.pausedMid) { play.pausedMid=false; var wait=showStep(play.idx,true,true); play.timer=setTimeout(tick,Math.max(16,wait)); } else tick();
+    });
   }
   function tick() {
     if (!play.running) { return; }
@@ -674,6 +683,7 @@
   }
   function stopPlayback(silent) {
     play.pausedMid=false;
+    play.starting = false;
     play.running = false;
     clearTimeout(play.timer);
     stopStartAudio();
@@ -872,7 +882,7 @@
     $('#viewTop').addEventListener('click', function () { FIELD.setView('top'); });
 
     $('#playBtn').addEventListener('click', function () {
-      if (play.running) { finishPlaybackQuiet(); play.pausedMid=true; } else { startPlayback(); }
+      if (play.running || play.starting) { finishPlaybackQuiet(); play.pausedMid=true; } else { startPlayback(); }
     });
     $('#stepBack').addEventListener('click', function () { finishPlaybackQuiet(); showStep(play.idx - 1, false); });
     $('#stepFwd').addEventListener('click', function () { finishPlaybackQuiet(); showStep(play.idx + 1, true); });
@@ -884,6 +894,7 @@
   }
   function finishPlaybackQuiet() {
     play.pausedMid=false;
+    play.starting = false;
     play.running = false;
     clearTimeout(play.timer);
     stopStartAudio();
@@ -1940,7 +1951,9 @@ function drawBot(cv, cfg, pick, label) {
   ctx.setTransform(k, 0, 0, -k, px / 2, px / 2);
   ctx.strokeStyle = col.tileLine; ctx.lineWidth = 0.15; ctx.setLineDash([0.6, 0.6]); ctx.strokeRect(-9, -9, 18, 18); ctx.setLineDash([]);
   ctx.rotate(Math.PI / 2);
-  BBZ.drawRobot(ctx, cfg, { held: ['P', 'P', 'P'], lift: 8, spin: 0.6, roll: 0, claw: 0.2, cata: 0 }, col, pick);
+  if (!cfg.cad || !BBZ.CAD3D || !BBZ.CAD3D.drawTop(ctx, cfg)) {
+    BBZ.drawRobot(ctx, cfg, { held: ['P', 'P', 'P'], lift: 8, spin: 0.6, roll: 0, claw: 0.2, cata: 0 }, col, pick);
+  }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (label) { ctx.fillStyle = col.tileText; ctx.font = '600 ' + Math.round(px / 30) + 'px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('FRONT', px / 2, px / 24); }
 }
@@ -1949,7 +1962,7 @@ let view3d = true, turning = false, spinRaf = 0, spinAt = 0;
 const mainView = { yaw: -0.9, pitch: 0.62 };
 const has3d = () => !!(BBZ.Bot3D && view3d);
 function drawPreview() {
-  if (has3d()) { if (!col) readColors(); BBZ.Bot3D.draw($('preview'), state.robot, { yaw: mainView.yaw, pitch: mainView.pitch, pick: pickKey, label: true, colors: col }); }
+  if (has3d()) { if (!col) readColors(); BBZ.Bot3D.draw($('preview'), state.robot, { yaw: mainView.yaw, pitch: mainView.pitch, pick: pickKey, label: true, cad: !!(state.robot.cad && BBZ.CAD3D.active), colors: col }); }
   else drawBot($('preview'), state.robot, pickKey, true);
 }
 /* The 3D model turns slowly by itself while the Build Bot tab is open. */
@@ -2035,6 +2048,16 @@ function renderPresets() {
 function renderBuild() {
   const c = state.robot;
   $('botName').value = c.name;
+  [['drive', 'driveTune'], ['turn', 'turnTune'], ['shooter', 'shooterTune'], ['intake', 'intakeTune']].forEach(([key, id]) => {
+    $(id).value = c.tuning[key];
+    $(id + 'Out').textContent = c.tuning[key] + '%';
+  });
+  $('btnRemoveCad').hidden = !c.cad;
+  $('btnRotateCad').hidden = !c.cad;
+  $('btnRotateCad').textContent = 'Xoay hướng CAD: ' + (c.cadFacing * 90) + '°';
+  $('cadStatus').textContent = c.cad && BBZ.CAD3D.active ? 'Đang dùng mô hình ' + c.cad + ' cho xem trước và sân mô phỏng. Các bộ phận CAD không tự chuyển động riêng.' :
+    c.cad ? 'Không thể khôi phục mô hình ' + c.cad + ' từ bộ nhớ của trình duyệt này.' :
+      'Mô hình CAD được dùng làm hình hiển thị; điều khiển và cơ cấu vẫn chạy theo mô phỏng.';
   const dl = $('driveList'); dl.textContent = '';
   Object.keys(BBZ.DRIVES).forEach((k) => {
     const d = BBZ.DRIVES[k];
@@ -2102,6 +2125,50 @@ const NAME_SETS = {
 };
 function wireBuild() {
   const c = () => state.robot;
+  [['drive', 'driveTune'], ['turn', 'turnTune'], ['shooter', 'shooterTune'], ['intake', 'intakeTune']].forEach(([key, id]) => {
+    const input = $(id);
+    input.addEventListener('input', () => {
+      c().tuning[key] = +input.value;
+      $(id + 'Out').textContent = input.value + '%';
+    });
+    input.addEventListener('change', () => applyRobot(false));
+  });
+  $('cadFile').addEventListener('change', async (event) => {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const status = $('cadStatus');
+    status.textContent = 'Đang đọc và kiểm tra mô hình CAD...';
+    try {
+      const mesh = await BBZ.CAD3D.read(file);
+      await BBZ.CAD3D.save(mesh);
+      BBZ.CAD3D.active = mesh;
+      c().cad = mesh.name;
+      c().cadFacing = 0;
+      applyRobot();
+      status.textContent = 'Đã tải ' + mesh.name + '. Xoay hình để xem trước; mô hình sẽ theo robot trên sân.';
+    } catch (error) {
+      console.error('Không thể tải mô hình CAD.', error);
+      status.textContent = error && error.message ? error.message : 'Không thể đọc mô hình CAD.';
+    } finally {
+      event.target.value = '';
+    }
+  });
+  $('btnRemoveCad').addEventListener('click', async () => {
+    try {
+      await BBZ.CAD3D.remove();
+      c().cad = '';
+      c().cadFacing = 0;
+      applyRobot();
+    } catch (error) {
+      console.error('Không thể xóa mô hình CAD đã lưu.', error);
+      $('cadStatus').textContent = error && error.message ? error.message : 'Không thể xóa mô hình CAD.';
+    }
+  });
+  $('btnRotateCad').addEventListener('click', () => {
+    c().cadFacing = (c().cadFacing + 1) % 4;
+    applyRobot(false);
+    $('btnRotateCad').textContent = 'Xoay hướng CAD: ' + (c().cadFacing * 90) + '°';
+  });
   $('botName').addEventListener('change', (e) => { c().name = e.target.value; applyRobot(); });
   $('motorSel').addEventListener('change', (e) => { c().motor = e.target.value; applyRobot(); });
   $('wheelSel').addEventListener('change', (e) => { c().wheel = e.target.value; applyRobot(); });
@@ -2247,8 +2314,17 @@ BBZ.dryRun = (src, cfg, mode, seconds, pads) => {
 };
 BBZ.colors = () => { readColors(); return col; };
 BBZ.currentRobot = () => state.robot;
-function init() {
+async function init() {
   load();
+  if (state.robot.cad) {
+    try {
+      BBZ.CAD3D.active = await BBZ.CAD3D.restore();
+      if (!BBZ.CAD3D.active) throw new Error('Không tìm thấy dữ liệu mô hình CAD đã lưu trên thiết bị này.');
+    } catch (error) {
+      console.error('Không thể khôi phục mô hình CAD.', error);
+      $('cadStatus').textContent = error && error.message ? error.message : 'Không thể khôi phục mô hình CAD.';
+    }
+  }
   readColors();
   world = new BBZ.World(state.robot);
   wireInput(); wireEditor(); wireStation(); wireBuild();
