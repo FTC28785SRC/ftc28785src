@@ -1351,12 +1351,13 @@ function endPractice() {
 function runOpen() {
   const p = openProg();
   if (!p) return;
+  stopStartAudio();
   /* An autonomous run always begins from a fresh field. */
   const fresh = p.mode === 'auto';
   if (matchOn || world.mode === 'over' || fresh) { endOpMode(); world.reset(); clearLog(); rebuildHw(); }
   matchOn = false;
   world.mode = fresh ? 'autotest' : 'practice';            /* an autonomous run on its own is scored as AUTO */
-  if (startOpMode(p)) { playStartAudio(); setStatus('Đang chạy "' + p.name + '"' + (fresh ? ' từ vị trí xuất phát' : '') + '. Nhấn Dừng khi bạn muốn kết thúc.'); addLog('info', 'Đã chạy ' + p.name + (fresh ? ' trên sân mới (luyện tập, không tính giờ).' : ' (luyện tập, không tính giờ).')); }
+  if (startOpMode(p)) { setStatus('Đang chạy "' + p.name + '"' + (fresh ? ' từ vị trí xuất phát' : '') + '. Nhấn Dừng khi bạn muốn kết thúc.'); addLog('info', 'Đã chạy ' + p.name + (fresh ? ' trên sân mới (luyện tập, không tính giờ).' : ' (luyện tập, không tính giờ).')); }
   else { stopStartAudio(); world.mode = 'idle'; setStatus('Chương trình gặp sự cố. Hãy kiểm tra thông báo bên dưới trình soạn thảo.'); }
 }
 const sfx = (name) => { try { if (BBZ.Sound) BBZ.Sound.play(name); } catch (e) { /* sound is optional */ } };
