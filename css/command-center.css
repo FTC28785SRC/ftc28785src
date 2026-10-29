@@ -1,0 +1,657 @@
+:root {
+  --bg: #080a0f;
+  --bg2: #0d1017;
+  --panel: #11141d;
+  --panel2: #191d27;
+  --line: #272a31;
+  --line2: #3a4050;
+  --ink: #f1f3fa;
+  --ink-dim: #a7adc2;
+  --ink-mute: #7c8498;
+  --red: #ff2a85;
+  --red-deep: #7e123e;
+  --red-glow: rgba(255, 42, 133, .4);
+  --blue: #39a7ff;
+  --blue-deep: #10366f;
+  --blue-glow: rgba(57, 167, 255, .4);
+  --pollen: #e2fd52;
+  --good: #01ed7c;
+  --bad: #ff5252;
+  --warn: #ffb03a;
+  --r: 3px;
+  --r-s: 2px;
+  --sh: 4px 4px 0 #000;
+}
+
+body {
+  padding-bottom: 48px;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(255, 42, 133, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 42, 133, .035) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 25%, rgba(226, 253, 82, .035), transparent 68%);
+  background-size: 32px 32px, 32px 32px, 100% 100%;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--mono);
+}
+
+h2 {
+  color: var(--ink);
+}
+
+select,
+input:not([type="range"]):not([type="checkbox"]),
+textarea {
+  border-radius: 2px;
+  border-color: var(--line2);
+  background-color: #080a0f;
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+  border-color: var(--pollen);
+}
+
+.btn {
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 #000;
+  transition: background-color .15s, border-color .15s, color .15s, transform .15s;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--pollen);
+  filter: brightness(1.08);
+}
+
+.btn:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #000;
+}
+
+.btn-primary {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--red);
+}
+
+.topbar {
+  position: relative;
+  z-index: 40;
+  margin: 0 calc(-1 * clamp(12px, 2.4vw, 28px));
+  padding: 10px clamp(12px, 2.4vw, 28px);
+  border-bottom: 2px solid var(--line);
+  background: rgba(11, 14, 20, .96);
+  box-shadow: 0 4px 0 #000;
+}
+
+.topbar h1 {
+  margin: 0;
+  color: #fff;
+  font-family: var(--mono);
+  font-size: clamp(1.2rem, 2vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: -.04em;
+}
+
+.logo img {
+  width: 46px;
+  height: 46px;
+  border: 2px solid var(--red);
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 var(--pollen);
+}
+
+.tagline {
+  color: var(--good);
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.welcome,
+.match-setup,
+.board-wrap,
+.scorecard,
+.match-card,
+.palette,
+.lane,
+.notes,
+.team-contact,
+.studio-view,
+.studio-card {
+  border: 2px solid var(--line);
+  border-radius: 2px;
+  background: var(--panel);
+  box-shadow: var(--sh);
+}
+
+.welcome.tactical-intro {
+  border-color: var(--line);
+  background: linear-gradient(135deg, #11141d, #0d1017);
+  box-shadow: var(--sh);
+}
+
+.welcome.tactical-intro::before {
+  opacity: .14;
+  background-image:
+    linear-gradient(rgba(255, 42, 133, .28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 42, 133, .28) 1px, transparent 1px);
+}
+
+.welcome-copy .eyebrow,
+.studio-kicker {
+  color: var(--pollen) !important;
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .14em;
+}
+
+.welcome-copy #welcomeTitle {
+  font-family: var(--mono);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  letter-spacing: -.05em;
+}
+
+.welcome-copy #welcomeTitle span {
+  color: var(--red);
+  text-shadow: 0 0 20px rgba(255, 42, 133, .2);
+}
+
+.welcome-copy > .welcome-intro {
+  color: var(--ink-dim);
+}
+
+.welcome-actions #demoBtn,
+.welcome-actions #randomOpponentBtn {
+  border: 2px solid var(--red);
+  border-radius: 2px;
+  background: var(--red);
+  box-shadow: 3px 3px 0 #000;
+}
+
+.welcome-actions .welcome-build-cta,
+.btn-outline-glow {
+  border: 1px solid var(--pollen);
+  border-radius: 2px;
+  background: #171a22;
+  color: var(--pollen);
+  box-shadow: 2px 2px 0 #000;
+}
+
+.welcome-steps {
+  gap: 8px;
+}
+
+.process-card {
+  border: 1px solid var(--line2);
+  border-left: 3px solid var(--line2);
+  border-radius: 2px;
+  background: #0b0e14;
+}
+
+.process-card.is-active {
+  border-color: var(--red);
+  border-left-color: var(--red);
+  box-shadow: 2px 2px 0 #000;
+}
+
+.process-card[data-process-step="build"] {
+  border-left-color: var(--pollen);
+}
+
+.process-card[data-process-step="compare"] {
+  border-left-color: var(--good);
+}
+
+.tutorial-inline,
+.tactical-status,
+.demo-summary {
+  border-color: var(--line);
+  border-radius: 2px;
+  background: #0b0e14;
+}
+
+.tutorial-inline h3,
+.setup-heading h2 {
+  color: #fff;
+}
+
+.tutorial-footer,
+.tutorial-footer a {
+  color: var(--ink-dim);
+}
+
+.telemetry-chip {
+  border: 1px solid var(--line2);
+  border-radius: 2px;
+  background: #080a0f;
+  font-family: var(--mono);
+}
+
+.progress-track {
+  border: 1px solid var(--line2);
+  border-radius: 0;
+  background: #080a0f;
+}
+
+.progress-track > span {
+  background: linear-gradient(90deg, var(--red), var(--pollen), var(--good));
+}
+
+.match-setup {
+  margin-top: 14px;
+  padding: 14px;
+}
+
+.setup-heading p,
+.setup-note {
+  color: var(--ink-dim);
+}
+
+.match-setup .topbar-controls {
+  gap: 8px;
+}
+
+.match-setup .topbar-controls > label {
+  color: var(--ink-dim);
+}
+
+.workspace-nav {
+  gap: 6px;
+  padding: 10px 0;
+  background: rgba(8, 10, 15, .96);
+}
+
+.workspace-nav .btn {
+  font-family: var(--mono);
+  font-size: .76rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.workspace-nav .btn[aria-pressed="true"] {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.stage {
+  grid-template-columns: minmax(0, 1.75fr) minmax(300px, .9fr);
+  gap: 14px;
+}
+
+.board-wrap {
+  padding: 14px;
+  background: #10131a;
+}
+
+.board-head {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+
+.board-head h2 {
+  color: #fff;
+  font-family: var(--mono);
+}
+
+.board-sub,
+.orientation-key,
+.field-key,
+.field-hint,
+.match-clock,
+.playlabel {
+  color: var(--ink-dim);
+}
+
+.view-controls {
+  padding: 6px;
+  border: 1px solid var(--line);
+  background: #080a0f;
+}
+
+.view-controls [aria-pressed="true"] {
+  border-color: var(--pollen);
+  background: var(--pollen);
+  color: #11141d;
+}
+
+#fieldSvg {
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: #07090e;
+}
+
+.readout-red,
+.readout-blue,
+.phase-track span,
+.match-clock strong {
+  border-radius: 2px;
+}
+
+.phase-track span {
+  border-color: var(--line);
+  background: #11141d;
+}
+
+.phase-track span[data-seg="auto"] {
+  border-left: 2px solid var(--red);
+}
+
+.phase-track span[data-seg="teleopEarly"] {
+  border-left: 2px solid var(--pollen);
+}
+
+.phase-track span[data-seg="teleopLate"] {
+  border-left: 2px solid var(--good);
+}
+
+.scorewrap {
+  gap: 10px;
+}
+
+.match-card {
+  background: linear-gradient(135deg, #251321, #11141d 72%);
+}
+
+.match-card h2,
+.scorecard h2 {
+  font-family: var(--mono);
+}
+
+.scorecard {
+  padding: 14px;
+}
+
+.scorecard .sc,
+.scorecard .stats > div,
+.scorecard .flowerstats .fl,
+.scorecard .robotstats .rs-hold span {
+  border-radius: 2px;
+  background: #0b0e14;
+}
+
+.scorecard .sc-total {
+  border-color: var(--red);
+  background: linear-gradient(135deg, var(--red-deep), #11141d);
+}
+
+.scorecard .rp-track {
+  border-radius: 0;
+  background: #0b0e14;
+}
+
+.scorecard .rp-bar {
+  background: linear-gradient(90deg, var(--red), var(--pollen));
+}
+
+.estimate-callout,
+.defense-explainer,
+.scorecard .total-score-card {
+  border-radius: 2px;
+}
+
+.builder {
+  padding: 16px;
+  border: 2px solid var(--line);
+  background: rgba(17, 20, 29, .92);
+  box-shadow: var(--sh);
+}
+
+.builder-head {
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 12px;
+}
+
+.builder-head h2 {
+  color: #fff;
+}
+
+.editor-switch,
+.timing-settings,
+.palette,
+.lane,
+.zone,
+.card,
+.card-option,
+.pal-card,
+.bin {
+  border-radius: 2px;
+}
+
+.palette {
+  background: #0d1017;
+}
+
+.pal-card {
+  border-color: var(--line2);
+  background: #171a22;
+  box-shadow: 1px 1px 0 #000;
+}
+
+.pal-card:hover {
+  background: #20232e;
+  border-color: var(--pollen);
+}
+
+.lane {
+  background: #11141d;
+}
+
+.card,
+.zone {
+  border-color: var(--line);
+  background: #0d1017;
+}
+
+.card-tools .icobtn,
+.zone-add button {
+  border-radius: 2px;
+}
+
+.notes {
+  padding: 16px;
+}
+
+.notes h2,
+.notes h3 {
+  color: #fff;
+}
+
+.notes article {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--good);
+  border-radius: 2px;
+  background: #0d1017;
+}
+
+.sources {
+  border-top: 2px solid var(--line);
+  color: var(--ink-dim);
+}
+
+.team-contact {
+  padding: 16px;
+}
+
+.team-contact-links .contact-card {
+  border-radius: 2px;
+  background: #0b0e14;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.studio-view {
+  background: rgba(13, 16, 23, .96);
+}
+
+.studio-tabs [aria-selected="true"],
+.app-switch [aria-pressed="true"] {
+  background: var(--red-deep);
+  border-color: var(--red);
+}
+
+.studio-card {
+  background: #11141d;
+}
+
+.gamepad {
+  border-color: var(--line);
+  border-radius: 2px;
+  background: #0b0e14;
+}
+
+.code-editor,
+.code-editor pre,
+.code-editor textarea {
+  border-radius: 2px;
+  background: #05070a;
+}
+
+:focus-visible {
+  outline-color: var(--pollen);
+}
+
+html[data-theme="light"] body {
+  background-image:
+    linear-gradient(rgba(191, 52, 75, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(191, 52, 75, .045) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 25%, rgba(226, 190, 60, .12), transparent 68%);
+}
+
+html[data-theme="light"] .topbar,
+html[data-theme="light"] .welcome.tactical-intro,
+html[data-theme="light"] .match-card,
+html[data-theme="light"] .builder,
+html[data-theme="light"] .palette,
+html[data-theme="light"] .lane,
+html[data-theme="light"] .notes article,
+html[data-theme="light"] .studio-view,
+html[data-theme="light"] .studio-card {
+  background: var(--panel);
+}
+
+html[data-theme="light"] .topbar h1,
+html[data-theme="light"] .board-head h2,
+html[data-theme="light"] .tutorial-inline h3,
+html[data-theme="light"] .setup-heading h2,
+html[data-theme="light"] .builder-head h2,
+html[data-theme="light"] .notes h2,
+html[data-theme="light"] .notes h3 {
+  color: var(--ink);
+}
+
+html[data-theme="light"] .tagline {
+  color: var(--good);
+}
+
+html[data-theme="light"] select,
+html[data-theme="light"] input:not([type="range"]):not([type="checkbox"]),
+html[data-theme="light"] textarea,
+html[data-theme="light"] .process-card,
+html[data-theme="light"] .tutorial-inline,
+html[data-theme="light"] .tactical-status,
+html[data-theme="light"] .demo-summary,
+html[data-theme="light"] .telemetry-chip,
+html[data-theme="light"] .view-controls,
+html[data-theme="light"] .scorecard .sc,
+html[data-theme="light"] .scorecard .stats > div,
+html[data-theme="light"] .scorecard .flowerstats .fl,
+html[data-theme="light"] .pal-card,
+html[data-theme="light"] .card,
+html[data-theme="light"] .zone,
+html[data-theme="light"] .team-contact-links .contact-card,
+html[data-theme="light"] .gamepad {
+  background-color: var(--bg2);
+}
+
+html[data-theme="light"] .view-controls [aria-pressed="true"] {
+  background: var(--pollen);
+  color: var(--ink);
+}
+
+html[data-theme="light"] .scorecard .sc-total {
+  background: linear-gradient(135deg, var(--red-deep), var(--panel));
+}
+
+html[data-theme="light"] .scorecard .rp-track {
+  background: var(--panel2);
+}
+
+html[data-theme="light"] .code-editor,
+html[data-theme="light"] .code-editor pre,
+html[data-theme="light"] .code-editor textarea {
+  background: var(--bg2);
+}
+
+@media (max-width: 1080px) {
+  .stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  body {
+    padding-bottom: calc(92px + env(safe-area-inset-bottom));
+  }
+
+  .topbar {
+    margin: 0 -12px;
+    padding: 10px 12px;
+  }
+
+  .workspace-nav {
+    background: var(--panel);
+  }
+
+  .workspace-nav .btn[aria-pressed="true"] {
+    background: var(--red);
+  }
+
+  .welcome,
+  .match-setup,
+  .board-wrap,
+  .scorecard,
+  .match-card,
+  .builder,
+  .notes,
+  .team-contact,
+  .studio-view,
+  .studio-card {
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  .stage {
+    gap: 8px;
+  }
+
+  .board-wrap,
+  .scorecard,
+  .builder,
+  .notes {
+    padding: 10px;
+  }
+
+  .scorewrap {
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
