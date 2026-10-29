@@ -237,7 +237,6 @@ textarea:focus {
   border-left-color: var(--good);
 }
 
-.tutorial-inline,
 .tactical-status,
 .demo-summary {
   border-color: var(--line);
@@ -245,14 +244,8 @@ textarea:focus {
   background: #0b0e14;
 }
 
-.tutorial-inline h3,
 .setup-heading h2 {
   color: #fff;
-}
-
-.tutorial-footer,
-.tutorial-footer a {
-  color: var(--ink-dim);
 }
 
 .telemetry-chip {
@@ -629,7 +622,6 @@ html[data-theme="light"] .studio-card {
 }
 
 html[data-theme="light"] .process-card,
-html[data-theme="light"] .tutorial-inline,
 html[data-theme="light"] .tactical-status,
 html[data-theme="light"] .demo-summary,
 html[data-theme="light"] .telemetry-chip,
@@ -737,7 +729,6 @@ html[data-theme="light"] #blocksRoot .blocklyTreeLabel {
 
 html[data-theme="light"] .topbar h1,
 html[data-theme="light"] .board-head h2,
-html[data-theme="light"] .tutorial-inline h3,
 html[data-theme="light"] .setup-heading h2,
 html[data-theme="light"] .builder-head h2,
 html[data-theme="light"] .notes h2,
@@ -753,7 +744,6 @@ html[data-theme="light"] select,
 html[data-theme="light"] input:not([type="range"]):not([type="checkbox"]),
 html[data-theme="light"] textarea,
 html[data-theme="light"] .process-card,
-html[data-theme="light"] .tutorial-inline,
 html[data-theme="light"] .tactical-status,
 html[data-theme="light"] .demo-summary,
 html[data-theme="light"] .telemetry-chip,

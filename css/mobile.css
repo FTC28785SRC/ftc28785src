@@ -133,23 +133,18 @@
 /* Keep the intro compact and place settings with the match workspace. */
 @media(max-width:700px) {
  .topbar { margin-bottom:14px; padding-block:12px; }
- .welcome-with-video { padding:16px; gap:20px; }
+ .tactical-intro { padding:16px; gap:20px; }
  .welcome-copy #welcomeTitle { font-size:2rem; }
  .welcome-copy .welcome-actions { margin-top:16px; }
  .welcome-steps { margin-top:16px; padding-top:12px; gap:8px; }
  .welcome-steps span { font-size:.7rem; }
- .tutorial-inline { padding:10px; border-radius:12px; }
- .tutorial-footer { font-size:.75rem; }
  .match-setup { margin-top:16px; padding:12px; }
  .setup-heading { margin-bottom:10px; }
  .match-setup .mobile-fold { margin:0; }
 }
 
 @media(max-width:700px) {
- .welcome-with-video .tutorial-inline { order:-1; }
-}
-@media(max-width:700px) {
- .welcome-with-video { padding:18px 14px; gap:16px; }
+ .tactical-intro { padding:18px 14px; gap:16px; }
  .welcome-copy .eyebrow { display:block; margin-bottom:10px; font-size:.61rem; }
  .welcome-copy #welcomeTitle { max-width:none; font-size:clamp(2.15rem,10vw,3rem); line-height:1.03; margin-bottom:12px; }
  .welcome-copy > .welcome-intro { font-size:.92rem; line-height:1.55; }

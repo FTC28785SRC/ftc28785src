@@ -7,9 +7,9 @@
 <meta name="description" content="Công cụ lập chiến lược trận đấu BIOBUZZ của FIRST Tech Challenge 2026-2027, do người hâm mộ xây dựng để kéo thả và mô phỏng từng pha trận đấu.">
 <meta name="color-scheme" content="light dark">
 <script src="js/analsy.js?v=1"></script>
-<link rel="stylesheet" href="css/style.css?v=brighter-bees-4">
-<link rel="stylesheet" href="css/app.css?v=dashboard-5">
-<link rel="stylesheet" href="css/mobile.css?v=mobile-tactical-intro-2" media="(max-width: 700px)">
+<link rel="stylesheet" href="css/style.css?v=gameplay-guide-1">
+<link rel="stylesheet" href="css/app.css?v=gameplay-guide-1">
+<link rel="stylesheet" href="css/mobile.css?v=gameplay-guide-1" media="(max-width: 700px)">
 <link rel="stylesheet" href="css/command-center.css?v=14">
 <link rel="icon" type="image/png" href="js/favicon.png">
 </head>
@@ -69,7 +69,7 @@
 
 </header>
 
-<section class="welcome welcome-with-video tactical-intro" aria-label="Giới thiệu công cụ lập kế hoạch">
+<section class="welcome tactical-intro" aria-label="Giới thiệu công cụ lập kế hoạch">
   <div class="welcome-copy">
     <p class="eyebrow">SCIENCE ROBOTICS CLUB · FTC STRATEGY LAB</p>
     <h2 id="welcomeTitle">Lập chiến thuật.<br><span>Chinh phục sân đấu.</span></h2>
@@ -82,13 +82,6 @@
       <li><button type="button" class="process-card" data-process-step="compare" data-action="run"><span class="process-card-top"><span class="process-number">03</span><span class="process-badge">Sẵn sàng</span></span><svg class="process-icon" aria-hidden="true"><use href="#i-park"></use></svg><strong>So sánh</strong><span>Chạy thử và tinh chỉnh</span></button></li>
     </ol>
   </div>
-  <section id="videoTutorial" class="tutorial-inline" aria-labelledby="tutorialTitle" tabindex="-1">
-    <h3 id="tutorialTitle">Xem video hướng dẫn của Dragonflow</h3>
-    <div id="tutorialPlayer" class="tutorial-player">
-      <iframe src="https://www.youtube-nocookie.com/embed/-3p6wPDzCws?playsinline=1&amp;rel=0" title="Video hướng dẫn sử dụng trình mô phỏng chiến lược FTC BIOBUZZ của Dragonflow" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
-    </div>
-    <p class="tutorial-footer"><span>Học cách xây dựng, thử nghiệm và lưu kế hoạch robot. Nếu lời thoại video là tiếng Anh, bật CC rồi chọn dịch tự động sang tiếng Việt (nếu có).</span> <a href="https://www.youtube.com/watch?v=-3p6wPDzCws" target="_blank" rel="noopener noreferrer">Mở trên YouTube &#8599;</a></p>
-  </section>
   <p id="demoSummary" role="status" class="demo-summary">Chưa có kế hoạch nào được tải. Một bản demo sẽ điền các bước robot cho bạn.</p>
   <section class="tactical-status" aria-label="Trạng thái chiến thuật">
     <div class="tactical-progress">
@@ -129,7 +122,7 @@
 <p id="status" class="status" role="status" aria-live="polite"></p>
 
 <noscript>
-  <p class="noscript">Công cụ lập kế hoạch cần JavaScript để hoạt động. Hãy bật JavaScript để dùng trình mô phỏng hoặc <a href="https://www.youtube.com/watch?v=-3p6wPDzCws">xem video hướng dẫn trên YouTube</a>.</p>
+  <p class="noscript">Công cụ lập kế hoạch cần JavaScript để hoạt động. Hãy bật JavaScript để dùng trình mô phỏng.</p>
 </noscript>
 
 <!-- ============================ STAGE ============================ -->
@@ -429,7 +422,7 @@
     <li><a href="https://ftc-resources.firstinspires.org/ftc/game" rel="noopener noreferrer">Tài nguyên trò chơi chính thức</a></li>
   </ul>
   <p class="disclaim">Các mã luật được nhắc đến: G410, G417, G418 và mức phạt LỖI NHẸ / LỖI NẶNG. Công cụ không sử dụng mã luật nào khác. Hình minh họa được tự thiết kế; không sao chép hình dựng, dữ liệu CAD hoặc khung hình video của <em>FIRST</em>.</p>
-  <p class="disclaim">Chiến thuật được lưu thành tệp JSON trên thiết bị của bạn. Tệp tải lên được đọc cục bộ trong trình duyệt và không gửi lên máy chủ. Không cần tài khoản. Website đã xuất bản sử dụng Google Analytics để thống kê lượt truy cập và lượt xem công cụ lập kế hoạch; dịch vụ này có thể dùng cookie và xử lý thông tin thiết bị, kết nối. Nội dung chiến thuật, tên tệp, tên riêng và địa chỉ email không được đưa vào sự kiện phân tích. Cá nhân hóa quảng cáo và Google Signals đã tắt. Video nhúng kết nối với YouTube khi trình phát tải, dịch vụ này có thể xử lý dữ liệu xem và kết nối. Nhà cung cấp dịch vụ lưu trữ website có thể xử lý nhật ký kết nối thông thường.</p>
+  <p class="disclaim">Chiến thuật được lưu thành tệp JSON trên thiết bị của bạn. Tệp tải lên được đọc cục bộ trong trình duyệt và không gửi lên máy chủ. Không cần tài khoản. Website đã xuất bản sử dụng Google Analytics để thống kê lượt truy cập và lượt xem công cụ lập kế hoạch; dịch vụ này có thể dùng cookie và xử lý thông tin thiết bị, kết nối. Nội dung chiến thuật, tên tệp, tên riêng và địa chỉ email không được đưa vào sự kiện phân tích. Cá nhân hóa quảng cáo và Google Signals đã tắt. Nhà cung cấp dịch vụ lưu trữ website có thể xử lý nhật ký kết nối thông thường.</p>
 </footer>
 
 <script src="js/rule.js?v=vi-3"></script>
@@ -450,13 +443,12 @@
 <script src="js/flied3d.js?v=under-hive-1"></script>
 <script src="js/strategy_states.js?v=2"></script>
 <script src="js/ui.js?v=selected-run-silent-4"></script>
-<script src="js/beginner.js?v=dashboard-8"></script>
+<script src="js/beginner.js?v=gameplay-guide-1"></script>
 <script>window.BBEase.init(); window.BBUI.init();</script>
-<script src="js/video_turiol.js?v=4"></script>
 <script src="js/recpis.js?v=clear-recipes-2"></script>
 <script src="js/mobile.js?v=mobile-video-first-1"></script>
 <script src="js/strategy_file.js?v=14"></script>
 <script src="js/home.js?v=vi-1"></script>
-<script src="js/app.js?v=drive-deck-1"></script>
+<script src="js/app.js?v=gameplay-guide-1"></script>
 </body>
 </html>

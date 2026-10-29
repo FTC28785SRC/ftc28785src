@@ -560,6 +560,10 @@ html { scroll-behavior: smooth; }
 #editPanel { margin-top:12px; }
 .help-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin:20px 0 32px; }
 .help-grid article { border:1px solid var(--line); border-radius:12px; padding:18px; }
+.help-ftc-blocks { padding:18px; border:1px solid var(--line); border-radius:12px; background:var(--panel2); }
+.help-ftc-blocks ol { padding-left:24px; }
+.help-ftc-blocks li { margin:0 0 10px; color:var(--ink-dim); }
+.help-ftc-blocks p { margin:14px 0 0; color:var(--ink-dim); }
 .glossary { display:grid; grid-template-columns:minmax(100px,150px) 1fr; gap:12px; margin:20px 0 32px; }
 .glossary dt { font-weight:800; } .glossary dd { margin:0; color:var(--ink-dim); }
 .route-example { display:flex; gap:8px; flex-wrap:wrap; align-items:center; padding:15px 0; }.route-example strong{background:#ffda58;color:#18243a;padding:8px;border-radius:6px;}
@@ -795,26 +799,14 @@ html[data-theme="light"] .header-contact { color:#fff; }
 .download-prefix { display:grid; gap:8px; margin-top:14px; font-weight:700; }
 .download-prefix input { width:100%; min-width:0; min-height:44px; padding:10px; border:1px solid var(--line); border-radius:8px; background:var(--bg2); color:var(--ink); font:inherit; font-size:16px; }
 
-/* Inline tutorial reserves its space while YouTube loads. */
-.welcome-with-video { grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; }
 .welcome-copy { min-width:0; }
 .welcome-copy .welcome-actions { margin-top:20px; }
-.tutorial-inline { width:100%; max-width:800px; min-width:0; margin:0 auto; scroll-margin-top:80px; }
-.tutorial-inline h3 { color:var(--ink); text-transform:none; margin-bottom:12px; }
-.tutorial-player { position:relative; width:100%; aspect-ratio:16/9; min-height:200px; background:#000; border-radius:10px; overflow:hidden; }
-.tutorial-player iframe { position:absolute; inset:0; display:block; width:100%; height:100%; border:0; }
-.tutorial-footer { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 16px; margin:10px 0 0; color:var(--ink-dim); font-size:.85rem; }
-.tutorial-help { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-bottom:20px; margin-bottom:24px; border-bottom:1px solid var(--line); }
-.tutorial-help p { margin-bottom:0; }
-@media(max-width:900px) {
- .welcome-with-video { grid-template-columns:minmax(0,1fr); }
-}
 /* Intro first, then a clearly separated working area. */
 body { max-width:1600px; margin-inline:auto; }
 .topbar { padding-block:20px; border-bottom:1px solid var(--line); margin-bottom:24px; }
 .topbar h1 { font-size:1.55rem; letter-spacing:-.04em; margin-bottom:2px; }
 .topbar .tagline { font-size:.8rem; }
-.welcome-with-video { padding:clamp(20px,3vw,44px); gap:24px 40px; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); background:linear-gradient(125deg,var(--panel2),var(--panel)); }
+.tactical-intro { padding:clamp(20px,3vw,44px); gap:24px 40px; background:linear-gradient(125deg,var(--panel2),var(--panel)); }
 .welcome-copy .eyebrow { font-size:.7rem; letter-spacing:.12em; margin-bottom:18px; }
 .welcome-copy #welcomeTitle { font-size:clamp(2rem,3.6vw,3.5rem); line-height:1.08; letter-spacing:-.045em; margin-bottom:18px; }
 .welcome-copy > p:not(.eyebrow) { max-width:42ch; color:var(--ink-dim); }
@@ -824,9 +816,7 @@ body { max-width:1600px; margin-inline:auto; }
 .welcome-steps strong,.welcome-steps span { display:block; }
 .welcome-steps strong { font-size:.85rem; }
 .welcome-steps span { margin-top:4px; color:var(--ink-dim); font-size:.75rem; }
-.tutorial-inline { padding:16px; border:1px solid var(--line2); border-radius:16px; background:var(--bg2); box-shadow:0 12px 32px #0002; }
-.tutorial-inline h3 { font-size:.9rem; }
-.welcome-with-video .demo-summary { margin:0; font-size:.85rem; }
+.tactical-intro .demo-summary { margin:0; font-size:.85rem; }
 .match-setup { margin-top:28px; padding:20px; border:1px solid var(--line); border-radius:16px; background:var(--panel); }
 .setup-heading { margin-bottom:16px; }
 .setup-heading h2 { color:var(--ink); font-size:1.15rem; letter-spacing:-.02em; text-transform:none; }
@@ -834,7 +824,6 @@ body { max-width:1600px; margin-inline:auto; }
 .match-setup .topbar-controls { padding:0; border:0; border-radius:0; background:none; }
 .match-setup .setup-note { margin:12px 0 0; font-size:.8rem; }
 @media(max-width:900px) {
- .welcome-with-video { grid-template-columns:minmax(0,1fr); }
  .welcome-copy > p:not(.eyebrow) { max-width:60ch; }
 }
 
@@ -857,7 +846,6 @@ html[data-theme="light"] a { color:#9a6700; }
 html[data-theme="light"] a:hover { color:#714d00; }
 html[data-theme="light"] .workspace-nav { background:rgba(255,253,247,.94); border:1px solid var(--line); border-radius:14px; }
 html[data-theme="light"] .workspace-nav .btn[aria-pressed="true"] { background:#facc15; color:#272522; border-color:#eab308; }
-html[data-theme="light"] .tutorial-inline { background:#fffdf7; border-color:#e5c15b; box-shadow:0 12px 32px rgba(93,69,15,.1); }
 html[data-theme="light"] .plan-preview,
 html[data-theme="light"] .help-panel,
 html[data-theme="light"] .match-setup,
@@ -871,7 +859,7 @@ html[data-theme="light"] .studio-card { box-shadow:0 6px 18px rgba(93,69,15,.05)
 /* Strategy intro only: retain the existing field and page backdrop. */
 .welcome.tactical-intro { position:relative; isolation:isolate; overflow:hidden; border-color:rgba(118,164,255,.3); box-shadow:0 18px 54px #0004, inset 0 1px rgba(255,255,255,.06); }
 .welcome.tactical-intro::before { position:absolute; z-index:-1; inset:0; content:""; pointer-events:none; opacity:.18; background-image:linear-gradient(rgba(117,166,255,.28) 1px,transparent 1px),linear-gradient(90deg,rgba(117,166,255,.28) 1px,transparent 1px); background-size:34px 34px; mask-image:linear-gradient(110deg,#000,transparent 72%); }
-.welcome-copy,.tutorial-inline,.demo-summary,.tactical-status { position:relative; z-index:1; }
+.welcome-copy,.demo-summary,.tactical-status { position:relative; z-index:1; }
 .welcome-copy .eyebrow { color:#ff83ae; font-weight:800; }
 .welcome-copy #welcomeTitle { max-width:17ch; font-size:clamp(2.7rem,5vw,4.7rem); line-height:1.02; letter-spacing:-.055em; }
 .welcome-copy #welcomeTitle span { color:#ff86ac; text-shadow:0 0 24px rgba(255,73,131,.25); }

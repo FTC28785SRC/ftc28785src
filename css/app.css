@@ -643,44 +643,30 @@ body[data-app-view="robot"] > main {
   display: none !important;
 }
 
-body[data-studio-view="tutorial"] .welcome,
 body[data-studio-view="manual"] .welcome,
-body[data-studio-view="tutorial"] .match-setup,
 body[data-studio-view="manual"] .match-setup,
-body[data-studio-view="tutorial"] .workspace-nav,
 body[data-studio-view="manual"] .workspace-nav,
-body[data-studio-view="tutorial"] #status,
 body[data-studio-view="manual"] #status,
-body[data-studio-view="tutorial"] #scoresPanel,
 body[data-studio-view="manual"] #scoresPanel,
-body[data-studio-view="tutorial"] #editPanel,
 body[data-studio-view="manual"] #editPanel,
-body[data-studio-view="tutorial"] #helpPanel,
 body[data-studio-view="manual"] #helpPanel,
-body[data-studio-view="tutorial"] footer,
 body[data-studio-view="manual"] footer,
-body[data-studio-view="tutorial"] .file-bar,
 body[data-studio-view="manual"] .file-bar {
   display: none !important;
 }
-body[data-studio-view="tutorial"] #watchPanel.stage,
 body[data-studio-view="manual"] #watchPanel.stage {
   display: none !important;
 }
-body[data-studio-view="tutorial"] #watchPanel .board-wrap,
 body[data-studio-view="manual"] #watchPanel .board-wrap {
   padding: 0;
   border: 0;
   background: transparent;
   box-shadow: none;
 }
-body[data-studio-view="tutorial"] #watchPanel .board-wrap > :not(#robotApp),
 body[data-studio-view="manual"] #watchPanel .board-wrap > :not(#robotApp),
-body[data-studio-view="tutorial"] #watchPanel > .watch-summary,
 body[data-studio-view="manual"] #watchPanel > .watch-summary {
   display: none !important;
 }
-body[data-studio-view="tutorial"] main > #robotApp,
 body[data-studio-view="manual"] main > #robotApp {
   max-width: none;
   margin: 0;
@@ -706,22 +692,6 @@ body[data-studio-view="manual"] main > #robotApp {
 .studio-page-head > p:last-child {
   color: var(--ink-dim);
   font-size: 1.02rem;
-}
-.studio-guide-video {
-  width: min(100%, 1040px);
-  margin: 0 auto;
-}
-.studio-guide-video .tutorial-inline {
-  max-width: none;
-  padding: clamp(12px, 2vw, 22px);
-  border-radius: 20px;
-}
-.studio-guide-video .tutorial-inline h3 {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-}
-.studio-guide-video .tutorial-player {
-  min-height: 0;
-  border-radius: 14px;
 }
 .studio-guide-steps {
   display: grid;
@@ -767,17 +737,6 @@ body[data-studio-view="manual"] main > #robotApp {
   margin: 24px auto;
 }
 .studio-help-card p + p { margin-top: 10px; }
-.studio-guide-link {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 28px 0 0;
-  color: var(--ink-dim);
-  text-align: center;
-}
-body[data-studio-view="tutorial"] .studio-tabs,
 body[data-studio-view="manual"] .studio-tabs {
   position: sticky;
   top: 8px;
@@ -800,11 +759,7 @@ html[data-theme="light"] .studio-tabs [aria-selected="true"] {
 @media (max-width: 700px) {
   .studio-guide-steps { grid-template-columns: 1fr; }
   .studio-guide { padding: 18px 12px; }
-  .studio-guide-video .tutorial-inline { padding: 10px; }
-  .studio-guide-video .tutorial-player { min-height: 190px; }
-  body[data-studio-view="tutorial"] #watchPanel.stage,
   body[data-studio-view="manual"] #watchPanel.stage { margin-bottom: 18px; }
-  body[data-studio-view="tutorial"] .studio-tabs .tab,
   body[data-studio-view="manual"] .studio-tabs .tab { flex: 1 1 calc(50% - 8px); }
 }
 @media (max-width: 900px) {

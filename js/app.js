@@ -11,7 +11,6 @@
       '<button type="button" class="tab btn" data-view="drive">Trạm điều khiển</button>' +
       '<button type="button" class="tab btn" data-view="build">Lắp robot</button>' +
       '<button type="button" class="tab btn" data-view="learn">Điều khiển &amp; lập trình</button>' +
-      '<button type="button" class="tab btn" data-view="tutorial">Hướng dẫn</button>' +
       '<button type="button" class="tab btn" data-view="manual">Trợ giúp</button>' +
     '</nav>' +
     '<main class="studio-views">' +
@@ -94,18 +93,10 @@
           '<aside class="studio-card"><h2>Bản đồ phần cứng</h2><div class="table-scroll"><table><thead><tr><th>Thiết bị</th><th>Tên</th><th>Giá trị</th></tr></thead><tbody id="hwBody"></tbody></table></div><h2>Lỗi và kết quả</h2><p id="console" role="status"></p></aside>' +
         '</div>' +
       '</section>' +
-      '<section id="view-tutorial" class="studio-view studio-guide" hidden>' +
-        '<header class="studio-page-head"><p class="studio-kicker">FTC BIOBUZZ · VIDEO HƯỚNG DẪN</p><h1>Hướng dẫn</h1><p>Xem video hướng dẫn, sau đó làm theo ba bước để xây dựng, kiểm tra và lưu kế hoạch robot.</p></header>' +
-        '<div class="studio-guide-video"></div>' +
-        '<div class="studio-guide-steps"><article><span>01</span><h2>Bắt đầu với trận đấu</h2><p>Chọn liên minh và robot của bạn, sau đó thử một trận mẫu để xem kế hoạch hoàn chỉnh hoạt động.</p></article><article><span>02</span><h2>Theo dõi và so sánh</h2><p>Dùng trình phát để theo dõi từng robot, sau đó xem điểm số và các cảnh báo về thời gian hoặc luật.</p></article><article><span>03</span><h2>Tùy chỉnh chiến thuật</h2><p>Chỉnh sửa các bước của robot, chạy thử toàn trận và lưu chiến thuật khi đã sẵn sàng.</p></article></div>' +
-        '<p class="studio-guide-link">Cần tìm hiểu các nút điều khiển, thuật ngữ hoặc cách khắc phục sự cố? <button type="button" class="btn" data-open-view="manual">Mở trợ giúp</button></p>' +
-      '</section>' +
       '<section id="view-manual" class="studio-view studio-guide" hidden>' +
         '<header class="studio-page-head"><p class="studio-kicker">XƯỞNG ROBOT FTC</p><h1>Trợ giúp</h1><p>Tra cứu nhanh cách thiết lập robot, chạy OpMode và điều khiển mô phỏng sân đấu.</p></header>' +
-        '<div class="studio-guide-steps"><article><span>01</span><h2>Lắp ráp và cấu hình</h2><p>Chọn hệ truyền động và cơ cấu trong mục Lắp robot. Đặt tên thiết bị trùng với tên được dùng trong chương trình.</p></article><article><span>02</span><h2>Tạo chương trình</h2><p>Mở Điều khiển &amp; lập trình để tạo OpMode Tự động hoặc TeleOp. Có thể xem FTC Blocks dưới dạng mã Java được tạo; Java được chạy bằng trình thông dịch mô phỏng.</p></article><article><span>03</span><h2>Chạy trận đấu</h2><p>Chạy cả trận sẽ khởi động OpMode Tự động, tạm dừng trong thời gian chuyển tiếp FTC, rồi chạy OpMode TeleOp đã chọn. Chạy mục đã chọn chỉ khởi động OpMode tương ứng.</p></article></div>' +
-        '<section class="studio-help-card"><h2>Sử dụng FTC Blocks</h2><ol><li>Trong mục <strong>Lắp robot</strong>, thêm động cơ, servo và cảm biến cần dùng; đặt tên thiết bị trước khi lập trình.</li><li>Mở <strong>Điều khiển &amp; lập trình</strong>, chọn <strong>FTC Blocks</strong> rồi nhấn <strong>OpMode Blocks mới</strong>. Chọn chế độ Tự động hoặc TeleOp.</li><li>Kéo khối từ danh mục bên trái vào vùng làm việc và nối chúng theo thứ tự. Khối ghi chú chỉ dành cho người đọc; robot không chạy khối này.</li><li>Đặt các lệnh khởi tạo trước khối <code>waitForStart</code>. Các lệnh sau đó chỉ chạy khi OpMode bắt đầu; đặt vòng lặp điều khiển trong điều kiện <code>opModeIsActive</code>.</li><li>Dùng <strong>Ví dụ</strong> để nạp chương trình mẫu. Xem <strong>Xem mã Java được tạo từ các khối</strong> để kiểm tra mã; <strong>Chép Blocks sang Java</strong> sẽ chuyển nội dung sang trình soạn thảo Java.</li><li>Chọn OpMode và nhấn <strong>Chạy mục đã chọn</strong> hoặc <strong>Chạy cả trận</strong>. Kết quả, telemetry và lỗi hiển thị cạnh sân.</li></ol><p>Tên API như <code>runOpMode</code>, <code>waitForStart</code>, <code>Power</code> và <code>gamepad1</code> được giữ nguyên vì chúng phải khớp với FTC SDK và mã Java. Các chương trình ở đây chỉ chạy trong mô phỏng, không được nạp lên robot thật.</p></section>' +
+        '<div class="studio-guide-steps"><article><span>01</span><h2>Lắp ráp và cấu hình</h2><p>Chọn hệ truyền động và cơ cấu trong mục Lắp robot. Đặt tên thiết bị trùng với tên được dùng trong chương trình.</p></article><article><span>02</span><h2>Tạo chương trình</h2><p>Mở Điều khiển &amp; lập trình để tạo OpMode Tự động hoặc TeleOp. Có thể xem FTC Blocks dưới dạng mã Java được tạo; Java được chạy bằng trình thông dịch mô phỏng. Hướng dẫn FTC Blocks đầy đủ nằm trong mục Cách chơi.</p></article><article><span>03</span><h2>Chạy trận đấu</h2><p>Chạy cả trận sẽ khởi động OpMode Tự động, tạm dừng trong thời gian chuyển tiếp FTC, rồi chạy OpMode TeleOp đã chọn. Chạy mục đã chọn chỉ khởi động OpMode tương ứng.</p></article></div>' +
         '<section class="studio-help-card"><h2>Điều khiển robot</h2><p>Dùng phím WASD hoặc phím mũi tên, tay cầm trên màn hình hoặc tay cầm PS5/tay cầm thi đấu đã kết nối theo cấu hình tiêu chuẩn. Nhấn Dừng để dừng OpMode; Đặt lại sân để đưa robot và các phần tử sân về trạng thái ban đầu.</p><p>Các API SDK không được hỗ trợ sẽ được báo là lỗi mã. Mô hình sân chỉ ước tính chuyển động robot và tương tác trong trò chơi.</p></section>' +
-        '<p class="studio-guide-link">Bạn muốn xem hướng dẫn trực quan? <button type="button" class="btn" data-open-view="tutorial">Mở hướng dẫn</button></p>' +
       '</section>' +
       '<section id="view-legal" class="studio-view" hidden><h1>Thông tin về mô phỏng</h1><p>Đây là mô phỏng giáo dục chạy cục bộ. Chuyển động và tương tác trên sân chỉ là ước tính; trình thông dịch Java hỗ trợ một tập con an toàn của các API FTC SDK.</p></section>' +
     '</main>' +
@@ -178,12 +169,8 @@
   if (fileBar && dashboardSidebar && matchSetup) {
     dashboardSidebar.insertBefore(fileBar, matchSetup.nextSibling);
   }
-  var tutorialVideo = document.getElementById('videoTutorial');
-  if (tutorialVideo) {
-    var welcome = tutorialVideo.closest('.welcome');
-    stage.querySelector('.studio-guide-video').appendChild(tutorialVideo);
-    if (welcome) welcome.remove();
-  }
+  var welcome = document.querySelector('.welcome');
+  if (welcome) welcome.remove();
   document.body.dataset.fieldMode = 'ftc';
   document.body.dataset.appView = 'integrated';
 
