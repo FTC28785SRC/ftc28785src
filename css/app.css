@@ -176,7 +176,7 @@
   border-bottom: 1px solid var(--line);
   text-align: left;
 }
-#watchPanel .board-wrap > #robotApp {
+main > #robotApp {
   max-width: none;
   margin: 24px 0;
   min-height: 0;
@@ -289,29 +289,13 @@
 #watchPanel .shared-field-score #rpHint {
   margin: 8px 0;
 }
-#watchPanel .integrated-station > .studio-layout {
+#robotApp .integrated-station > .studio-layout {
   display: block;
 }
-#watchPanel .integrated-station .studio-layout > aside {
+#robotApp .integrated-station .studio-layout > aside {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0 16px;
-}
-body[data-field-mode="ftc"][data-studio-view="drive"] #watchPanel.stage,
-body[data-field-mode="ftc"][data-studio-view="build"] #watchPanel.stage,
-body[data-field-mode="ftc"][data-studio-view="learn"] #watchPanel.stage {
-  grid-template-columns: minmax(0, 1fr);
-}
-body[data-field-mode="ftc"][data-studio-view="drive"] #watchPanel > *,
-body[data-field-mode="ftc"][data-studio-view="build"] #watchPanel > *,
-body[data-field-mode="ftc"][data-studio-view="learn"] #watchPanel > * {
-  grid-column: 1;
-  min-width: 0;
-}
-body[data-field-mode="ftc"][data-studio-view="drive"] #watchPanel .plan-preview,
-body[data-field-mode="ftc"][data-studio-view="build"] #watchPanel .plan-preview,
-body[data-field-mode="ftc"][data-studio-view="learn"] #watchPanel .plan-preview {
-  display: none;
 }
 body[data-field-mode="ftc"][data-studio-view="learn"] #editorLayout {
   grid-template-columns: minmax(0, 1fr);
@@ -636,6 +620,18 @@ body[data-field-mode="ftc"] #fieldWrap {
 }
 #countOverlay strong {
   font-size: clamp(4rem, 20vw, 12rem);
+  color: var(--pollen);
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 24px var(--gold-glow), 0 4px 0 #000;
+}
+#countOverlay strong.pop {
+  animation: match-count-pop .72s cubic-bezier(.2, .8, .25, 1) both;
+}
+@keyframes match-count-pop {
+  0% { opacity: 0; transform: scale(.45); }
+  35% { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
 }
 body[data-app-view="robot"] .unofficial-strip,
 body[data-app-view="robot"] .welcome,
@@ -669,9 +665,7 @@ body[data-studio-view="manual"] .file-bar {
 }
 body[data-studio-view="tutorial"] #watchPanel.stage,
 body[data-studio-view="manual"] #watchPanel.stage {
-  display: block;
-  max-width: 1160px;
-  margin: 0 auto 40px;
+  display: none !important;
 }
 body[data-studio-view="tutorial"] #watchPanel .board-wrap,
 body[data-studio-view="manual"] #watchPanel .board-wrap {
@@ -686,8 +680,8 @@ body[data-studio-view="tutorial"] #watchPanel > .watch-summary,
 body[data-studio-view="manual"] #watchPanel > .watch-summary {
   display: none !important;
 }
-body[data-studio-view="tutorial"] #watchPanel .board-wrap > #robotApp,
-body[data-studio-view="manual"] #watchPanel .board-wrap > #robotApp {
+body[data-studio-view="tutorial"] main > #robotApp,
+body[data-studio-view="manual"] main > #robotApp {
   max-width: none;
   margin: 0;
   min-height: 0;
@@ -829,8 +823,16 @@ html[data-theme="light"] .studio-tabs [aria-selected="true"] {
   .studio-tabs .tab {
     flex: 1 1 auto;
   }
-  #watchPanel .integrated-station .studio-layout > aside {
-    display: block;
+  #robotApp .integrated-station .driver-station {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #robotApp .integrated-station .driver-station-head,
+  #robotApp .integrated-station .runtime-console,
+  #robotApp .integrated-station #driverMessage {
+    grid-column: 1;
+  }
+  #robotApp .integrated-station .runtime-console-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -1034,32 +1036,25 @@ html[data-theme="light"] .studio-tabs [aria-selected="true"] {
 }
 
 @media (min-width: 901px) {
-  #watchPanel .integrated-station .studio-layout > aside {
+  #robotApp .integrated-station .driver-station {
+    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: start;
-    gap: 0 16px;
+    gap: 12px;
   }
 
-  #watchPanel .integrated-station .studio-layout > aside > h2,
-  #watchPanel .integrated-station .studio-layout > aside > #dsStatus,
-  #watchPanel .integrated-station .studio-layout > aside > .controller-select,
-  #watchPanel .integrated-station .studio-layout > aside > .gamepad,
-  #watchPanel .integrated-station .studio-layout > aside > #driverMessage {
+  #robotApp .integrated-station .driver-station-head {
     grid-column: 1 / -1;
   }
 
-  #watchPanel .integrated-station .studio-layout > aside > h3:first-of-type,
-  #watchPanel .integrated-station .studio-layout > aside > #telemetry {
-    grid-column: 1;
+  #robotApp .integrated-station .runtime-console-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
-  #watchPanel .integrated-station .studio-layout > aside > h3:nth-of-type(2),
-  #watchPanel .integrated-station .studio-layout > aside > #log {
-    grid-column: 2;
-  }
-
-  #watchPanel .integrated-station .studio-layout > aside > #telemetry,
-  #watchPanel .integrated-station .studio-layout > aside > #log {
+  #robotApp .integrated-station #telemetry,
+  #robotApp .integrated-station #log {
     min-width: 0;
     max-height: 240px;
     overflow: auto;

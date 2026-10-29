@@ -40,6 +40,11 @@
   --meter-bg: #080807;
 }
 
+html[data-theme="light"] #watchPanel > .match-card {
+  background: linear-gradient(110deg, #fff1ed, #fffdf7 48%, #eef5ff);
+  box-shadow: 0 6px 18px rgba(93, 69, 15, .08);
+}
+
 body {
   padding-bottom: 48px;
   background-color: var(--bg);
@@ -1083,18 +1088,6 @@ body[data-field-mode="strategy"] #watchPanel .shared-field-layout {
     gap: 5px;
   }
 
-  body[data-field-mode="ftc"][data-studio-view="drive"] #watchPanel.stage,
-  body[data-field-mode="ftc"][data-studio-view="build"] #watchPanel.stage,
-  body[data-field-mode="ftc"][data-studio-view="learn"] #watchPanel.stage {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  body[data-field-mode="ftc"][data-studio-view="drive"] #watchPanel > *,
-  body[data-field-mode="ftc"][data-studio-view="build"] #watchPanel > *,
-  body[data-field-mode="ftc"][data-studio-view="learn"] #watchPanel > * {
-    grid-column: 1;
-    grid-row: auto;
-  }
 }
 
 @media (min-width: 701px) and (max-width: 1120px) {
@@ -1127,18 +1120,6 @@ body[data-field-mode="strategy"] #watchPanel .shared-field-layout {
     grid-row: 2;
   }
 
-  body[data-field-mode="ftc"][data-studio-view="drive"] #watchPanel.stage,
-  body[data-field-mode="ftc"][data-studio-view="build"] #watchPanel.stage,
-  body[data-field-mode="ftc"][data-studio-view="learn"] #watchPanel.stage {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  body[data-field-mode="ftc"][data-studio-view="drive"] #watchPanel > *,
-  body[data-field-mode="ftc"][data-studio-view="build"] #watchPanel > *,
-  body[data-field-mode="ftc"][data-studio-view="learn"] #watchPanel > * {
-    grid-column: 1;
-    grid-row: auto;
-  }
 }
 
 @media (max-width: 700px) {
@@ -1553,5 +1534,716 @@ body[data-field-mode="ftc"] #watchPanel .shared-field-score .total-score-card st
   #watchPanel .dashboard-scoreboard > .shared-field-score {
     order: 3;
     width: 100%;
+  }
+}
+
+/* Ergonomic FTC cockpit: live header, tactical tri-grid, then runtime deck. */
+body > .topbar {
+  display: grid;
+  grid-template-columns: minmax(190px, .8fr) minmax(260px, 1fr) minmax(390px, 1.5fr);
+  align-items: center;
+  gap: 10px 18px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0 0 16px 16px;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .24);
+  backdrop-filter: blur(16px);
+}
+
+.topbar-id,
+.header-telemetry,
+.header-actions {
+  min-width: 0;
+}
+
+.topbar-id {
+  gap: 10px;
+}
+
+.topbar-id h1 {
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  letter-spacing: -.02em;
+}
+
+.topbar-id .tagline {
+  margin: 0;
+  font-size: .62rem;
+  letter-spacing: .08em;
+}
+
+.header-telemetry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 5px 10px;
+}
+
+.header-telemetry .match-clock {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.header-telemetry #matchClock {
+  grid-column: 1 / -1;
+  color: var(--pollen);
+  font-family: var(--mono);
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-shadow: 0 0 14px var(--gold-glow);
+}
+
+.header-telemetry .match-clock label {
+  margin: 0;
+  color: var(--ink-dim);
+  font-size: .66rem;
+}
+
+.header-telemetry .match-clock select {
+  min-height: 28px;
+  padding: 3px 22px 3px 8px;
+  font-size: .68rem;
+}
+
+.header-telemetry .tactical-telemetry {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+
+.header-telemetry .telemetry-chip {
+  padding: 4px 8px;
+  border-radius: 9px;
+  font-size: .64rem;
+  white-space: nowrap;
+}
+
+.header-actions {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.header-contacts {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.header-contact {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line2);
+  border-radius: 10px;
+  color: var(--pollen);
+}
+
+.theme-choice {
+  display: flex;
+  grid-column: 2;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  color: var(--ink-dim);
+  font-size: .65rem;
+  white-space: nowrap;
+}
+
+.theme-choice select {
+  min-height: 32px;
+  padding: 4px 22px 4px 8px;
+  border-radius: 9px;
+  font-size: .7rem;
+}
+
+.header-run-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.header-run-actions #demoBtn,
+.header-run-actions #randomOpponentBtn {
+  min-height: 38px;
+  padding: 8px 16px;
+  border: 1px solid #ffd33d;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffd33d, #f2b705);
+  color: #201803;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+  box-shadow: 0 0 18px rgba(242, 183, 5, .25), 0 4px 12px rgba(0, 0, 0, .25);
+}
+
+.header-run-actions #demoBtn:hover:not(:disabled),
+.header-run-actions #randomOpponentBtn:hover:not(:disabled) {
+  box-shadow: 0 0 24px rgba(242, 183, 5, .4), 0 4px 12px rgba(0, 0, 0, .25);
+  transform: translateY(-1px);
+}
+
+.topbar .workspace-nav {
+  grid-column: 1 / -1;
+  justify-self: end;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.topbar .workspace-nav .btn {
+  min-height: 34px;
+  border-radius: 10px;
+  font-size: .68rem;
+}
+
+#watchPanel.stage {
+  grid-template-columns: minmax(235px, .85fr) minmax(420px, 1.7fr) minmax(260px, .9fr);
+  align-items: start;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+#watchPanel > .dashboard-sidebar,
+#watchPanel > .dashboard-scoreboard {
+  gap: 10px;
+}
+
+#watchPanel .dashboard-intro {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--pollen) 8%, var(--panel)), var(--panel) 70%);
+}
+
+#watchPanel .dashboard-intro .eyebrow {
+  margin: 0 0 5px;
+  font-size: .57rem;
+  letter-spacing: .1em;
+}
+
+#watchPanel .dashboard-intro #welcomeTitle {
+  margin: 0 0 5px;
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+  line-height: 1.18;
+}
+
+#watchPanel .dashboard-intro .welcome-intro,
+#watchPanel .dashboard-intro .demo-summary {
+  margin: 5px 0 0;
+  font-size: .68rem;
+  line-height: 1.4;
+}
+
+#watchPanel .dashboard-intro .welcome-note {
+  display: none;
+}
+
+#watchPanel .dashboard-intro .welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+#watchPanel .dashboard-intro .welcome-build-cta {
+  min-height: 32px;
+  padding: 6px 9px;
+  border-radius: 9px;
+  font-size: .66rem;
+}
+
+#watchPanel .dashboard-sidebar .match-setup,
+#watchPanel .dashboard-sidebar .tactical-status,
+#watchPanel .dashboard-sidebar .process-card,
+#watchPanel .dashboard-sidebar .plan-preview,
+#watchPanel .dashboard-sidebar .watch-summary {
+  border-radius: 14px;
+}
+
+#watchPanel > .board-wrap {
+  padding: clamp(10px, 1.2vw, 16px);
+  border-radius: 18px;
+}
+
+#watchPanel > .match-card {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: minmax(150px, .7fr) minmax(0, 1.8fr) minmax(180px, .8fr);
+  align-items: center;
+  gap: 8px 14px;
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--line2);
+  border-radius: 16px;
+  background: linear-gradient(110deg, color-mix(in srgb, var(--red) 12%, var(--panel)), var(--panel) 48%, color-mix(in srgb, var(--blue) 12%, var(--panel)));
+  box-shadow: 0 0 16px color-mix(in srgb, var(--pollen) 10%, transparent);
+}
+
+#watchPanel > .match-card h2 {
+  margin: 0;
+  font-size: .86rem;
+}
+
+#watchPanel > .match-card .match-scores {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+#watchPanel > .match-card .match-scores > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 8px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+}
+
+#watchPanel > .match-card .match-scores > div > span {
+  font-size: .68rem;
+  font-weight: 800;
+}
+
+#watchPanel > .match-card .match-scores > div > strong {
+  font-size: 1.6rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+#watchPanel > .match-card .match-scores > div > small {
+  grid-column: 1 / -1;
+  color: var(--ink-mute);
+  font-size: .65rem;
+}
+
+#watchPanel > .match-card #matchOutcome {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--pollen) 8%, var(--panel));
+  font-size: .72rem;
+}
+
+#watchPanel > .match-card > .fine {
+  grid-column: 2 / -1;
+  margin: -4px 0 0;
+  font-size: .62rem;
+}
+
+#watchPanel .board-head {
+  margin-bottom: 9px;
+}
+
+#watchPanel .board-head h2 {
+  font-size: clamp(.85rem, 1.1vw, 1.05rem);
+}
+
+#watchPanel .view-controls {
+  border-radius: 12px;
+}
+
+#watchPanel #fieldSvg,
+#watchPanel #fieldWrap,
+#watchPanel .shared-field-score,
+#watchPanel .dashboard-scoreboard .match-card,
+#watchPanel .dashboard-scoreboard .scorecard {
+  border-radius: 15px;
+}
+
+#watchPanel #fieldWrap {
+  width: min(100%, 860px);
+  border-color: var(--line2);
+  background: var(--sunk);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, .24), 0 0 16px var(--gold-glow);
+}
+
+#watchPanel .dashboard-scoreboard .scorecard .sc-total {
+  border-color: var(--pollen);
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+#watchPanel .dashboard-scoreboard .rp,
+#watchPanel .dashboard-scoreboard .scorecard,
+#watchPanel .dashboard-scoreboard .match-card {
+  min-width: 0;
+}
+
+main > #robotApp {
+  width: 100%;
+  max-width: 1500px;
+  margin: 16px auto 28px;
+  padding: 0;
+}
+
+#robotApp .studio-tabs {
+  top: 112px;
+  border-radius: 14px;
+}
+
+#robotApp .studio-tabs .tab {
+  border-radius: 10px;
+}
+
+#robotApp .studio-view {
+  padding: clamp(10px, 1.6vw, 18px);
+  border-radius: 18px;
+}
+
+#robotApp #view-drive .studio-toolbar:first-child {
+  align-items: end;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 14px;
+}
+
+#robotApp #view-drive .studio-toolbar:first-child label {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  font-size: .72rem;
+}
+
+#robotApp #view-drive .studio-toolbar:first-child select {
+  min-width: 130px;
+}
+
+#robotApp #btnStop {
+  border-color: #e54747;
+  background: #5c1717;
+  color: #fff3f3;
+  font-weight: 900;
+}
+
+#robotApp .integrated-station .driver-station {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  padding: clamp(10px, 1.4vw, 18px);
+  border-radius: 16px;
+}
+
+#robotApp .integrated-station .driver-station-head {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+#robotApp .integrated-station .driver-station-head h2,
+#robotApp .integrated-station .runtime-console h3 {
+  margin: 0;
+}
+
+#robotApp .integrated-station .driver-station-head #dsStatus {
+  margin: 0;
+  color: var(--good);
+  font-size: .78rem;
+}
+
+#robotApp .integrated-station .driver-hud,
+#robotApp .integrated-station .runtime-console {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+}
+
+#robotApp .integrated-station .driver-hud {
+  background: color-mix(in srgb, var(--pollen) 5%, var(--bg2));
+}
+
+#robotApp .integrated-station .runtime-console {
+  background: #0c100d;
+  color: #e3f3d9;
+  font-family: var(--mono);
+}
+
+#robotApp .integrated-station .runtime-console h3 {
+  color: var(--pollen);
+  font-size: .78rem;
+}
+
+#robotApp .integrated-station .runtime-console-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+#robotApp .integrated-station .runtime-console-grid > section {
+  min-width: 0;
+}
+
+#robotApp .integrated-station #telemetry,
+#robotApp .integrated-station #log {
+  max-height: 250px;
+  min-height: 80px;
+  margin: 6px 0 0;
+  padding: 8px 10px 8px 28px;
+  overflow: auto;
+  border: 1px solid #52613a;
+  border-radius: 10px;
+  background: #080b08;
+  color: #c8ee8b;
+  font-size: .68rem;
+  line-height: 1.5;
+}
+
+#robotApp .integrated-station #driverMessage {
+  grid-column: 1 / -1;
+  margin: 8px 0 0;
+  color: var(--ink-dim);
+  font-size: .75rem;
+}
+
+#robotApp .integrated-station .gamepad {
+  margin: 10px auto 0;
+  border-radius: 16px;
+}
+
+.sources {
+  margin-top: 22px;
+  padding: clamp(14px, 2vw, 24px);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+}
+
+.team-contact {
+  margin-bottom: 20px;
+  border-radius: 16px;
+}
+
+.team-contact-links {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+html[data-theme="light"] body > .topbar {
+  background: rgba(255, 253, 247, .97);
+  box-shadow: 0 8px 24px rgba(93, 69, 15, .1);
+}
+
+html[data-theme="light"] #robotApp .integrated-station .runtime-console {
+  border-color: #d3b34d;
+  background: #fffdf7;
+  color: #28251c;
+}
+
+html[data-theme="light"] #robotApp .integrated-station .runtime-console h3 {
+  color: #775600;
+}
+
+html[data-theme="light"] #robotApp .integrated-station #telemetry,
+html[data-theme="light"] #robotApp .integrated-station #log {
+  border-color: #e1d4ae;
+  background: #fffaf0;
+  color: #38532a;
+}
+
+html[data-theme="light"] .sources {
+  background: rgba(255, 253, 247, .96);
+  box-shadow: 0 8px 24px rgba(93, 69, 15, .07);
+}
+
+@media (min-width: 1121px) {
+  #watchPanel.stage {
+    grid-template-columns: minmax(250px, .85fr) minmax(450px, 1.7fr) minmax(285px, .9fr);
+  }
+}
+
+@media (min-width: 701px) {
+  #watchPanel > .dashboard-sidebar {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line2) transparent;
+  }
+}
+
+@media (max-width: 1120px) and (min-width: 701px) {
+  body > .topbar {
+    grid-template-columns: minmax(160px, .75fr) minmax(230px, 1fr) minmax(310px, 1.3fr);
+  }
+
+  #watchPanel.stage {
+    grid-template-columns: minmax(220px, .78fr) minmax(0, 1.4fr);
+  }
+
+  #watchPanel > .match-card {
+    grid-row: 3;
+  }
+}
+
+@media (max-width: 900px) {
+  #robotApp .integrated-station .driver-station {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #robotApp .integrated-station .driver-station-head,
+  #robotApp .integrated-station .runtime-console,
+  #robotApp .integrated-station #driverMessage {
+    grid-column: 1;
+  }
+
+  #robotApp .integrated-station .runtime-console-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  body > .topbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 7px;
+    padding: 8px 12px;
+  }
+
+  .topbar-id {
+    grid-column: 1 / -1;
+  }
+
+  .header-telemetry {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+  }
+
+  .header-telemetry .match-clock {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .header-telemetry #matchClock {
+    font-size: 1rem;
+  }
+
+  .header-telemetry .tactical-telemetry {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .header-telemetry .telemetry-chip {
+    font-size: .58rem;
+  }
+
+  .header-actions {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) auto;
+    justify-content: stretch;
+  }
+
+  .header-contacts {
+    display: none;
+  }
+
+  .theme-choice {
+    grid-column: 2;
+  }
+
+  .header-run-actions {
+    grid-column: 1;
+    grid-row: 1;
+    justify-content: flex-start;
+  }
+
+  .header-run-actions #demoBtn,
+  .header-run-actions #randomOpponentBtn {
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: .64rem;
+  }
+
+  .topbar .workspace-nav {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .topbar .workspace-nav .btn {
+    flex: initial;
+    min-width: 0;
+  }
+
+  #watchPanel.stage {
+    gap: 8px;
+  }
+
+  #watchPanel .dashboard-intro {
+    padding: 10px;
+  }
+
+  #watchPanel > .board-wrap {
+    border-radius: 14px;
+  }
+
+  #watchPanel > .match-card {
+    order: 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 9px;
+  }
+
+  #watchPanel > .match-card h2 {
+    display: none;
+  }
+
+  #watchPanel > .match-card .match-scores > div {
+    padding: 6px;
+  }
+
+  #watchPanel > .match-card .match-scores > div > strong {
+    font-size: 1.25rem;
+  }
+
+  #watchPanel > .match-card #matchOutcome,
+  #watchPanel > .match-card > .fine {
+    display: none;
+  }
+
+  main > #robotApp {
+    margin: 10px 0 20px;
+  }
+
+  #robotApp .studio-tabs {
+    top: 150px;
+  }
+
+  #robotApp .integrated-station .runtime-console-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .team-contact-links {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 700px) and (max-height: 500px) {
+  .topbar .workspace-nav {
+    position: static;
+    bottom: auto;
   }
 }

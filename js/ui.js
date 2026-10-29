@@ -61,7 +61,7 @@
   }
   var result = null;          // latest simulate() output
   var eventByUid = {};
-  var play = { idx: -1, timer: null, running: false, starting: false };
+  var play = { idx: -1, timer: null, countdownTimer: null, running: false, starting: false };
 
   var $ = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
@@ -646,20 +646,56 @@
     }
   }
 
+  function showPlaybackCount(text) {
+    var overlay = $('#countOverlay');
+    var number = $('#countNum');
+    if (!overlay || !number) { return; }
+    number.textContent = text;
+    overlay.hidden = false;
+    number.classList.remove('pop');
+    void number.offsetWidth;
+    number.classList.add('pop');
+  }
+  function hidePlaybackCount() {
+    clearTimeout(play.countdownTimer);
+    play.countdownTimer = null;
+    var overlay = $('#countOverlay');
+    if (overlay) { overlay.hidden = true; }
+  }
+  function playMatchCue(name) {
+    try { if (root.BBZ && root.BBZ.Sound) { root.BBZ.Sound.play(name); } } catch (e) { /* sound is optional */ }
+  }
+  function beginPlayback() {
+    play.starting = false;
+    play.running = true;
+    $('#playBtn').textContent = '⏸ Tạm dừng';
+    $('#playBtn').setAttribute('aria-label', 'Tạm dừng phát lại');
+    document.body.classList.add('is-playing');
+    if (play.idx >= result.events.length - 1) { play.idx = -1; showStep(-1, false); }
+    if (play.pausedMid) { play.pausedMid=false; var wait=showStep(play.idx,true,true); play.timer=setTimeout(tick,Math.max(16,wait)); } else tick();
+  }
   function startPlayback() {
     if (!result.events.length || play.running || play.starting) { return; }
     play.starting = true;
-    $('#playBtn').textContent = 'Đang đồng bộ âm thanh...';
-    playStartAudio().then(function () {
-      if (!play.starting) return;
-      play.starting = false;
-      play.running = true;
-      $('#playBtn').textContent = '⏸ Tạm dừng';
-      $('#playBtn').setAttribute('aria-label', 'Tạm dừng phát lại');
-      document.body.classList.add('is-playing');
-      if (play.idx >= result.events.length - 1) { play.idx = -1; showStep(-1, false); }
-      if (play.pausedMid) { play.pausedMid=false; var wait=showStep(play.idx,true,true); play.timer=setTimeout(tick,Math.max(16,wait)); } else tick();
-    });
+    playStartAudio();
+    var count = 3;
+    function tickCountdown() {
+      if (!play.starting) { return; }
+      if (count === 0) {
+        showPlaybackCount('GO!');
+        playMatchCue('charge');
+        beginPlayback();
+        play.countdownTimer = setTimeout(hidePlaybackCount, 700);
+        return;
+      }
+      showPlaybackCount(String(count));
+      playMatchCue('count');
+      $('#playBtn').textContent = 'Đếm ngược ' + count + '...';
+      $('#playBtn').setAttribute('aria-label', 'Đếm ngược bắt đầu trận: ' + count + ' giây');
+      count--;
+      play.countdownTimer = setTimeout(tickCountdown, 1000);
+    }
+    tickCountdown();
   }
   function tick() {
     if (!play.running) { return; }
@@ -670,6 +706,7 @@
   function finishPlayback() {
     play.running = false;
     clearTimeout(play.timer);
+    hidePlaybackCount();
     stopStartAudio();
     FIELD.clearFx();
     $('#playBtn').textContent = '▶ Chạy kế hoạch';
@@ -688,6 +725,7 @@
     play.starting = false;
     play.running = false;
     clearTimeout(play.timer);
+    hidePlaybackCount();
     stopStartAudio();
     play.idx = -1;
     var b = $('#playBtn');
@@ -884,7 +922,9 @@
     $('#viewTop').addEventListener('click', function () { FIELD.setView('top'); });
 
     $('#playBtn').addEventListener('click', function () {
-      if (play.running || play.starting) { finishPlaybackQuiet(); play.pausedMid=true; } else { startPlayback(); }
+      if (play.running) { finishPlaybackQuiet(); play.pausedMid=true; }
+      else if (play.starting) { finishPlaybackQuiet(); }
+      else { startPlayback(); }
     });
     $('#stepBack').addEventListener('click', function () { finishPlaybackQuiet(); showStep(play.idx - 1, false); });
     $('#stepFwd').addEventListener('click', function () { finishPlaybackQuiet(); showStep(play.idx + 1, true); });
@@ -899,6 +939,7 @@
     play.starting = false;
     play.running = false;
     clearTimeout(play.timer);
+    hidePlaybackCount();
     stopStartAudio();
     FIELD.clearFx();
     $('#playBtn').textContent = '▶ Chạy kế hoạch';

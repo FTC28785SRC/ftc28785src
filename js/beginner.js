@@ -11,11 +11,16 @@
         ['watch', 'edit', 'scores', 'help'].forEach(key => {
             $('#' + key + 'Panel').hidden = key !== name && !(keepWatch && key === 'watch');
         });
+        var robotApp = $('#robotApp');
+        if (robotApp)
+            robotApp.hidden = name === 'help';
         document.querySelectorAll('.workspace-nav [data-screen]').forEach(b => b.setAttribute('aria-pressed', b.dataset.screen === name));
         if (root.BBAnalytics)
             root.BBAnalytics.view(name);
         if (focus) {
             var panel = $('#' + name + 'Panel');
+            var topbar = $('.topbar');
+            panel.style.scrollMarginTop = (topbar ? Math.ceil(topbar.getBoundingClientRect().height + 12) : 12) + 'px';
             panel.scrollIntoView({
                 block: 'start'
             });
@@ -52,22 +57,43 @@
         $('#watchPanel').appendChild(side);
         var setup = $('.match-setup');
         var welcome = $('.welcome');
+        var welcomeCopy = $('.welcome-copy');
+        var demoSummary = $('#demoSummary');
         var welcomeSteps = $('.welcome-steps');
         var tacticalStatus = $('.tactical-status');
         var planPreview = side.querySelector('.plan-preview');
-        if (!setup || !welcome || !welcomeSteps || !tacticalStatus || !planPreview) {
+        if (!setup || !welcome || !welcomeCopy || !demoSummary || !welcomeSteps || !tacticalStatus || !planPreview) {
             throw new Error('Không thể bố trí bảng điều khiển chiến thuật: thiếu một khu vực giao diện bắt buộc.');
         }
         welcome.classList.add('welcome-dashboard');
+        var dashboardIntro = document.createElement('section');
+        dashboardIntro.className = 'dashboard-intro';
+        dashboardIntro.append(welcomeCopy, demoSummary);
         var dashboardSidebar = document.createElement('aside');
         dashboardSidebar.className = 'dashboard-sidebar';
         dashboardSidebar.setAttribute('aria-label', 'Cấu hình và kế hoạch chiến thuật');
-        dashboardSidebar.append(setup, welcomeSteps, tacticalStatus, planPreview, side);
+        dashboardSidebar.append(dashboardIntro, setup, welcomeSteps, tacticalStatus, planPreview, side);
         var dashboardScoreboard = document.createElement('aside');
         dashboardScoreboard.className = 'dashboard-scoreboard';
         dashboardScoreboard.setAttribute('aria-label', 'Điểm số trận đấu');
         dashboardScoreboard.append(match, score);
         $('#watchPanel').append(dashboardSidebar, dashboardScoreboard);
+        var boardWrap = $('#watchPanel > .board-wrap');
+        function syncDashboardSidebarHeight() {
+            if (!window.matchMedia('(min-width: 701px)').matches) {
+                dashboardSidebar.style.removeProperty('height');
+                return;
+            }
+            var boardHeight = Math.ceil(boardWrap.getBoundingClientRect().height);
+            if (boardHeight > 0)
+                dashboardSidebar.style.height = boardHeight + 'px';
+        }
+        if (window.ResizeObserver) {
+            new ResizeObserver(syncDashboardSidebarHeight).observe(boardWrap);
+        } else {
+            window.addEventListener('resize', syncDashboardSidebarHeight);
+        }
+        syncDashboardSidebarHeight();
         var workspaceNav = $('.workspace-nav');
         if (!workspaceNav) {
             throw new Error('Không thể bố trí điều hướng chiến thuật: thiếu thanh điều hướng.');
@@ -129,6 +155,13 @@
         theme.innerHTML = 'Giao diện <select id="themeChoice"><option value="system">Hệ thống</option><option value="dark" selected>Tối</option><option value="light">Sáng</option></select>';
         var headerActions = document.createElement('div');
         headerActions.className = 'header-actions';
+        var headerTelemetry = document.createElement('div');
+        headerTelemetry.className = 'header-telemetry';
+        headerTelemetry.setAttribute('aria-label', 'Đồng hồ và dữ liệu mô phỏng');
+        headerTelemetry.append($('.match-clock'), $('.tactical-telemetry'));
+        var runActions = document.createElement('div');
+        runActions.className = 'header-run-actions';
+        runActions.append($('#demoBtn'), $('#randomOpponentBtn'));
         var contacts = document.createElement('nav');
         contacts.className = 'header-contacts';
         contacts.setAttribute('aria-label', 'Liên hệ Science Robotics Club');
@@ -145,8 +178,9 @@
             }[platform] + ': ' + source.querySelector('.contact-handle').textContent;
             contacts.appendChild(link);
         });
-        headerActions.append(contacts, theme);
-        $('.topbar-id').after(headerActions);
+        headerActions.append(contacts, theme, runActions);
+        $('.topbar-id').after(headerTelemetry);
+        headerTelemetry.after(headerActions);
         var systemTheme = matchMedia('(prefers-color-scheme: dark)');
         function applyTheme() {
             var choice = $('#themeChoice').value;

@@ -36,8 +36,9 @@
             '<div class="total-score-card" aria-live="polite"><span>TỔNG ĐIỂM</span><strong id="score">0</strong><span>ROBOT FTC</span></div>' +
             '<p id="scoreHint" class="hint"></p><table class="score-breakdown"><tbody id="scoreBody"></tbody></table><p id="rpHint" class="hint"></p>' +
           '</section>' +
-          '<aside class="studio-card">' +
-            '<h2>Trạm điều khiển</h2><p id="dsStatus" role="status">Sẵn sàng</p>' +
+          '<aside class="studio-card driver-station">' +
+            '<header class="driver-station-head"><h2>Trạm điều khiển</h2><p id="dsStatus" role="status">Sẵn sàng</p></header>' +
+            '<section class="driver-hud" aria-label="Điều khiển robot">' +
             '<div class="controller-select"><button type="button" class="btn" data-pt="0">Tay cầm 1</button><button type="button" class="btn" data-pt="1">Tay cầm 2</button><button type="button" class="btn" id="btnSwapPads">Đổi tay cầm</button><span id="padStatus"></span></div>' +
             '<div class="gamepad">' +
               '<div class="stick" id="stickL" aria-label="Cần trái"><span class="knob"></span></div>' +
@@ -48,8 +49,11 @@
               '</div>' +
               '<div class="stick" id="stickR" aria-label="Cần phải"><span class="knob"></span></div>' +
             '</div>' +
-            '<h3>Dữ liệu telemetry</h3><ul id="telemetry"></ul><h3>Nhật ký chạy</h3><ol id="log"></ol>' +
-            '<p id="driverMessage" role="status"></p>' +
+            '</section>' +
+            '<section class="runtime-console" aria-label="Telemetry và nhật ký chạy">' +
+              '<div class="runtime-console-grid"><section><h3>Dữ liệu telemetry</h3><ul id="telemetry"></ul></section><section><h3>Nhật ký chạy</h3><ol id="log"></ol></section></div>' +
+              '<p id="driverMessage" role="status"></p>' +
+            '</section>' +
           '</aside>' +
         '</div>' +
       '</section>' +
@@ -162,7 +166,11 @@
   driveView.classList.add('integrated-station');
   boardWrap.insertBefore(fieldMode, sharedFieldLayout);
   boardWrap.insertBefore(fieldControls, sharedFieldLayout);
-  boardWrap.appendChild(stage);
+  var watchPanel = document.querySelector('#watchPanel');
+  if (!watchPanel) {
+    throw new Error('Không thể đặt Trạm điều khiển: thiếu khu vực Xem trận đấu.');
+  }
+  watchPanel.after(stage);
   stage.hidden = false;
   var fileBar = document.querySelector('.topbar > .file-bar');
   var dashboardSidebar = document.querySelector('#watchPanel > .dashboard-sidebar');
@@ -172,8 +180,9 @@
   }
   var tutorialVideo = document.getElementById('videoTutorial');
   if (tutorialVideo) {
-    tutorialVideo.closest('.welcome').classList.remove('welcome-with-video');
+    var welcome = tutorialVideo.closest('.welcome');
     stage.querySelector('.studio-guide-video').appendChild(tutorialVideo);
+    if (welcome) welcome.remove();
   }
   document.body.dataset.fieldMode = 'ftc';
   document.body.dataset.appView = 'integrated';
