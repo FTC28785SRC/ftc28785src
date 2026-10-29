@@ -107,10 +107,6 @@
     '</main>' +
     '<div id="countOverlay" hidden><strong id="countNum"></strong></div><div id="toast" role="status" hidden></div>';
 
-  var style = document.createElement('link');
-  style.rel = 'stylesheet';
-  style.href = 'css/app.css?v=tutorial-page-4';
-  document.head.appendChild(style);
   var boardWrap = document.querySelector('#watchPanel .board-wrap');
   var board = document.querySelector('#watchPanel .board');
   var fieldWrap = stage.querySelector('#fieldWrap');
@@ -153,8 +149,13 @@
     if (item) liveScore.appendChild(item.closest('table') || item);
   });
   liveScore.insertBefore(scoreHeading, liveScore.firstChild);
+  var dashboardScoreboard = document.querySelector('#watchPanel > .dashboard-scoreboard');
+  if (!dashboardScoreboard) {
+    throw new Error('Không thể tích hợp điểm FTC trực tiếp: thiếu bảng điểm của dashboard.');
+  }
+  dashboardScoreboard.appendChild(liveScore);
   boardWrap.insertBefore(sharedFieldLayout, board);
-  sharedFieldLayout.append(board, liveScore);
+  sharedFieldLayout.appendChild(board);
   driveCard.remove();
   driveLayout.replaceChildren(driverStation);
   driveView.insertBefore(driveToolbar, driveLayout);
@@ -163,6 +164,12 @@
   boardWrap.insertBefore(fieldControls, sharedFieldLayout);
   boardWrap.appendChild(stage);
   stage.hidden = false;
+  var fileBar = document.querySelector('.topbar > .file-bar');
+  var dashboardSidebar = document.querySelector('#watchPanel > .dashboard-sidebar');
+  var matchSetup = dashboardSidebar && dashboardSidebar.querySelector('.match-setup');
+  if (fileBar && dashboardSidebar && matchSetup) {
+    dashboardSidebar.insertBefore(fileBar, matchSetup.nextSibling);
+  }
   var tutorialVideo = document.getElementById('videoTutorial');
   if (tutorialVideo) {
     tutorialVideo.closest('.welcome').classList.remove('welcome-with-video');

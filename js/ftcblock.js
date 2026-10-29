@@ -500,12 +500,12 @@ function sanitize(s) {
 
 /* ---------- the editor ---------- */
 let ws = null, holder = null, cur = null, quietUntil = 0, darkTheme = null;
-const isDark = () => { try { return getComputedStyle(document.documentElement).colorScheme.indexOf('dark') >= 0; } catch (e) { return false; } };
+const isDark = () => document.documentElement.dataset.theme !== 'light';
 function theme() {
   if (!darkTheme) darkTheme = B.Theme.defineTheme('simDark', { name: 'simDark', base: B.Themes.Classic, componentStyles: {
-    workspaceBackgroundColour: '#1c2017', toolboxBackgroundColour: '#10130c', toolboxForegroundColour: '#eceee4',
-    flyoutBackgroundColour: '#262b1f', flyoutForegroundColour: '#cfd3c6', flyoutOpacity: 1,
-    scrollbarColour: '#7d8672', scrollbarOpacity: 0.5, insertionMarkerColour: '#ffffff', insertionMarkerOpacity: 0.3 } });
+    workspaceBackgroundColour: '#080a0f', toolboxBackgroundColour: '#11141d', toolboxForegroundColour: '#f1f3fa',
+    flyoutBackgroundColour: '#191d27', flyoutForegroundColour: '#a7adc2', flyoutOpacity: 1,
+    scrollbarColour: '#59657b', scrollbarOpacity: 0.65, insertionMarkerColour: '#e2fd52', insertionMarkerOpacity: 0.45 } });
   return isDark() ? darkTheme : B.Themes.Classic;
 }
 function onChange(e) {

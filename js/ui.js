@@ -10,8 +10,10 @@
   var R = root.BBRules;
   var SIM = root.BBScoring;
   var FIELD = root.BBField;
-  var startAudio = new root.Audio(encodeURI('FIRST Tech Challenge FTC Match Timer (DECODE) - STRΛTOS.mp3'));
-  startAudio.preload = 'none';
+  var startAudio = new root.Audio();
+  startAudio.preload = 'auto';
+  startAudio.src = encodeURI('FIRST Tech Challenge FTC Match Timer (DECODE) - STRΛTOS.mp3');
+  startAudio.load();
   function playStartAudio() {
     startAudio.currentTime = 0;
     try {

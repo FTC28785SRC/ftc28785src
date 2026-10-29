@@ -833,3 +833,284 @@ html[data-theme="light"] .studio-tabs [aria-selected="true"] {
     display: block;
   }
 }
+
+.studio-tabs {
+  position: sticky;
+  top: 8px;
+  z-index: 35;
+  padding: 8px;
+  border: 2px solid var(--line);
+  background: rgba(11, 14, 20, .96);
+  box-shadow: 3px 3px 0 #000;
+  backdrop-filter: blur(12px);
+}
+
+.studio-tabs .tab,
+.studio-view .studio-toolbar .btn {
+  min-height: 40px;
+  font-family: var(--mono);
+  font-size: .76rem;
+  font-weight: 800;
+  letter-spacing: .025em;
+}
+
+.studio-tabs .tab[aria-pressed="true"],
+.studio-tabs .tab[aria-selected="true"],
+.studio-tabs .tab.is-active {
+  border-color: var(--pollen);
+  background: var(--pollen);
+  color: #181205;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.studio-view {
+  border: 2px solid var(--line);
+  border-radius: 3px;
+  background: rgba(13, 16, 23, .96);
+  box-shadow: 4px 4px 0 #000;
+}
+
+.studio-card {
+  border: 2px solid var(--line);
+  border-top-color: var(--pollen);
+  border-radius: 3px;
+  background: #11141d;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.studio-card h2,
+.studio-card h3 {
+  font-family: var(--mono);
+  letter-spacing: .035em;
+}
+
+.studio-toolbar {
+  padding: 10px;
+  border: 1px solid var(--line);
+  background: #0b0e14;
+}
+
+.studio-toolbar label {
+  color: var(--ink-dim);
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.studio-toolbar input:not([type="range"]),
+.studio-toolbar select,
+.studio-view input:not([type="range"]),
+.studio-view select {
+  min-height: 38px;
+  border: 1px solid var(--line2);
+  border-radius: 2px;
+  background: #080a0f;
+  color: var(--ink);
+}
+
+#watchPanel #fieldWrap {
+  width: min(100%, 860px);
+  height: auto;
+  max-height: none;
+  aspect-ratio: 1 / 1;
+  padding: 8px;
+  border: 2px solid #252a38;
+  background: #07090e;
+  box-shadow: inset 0 0 18px #0008;
+}
+
+#watchPanel #field {
+  width: 100%;
+  height: 100%;
+}
+
+#watchPanel .shared-field-score {
+  border: 2px solid var(--line);
+  border-radius: 3px;
+  background: #11141d;
+  box-shadow: 3px 3px 0 #000;
+}
+
+.gamepad {
+  width: 100%;
+  max-width: 860px;
+  margin: 16px auto;
+  padding: clamp(10px, 2vw, 18px);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(6px, 2vw, 18px);
+  border: 2px solid var(--line);
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at center, rgba(242, 183, 5, .07), transparent 68%),
+    #0b0e14;
+  box-shadow: inset 0 0 16px #0008;
+}
+
+.gamepad .stick {
+  justify-self: center;
+  border-color: #4a5168;
+  background: radial-gradient(circle, #1b202c, #080a0f 72%);
+  box-shadow: inset 0 0 12px #000;
+}
+
+.gamepad .knob {
+  border: 2px solid #080a0f;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--ally) 45%, transparent);
+}
+
+.gamepad .pad-buttons {
+  display: grid;
+  width: 100%;
+  max-width: 360px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  margin: auto;
+}
+
+.gamepad .pb {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  aspect-ratio: 1 / .9;
+  margin: 0;
+  border: 1px solid var(--line2);
+  background: #191d27;
+  font-family: var(--mono);
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.gamepad .pb:nth-child(9) {
+  grid-column: 2;
+}
+
+.gamepad .pb:nth-child(10) {
+  grid-column: 3;
+}
+
+.gamepad .pb:hover,
+.gamepad .pb.is-down {
+  border-color: var(--pollen);
+  background: var(--pollen);
+  color: #181205;
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+#blocksPane,
+#javaPane {
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: #080a0f;
+}
+
+#blocksRoot {
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: #080a0f;
+}
+
+#blocksRoot .blocklySvg {
+  background-color: #080a0f;
+}
+
+#blocksRoot .blocklyToolbox {
+  border-right: 1px solid var(--line);
+  background: #11141d;
+}
+
+#blocksRoot .blocklyTreeLabel {
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+#blocksRoot .blocklyTreeRow:hover,
+#blocksRoot .blocklyTreeRow.blocklyTreeSelected {
+  background-color: #272a31;
+}
+
+#genJava {
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+@media (min-width: 901px) {
+  #watchPanel .integrated-station .studio-layout > aside {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 0 16px;
+  }
+
+  #watchPanel .integrated-station .studio-layout > aside > h2,
+  #watchPanel .integrated-station .studio-layout > aside > #dsStatus,
+  #watchPanel .integrated-station .studio-layout > aside > .controller-select,
+  #watchPanel .integrated-station .studio-layout > aside > .gamepad,
+  #watchPanel .integrated-station .studio-layout > aside > #driverMessage {
+    grid-column: 1 / -1;
+  }
+
+  #watchPanel .integrated-station .studio-layout > aside > h3:first-of-type,
+  #watchPanel .integrated-station .studio-layout > aside > #telemetry {
+    grid-column: 1;
+  }
+
+  #watchPanel .integrated-station .studio-layout > aside > h3:nth-of-type(2),
+  #watchPanel .integrated-station .studio-layout > aside > #log {
+    grid-column: 2;
+  }
+
+  #watchPanel .integrated-station .studio-layout > aside > #telemetry,
+  #watchPanel .integrated-station .studio-layout > aside > #log {
+    min-width: 0;
+    max-height: 240px;
+    overflow: auto;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    background: #0b0e14;
+  }
+}
+
+@media (max-width: 700px) {
+  .studio-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .studio-tabs .tab {
+    min-width: 0;
+    padding-inline: 8px;
+    font-size: .7rem;
+  }
+
+  .studio-view {
+    padding: 10px;
+  }
+
+  .studio-view .studio-toolbar {
+    gap: 6px;
+  }
+
+  .studio-toolbar label {
+    min-width: 0;
+  }
+
+  .gamepad {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 4px;
+    margin: 10px 0;
+    padding: 8px;
+  }
+
+  .gamepad .stick {
+    width: min(100%, 92px);
+  }
+
+  .gamepad .pad-buttons {
+    gap: 2px;
+  }
+
+  .gamepad .pb {
+    min-height: 34px;
+    font-size: .7rem;
+  }
+}

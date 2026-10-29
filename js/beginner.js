@@ -50,6 +50,29 @@
         side.appendChild(match);
         side.insertAdjacentHTML('beforeend', '<section class="plan-preview"><h2>Kế hoạch thi đấu của bạn</h2><p>Mỗi robot có chuỗi hành động riêng và hoạt động cùng lúc.</p><div id="planOverview"></div><button class="btn btn-primary" data-screen="edit">Xem và chỉnh sửa kế hoạch →</button><button class="btn" data-screen="scores">Tìm hiểu cách tính điểm →</button></section>');
         $('#watchPanel').appendChild(side);
+        var setup = $('.match-setup');
+        var welcome = $('.welcome');
+        var welcomeSteps = $('.welcome-steps');
+        var tacticalStatus = $('.tactical-status');
+        var planPreview = side.querySelector('.plan-preview');
+        if (!setup || !welcome || !welcomeSteps || !tacticalStatus || !planPreview) {
+            throw new Error('Không thể bố trí bảng điều khiển chiến thuật: thiếu một khu vực giao diện bắt buộc.');
+        }
+        welcome.classList.add('welcome-dashboard');
+        var dashboardSidebar = document.createElement('aside');
+        dashboardSidebar.className = 'dashboard-sidebar';
+        dashboardSidebar.setAttribute('aria-label', 'Cấu hình và kế hoạch chiến thuật');
+        dashboardSidebar.append(setup, welcomeSteps, tacticalStatus, planPreview, side);
+        var dashboardScoreboard = document.createElement('aside');
+        dashboardScoreboard.className = 'dashboard-scoreboard';
+        dashboardScoreboard.setAttribute('aria-label', 'Điểm số trận đấu');
+        dashboardScoreboard.append(match, score);
+        $('#watchPanel').append(dashboardSidebar, dashboardScoreboard);
+        var workspaceNav = $('.workspace-nav');
+        if (!workspaceNav) {
+            throw new Error('Không thể bố trí điều hướng chiến thuật: thiếu thanh điều hướng.');
+        }
+        $('.topbar').appendChild(workspaceNav);
         var help = document.createElement('section');
         help.id = 'helpPanel';
         help.tabIndex = -1;
