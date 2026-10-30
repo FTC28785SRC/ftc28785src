@@ -2289,7 +2289,7 @@ function wireBuild() {
 }
 
 /* ---------- navigation and the frame loop ---------- */
-const VIEWS = ['home', 'drive', 'build', 'learn', 'tutorial', 'manual', 'legal'];
+const VIEWS = ['home', 'drive', 'build', 'learn', 'manual', 'legal'];
 function showView(name, fromHash) {
   if (VIEWS.indexOf(name) < 0 || name === 'home') name = 'drive';
   document.body.dataset.studioView = name;
@@ -2305,7 +2305,12 @@ function showView(name, fromHash) {
   }
   document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.view === name)));
   if (name === 'build') { renderBuild(); startSpin(); }
-  if (name === 'drive') { resizeField(); updateGutter(); }
+  if (name === 'drive' || name === 'learn') {
+    const ftcModeButton = document.querySelector('#watchPanel [data-field-mode="ftc"]');
+    if (ftcModeButton) ftcModeButton.click();
+    resizeField();
+  }
+  if (name === 'drive') updateGutter();
   if (!fromHash) { try { history.replaceState(null, '', '#' + name); } catch (e) { /* ignore */ } }
 }
 function resizeField() {
