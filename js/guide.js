@@ -455,6 +455,20 @@
   skipAll.hidden = true;
   document.body.appendChild(skipAll);
 
+  function hideGuideUi() {
+    [spotlight, card, skipAll].forEach(element => {
+      element.hidden = true;
+      element.style.setProperty('display', 'none', 'important');
+    });
+  }
+
+  function showGuideUi() {
+    [spotlight, card, skipAll].forEach(element => {
+      element.style.removeProperty('display');
+      element.hidden = false;
+    });
+  }
+
   function setPreference(value) {
     try {
       root.localStorage.setItem(GUIDE_CHOICE_KEY, value);
@@ -526,9 +540,7 @@
     index = 0;
     setPreference('in-progress');
     welcome.close();
-    card.hidden = false;
-    spotlight.hidden = false;
-    skipAll.hidden = false;
+    showGuideUi();
     document.documentElement.classList.add('guide-instant');
     const watchButton = $('.workspace-nav [data-screen="watch"]');
     if (watchButton) watchButton.click();
@@ -812,7 +824,7 @@
       else root.localStorage.setItem(ROBOT_STATE_KEY, robotStateSnapshot);
       const nextHash = originalHash || '#' + originalStudioView;
       root.history.replaceState(null, '', root.location.pathname + root.location.search + nextHash);
-      setTimeout(() => root.location.reload(), 450);
+      setTimeout(() => root.location.reload(), 2600);
       return true;
     } catch (error) {
       console.error('Không thể khôi phục cấu hình FTC sau hướng dẫn.', error);
@@ -838,9 +850,7 @@
     target = null;
     document.body.classList.remove('guide-active');
     document.documentElement.classList.remove('guide-instant');
-    spotlight.hidden = true;
-    card.hidden = true;
-    skipAll.hidden = true;
+    hideGuideUi();
     welcome.close();
     card.style.removeProperty('left');
     card.style.removeProperty('top');
@@ -852,6 +862,16 @@
       catch (error) { console.warn('Không thể xóa bản khôi phục hướng dẫn đã dùng.', error); }
     }
     setPreference(isComplete ? 'done' : 'skipped');
+    if (isComplete) {
+      welcome.classList.add('guide-congrats');
+      welcome.innerHTML =
+        '<div class="guide-finish"><svg class="guide-finish-bee" aria-hidden="true" viewBox="0 0 100 100"><use href="#i-bee"></use></svg>' +
+        '<p class="guide-finish-badge">Đã hoàn thành hành trình</p><h1 id="guideWelcomeTitle">Chúc mừng!</h1>' +
+        '<p class="guide-finish-copy">Bạn đã khám phá Strategy, sân mô phỏng và FTC Blocks. Giờ hãy tự tin bắt đầu kế hoạch của đội mình nhé!</p>' +
+        '<button type="button" class="btn guide-primary" id="guideDoneBtn">Tiếp tục khám phá</button></div>';
+      $('#guideDoneBtn', welcome).addEventListener('click', () => welcome.close());
+      welcome.showModal();
+    }
     if (didReload) return;
   }
 
@@ -893,6 +913,7 @@
     });
     $('#guideStartBtn').addEventListener('click', begin);
     $('#openGuideBtn').addEventListener('click', () => {
+      welcome.classList.remove('guide-congrats');
       welcome.innerHTML =
         '<div class="guide-welcome-row"><svg class="guide-welcome-bee" aria-hidden="true" viewBox="0 0 100 100"><use href="#i-bee"></use></svg>' +
         '<div><p class="studio-kicker">FTC BIOBUZZ · NGƯỜI BẠN ĐỒNG HÀNH</p><h1 id="guideWelcomeTitle">Mở lại hướng dẫn sử dụng?</h1>' +
@@ -946,6 +967,7 @@
   }
 
   function init() {
+    hideGuideUi();
     wire();
     restoreAfterReload();
     root.addEventListener('pagehide', () => {
