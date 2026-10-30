@@ -8,7 +8,7 @@
     if (new TextEncoder().encode(text).length > MAX_BYTES) text = JSON.stringify(clean);
     if (new TextEncoder().encode(text).length > MAX_BYTES) throw new Error('Chiến thuật này vượt quá giới hạn tệp 1 MB.');
     return text;
-  }
+  }//ok 
   function decode(text) {
     if (new TextEncoder().encode(text).length > MAX_BYTES) throw new Error('Hãy chọn tệp JSON nhỏ hơn 1 MB.');
     let parsed;
