@@ -57,14 +57,20 @@
   }
 
   function strategySteps() {
+    clickStep('#plannerField', 'Strategy · sân mô phỏng chiến thuật',
+      'Strategy là nơi lập kế hoạch thi đấu BIOBUZZ, xem vị trí bốn robot và theo dõi diễn biến trên sân.',
+      'Sân này hiển thị kế hoạch của hai liên minh cùng lúc. Các robot và bóng di chuyển theo hành động đã lập; bảng điểm bên cạnh cập nhật kết quả. Những bước kế tiếp sẽ giới thiệu cách chọn trận, tạo kế hoạch và chạy mô phỏng.');
+    clickStep('#fieldWrap', 'FTC Blocks · sân mô phỏng robot',
+      'FTC Blocks dùng chương trình dạng khối để điều khiển robot FTC; sân mô phỏng cho thấy robot thực hiện chương trình.',
+      'Đây là sân FTC nhìn từ trên xuống. Chọn OpMode Tự động hoặc TeleOp rồi chạy thử để thấy robot và điểm số thay đổi. Strategy và FTC dùng chung sân hiển thị, nhưng chương trình và cách điều khiển khác nhau.');
     selectStep('#matchMode', 'Chọn chế độ trận đấu', 'Chọn quy mô buổi luyện tập hoặc cách lập kế hoạch.',
-      'Mở danh sách và chọn một chế độ khác để xem website điều chỉnh sân và các lựa chọn phù hợp.');
+      'Danh sách quyết định những robot nào tham gia. Chế độ lập kế hoạch cả hai liên minh hiển thị bốn robot; chế độ một robot dùng để luyện tập riêng. Có thể đổi lại bất cứ lúc nào.');
     selectStep('#playingAlliance', 'Chọn liên minh của bạn', 'Đổi góc nhìn và kế hoạch theo liên minh Đỏ hoặc Xanh.',
-      'Chọn màu liên minh bạn muốn điều khiển. Màu sân và robot của bạn sẽ cập nhật theo lựa chọn.');
+      'Chọn Đỏ hoặc Xanh để xác định liên minh bạn đang lập kế hoạch. Màu robot và phần chỉnh sửa sẽ đổi theo lựa chọn; kế hoạch của liên minh còn lại vẫn được giữ.');
     selectStep('#defenseTactic', 'Chọn chiến thuật phòng thủ', 'Quyết định cách mô phỏng đối thủ phòng thủ.',
-      'Thử đổi giữa các kiểu phòng thủ. Phần ghi chú dưới khu vực chọn giải thích lựa chọn đang hoạt động.');
+      'Mục này chọn cách robot đối thủ phản ứng khi mô phỏng. Nếu mới bắt đầu, có thể giữ lựa chọn mặc định; thiết lập này không thay thế kế hoạch của liên minh bạn.');
     clickStep('#demoBtn', 'Tạo trận mẫu', 'Tạo sẵn kế hoạch để bạn quan sát sân, các bước và điểm số.',
-      'Nhấn nút trận mẫu. Khi chạy xong, phần tóm tắt kế hoạch và các robot sẽ xuất hiện.',
+      'Nhấn “Thử trận mẫu” để tạo nhanh chuỗi hành động cho robot. Sau khi tạo xong, xem phần tóm tắt rồi nhấn “Phát kế hoạch” để quan sát robot trên sân. Đây là ví dụ có thể thay đổi, không ghi đè tệp đã lưu.',
       () => $('#status').textContent.indexOf('Đã tải trận mẫu') === 0,
       { waitFor: true, timeout: 60000, planMutation: true });
     selectStep('#matchMode', 'Thử chế độ đối thủ ngẫu nhiên', 'Tạo một đối thủ để so sánh chiến thuật.',
@@ -95,7 +101,7 @@
     selectStep('#playSpeed', 'Tốc độ phát kế hoạch', 'Điều chỉnh tốc độ xem diễn biến trận.',
       'Chọn một tốc độ khác 1×. Đây chỉ là tốc độ phát mô phỏng, không sửa các bước kế hoạch.');
     clickStep('#playBtn', 'Chạy kế hoạch', 'Phát lần lượt các hành động đã được lập và đồng hồ mô phỏng.',
-      'Nhấn “Chạy kế hoạch” và chờ đếm ngược. Nút sẽ đổi thành “Tạm dừng” khi phát.',
+      'Nhấn “Phát kế hoạch” để xem các robot thực hiện hành động theo đồng hồ trận. Dùng “Tạm dừng” để dừng xem; thanh thời gian và nút bước cho phép kiểm tra từng thời điểm.',
       () => document.body.classList.contains('is-playing'),
       { waitFor: true, timeout: 9000 });
     clickStep('#playBtn', 'Tạm dừng kế hoạch', 'Dừng tạm thời để xem sân hoặc đọc nhãn hành động.',
@@ -115,17 +121,17 @@
     clickStep('#resetBtn', 'Khởi động lại lượt xem', 'Đưa trình phát về trạng thái đầu trận mà không xóa kế hoạch.',
       'Nhấn “Khởi động lại”. Trình phát sẽ trở về bước ban đầu; các hành động vẫn được giữ.');
     clickStep('#scoresPanel', 'Bảng điểm chi tiết', 'Xem điểm TỰ ĐỘNG, ĐIỀU KHIỂN, điểm xếp hạng và thống kê sân.',
-      'Bảng này hiển thị điểm trận, trạng thái sân và các giả định của mô phỏng.');
+      'Bảng điểm tách điểm TỰ ĐỘNG, ĐIỀU KHIỂN và tổng điểm, đồng thời cho biết trạng thái sân và các giả định mô phỏng. Dùng mục này để kiểm tra kết quả sau khi phát hoặc chỉnh sửa kế hoạch.');
     screenStep('watch', 'Quay lại sân đấu', 'Trở lại sân và khu vực chọn trận.',
       'Nhấn “Xem trận đấu”. Các nút điều khiển và tóm tắt trận xuất hiện lại.');
     screenStep('edit', 'Mở Strategy', 'Xây dựng kế hoạch theo từng robot và từng giai đoạn trận.',
-      'Mở “Chỉnh sửa chiến lược”. Bạn có thể thêm, sắp xếp và cấu hình các hành động trên các làn robot.');
+      'Mở “Chỉnh sửa chiến lược”. Chọn liên minh, robot và giai đoạn trận; nhấn một hành động hoặc công thức để thêm vào làn. Mỗi làn là thứ tự hành động của một robot.');
     selectStep('#editorAlliance', 'Chọn kế hoạch liên minh', 'Chuyển giữa kế hoạch Đỏ và Xanh để xem hoặc chỉnh sửa.',
-      'Chọn liên minh trong danh sách. Sân vẫn giữ cả hai kế hoạch, còn bảng chỉnh sửa chuyển sang liên minh đã chọn.');
+      'Chọn Đỏ hoặc Xanh. Đây là liên minh đang được chỉnh sửa; kế hoạch của liên minh còn lại vẫn nằm trên sân và không bị xóa.');
     selectStep('#paletteRobot', 'Chọn robot cần chỉnh sửa', 'Mỗi robot có chuỗi hành động riêng.',
-      'Chọn Robot 1 hoặc Robot 2. Các bước trong làn sẽ thuộc về robot đang chọn.');
+      'Chọn Robot 1 hoặc Robot 2. Sau đó, hành động bạn thêm sẽ được đặt cho robot này, không ảnh hưởng làn của robot kia.');
     selectStep('#paletteSegment', 'Chọn giai đoạn trận', 'Tách hành động TỰ ĐỘNG và hai nửa ĐIỀU KHIỂN.',
-      'Chọn một giai đoạn khác. Bảng hành động bên dưới sẽ đổi theo giai đoạn đó.');
+      'Chọn TỰ ĐỘNG, 60 giây đầu hoặc 60 giây cuối của ĐIỀU KHIỂN. Danh sách hành động và làn bên dưới đổi theo giai đoạn đã chọn.');
     clickStep('#recipeLibrary .recipe-choice', 'Thêm một hành động Strategy', 'Chọn một chu kỳ dựng sẵn để thêm các hành động phù hợp vào kế hoạch robot.',
       'Các khối công thức giúp bắt đầu nhanh; có thể chỉnh sửa từng hành động sau đó.',
       () => true, { planMutation: true });
@@ -195,7 +201,7 @@
       'Chọn kích thước khác trong danh sách. Kích thước sẽ được dùng trong mô phỏng.',
       null, { mutatesRobot: true });
     clickStep('#driveList button', 'Chọn hệ truyền động', 'Hệ truyền động xác định bố trí và kiểu chuyển động cơ bản của robot.',
-      'Chọn một cấu hình truyền động trong danh sách. Bản xem trước và bản đồ phần cứng sẽ cập nhật.',
+      'Chọn một cấu hình trong danh sách. Hệ truyền động quyết định cách robot di chuyển trên sân FTC; bản xem trước và bản đồ phần cứng sẽ cập nhật.',
       () => true, { mutatesRobot: true });
     clickStep('#paintList button', 'Chọn màu khung robot', 'Tùy chỉnh màu hiển thị robot trên sân.',
       'Chọn một màu khung khác. Robot xem trước và sân dùng màu mới.',
@@ -218,23 +224,23 @@
       'Nút này chỉ đặt lại vị trí các bộ phận; không xóa chương trình FTC hay kế hoạch Strategy.',
       () => true, { optional: true, mutatesRobot: true });
     clickStep('#presetList button', 'Chọn mẫu robot dựng sẵn', 'Nạp một cấu hình mẫu để bắt đầu nhanh, rồi tiếp tục điều chỉnh riêng.',
-      'Chọn một mẫu robot. Mẫu thay đổi robot mô phỏng hiện tại; cấu hình ban đầu sẽ được khôi phục khi kết thúc hướng dẫn.',
+      'Chọn một mẫu robot để nạp nhanh hệ truyền động và cơ cấu mẫu. Đây là cấu hình dùng cho mô phỏng FTC; cấu hình ban đầu sẽ được khôi phục khi kết thúc hướng dẫn.',
       () => true, { mutatesRobot: true });
     studioStep('drive', 'Trạm điều khiển robot', 'Chạy OpMode và theo dõi sân, điểm, nhật ký cùng telemetry.',
-      'Mở “Trạm điều khiển”. Chọn OpMode và vị trí xuất phát ở thanh phía trên.');
+      'Trạm điều khiển là nơi chọn OpMode, vị trí xuất phát và chạy chương trình. Khi robot hoạt động, hãy theo dõi sân FTC, đồng hồ, điểm, telemetry và nhật ký.');
     selectStep('#startSel', 'Chọn vị trí xuất phát', 'Chọn nơi robot bắt đầu khi chạy chương trình.',
-      'Chọn một vị trí xuất phát khác. Robot trên sân sẽ chuyển sang vị trí đã chọn.',
+      'Chọn một trong các vị trí xuất phát. Robot sẽ được đặt tại vị trí đó khi chạy OpMode hoặc đặt lại sân; hãy chọn vị trí phù hợp với kế hoạch của bạn.',
       null, { mutatesRobot: true });
     clickStep('#allianceBlue', 'Chọn liên minh cho robot FTC', 'Đổi màu liên minh robot trong mô phỏng FTC.',
       'Chọn Liên minh xanh. Có thể trở lại Liên minh đỏ bằng nút bên cạnh.',
       () => $('#allianceBlue').getAttribute('aria-pressed') === 'true',
       { optional: true, mutatesRobot: true });
     selectStep('#autoSel', 'Chọn OpMode Tự động', 'Chọn chương trình chạy tự động trên Trạm điều khiển.',
-      'Đổi OpMode trong danh sách Tự động. Đây là chương trình được chạy khi chọn “Chạy mục đã chọn”.',
+      'Chọn một chương trình trong danh sách Tự động. “Chạy mục đã chọn” chạy riêng OpMode đang chọn; khi chọn “Chạy cả trận”, OpMode Tự động chạy trước.',
       (element, before) => element.value !== before,
       { capture: element => element.value, mutatesRobot: true });
     selectStep('#teleSel', 'Chọn OpMode TeleOp', 'Chọn chương trình điều khiển robot bằng tay cầm.',
-      'Đổi OpMode trong danh sách TeleOp. Khi chạy cả trận, chương trình này bắt đầu sau TỰ ĐỘNG.',
+      'Chọn một chương trình trong danh sách TeleOp. Chương trình này đọc tay cầm để điều khiển robot; khi chạy cả trận, nó bắt đầu sau giai đoạn Tự động.',
       (element, before) => element.value !== before,
       { capture: element => element.value, mutatesRobot: true });
     clickStep('#robotApp .speed[data-s="2"]', 'Tốc độ mô phỏng robot', 'Tăng tốc vòng lặp mô phỏng để thử OpMode nhanh hơn.',
@@ -244,7 +250,7 @@
     clickStep('#robotApp .gamepad', 'Điều khiển bằng tay cầm trên màn hình', 'Các nút mô phỏng tương ứng với nút trên gamepad1; tay cầm thật được nhận diện khi kết nối.',
       'Nhấn một nút trong bảng tay cầm. Khi TeleOp đang chạy, chương trình có thể đọc trạng thái nút và cần điều khiển.');
     clickStep('#btnRun', 'Chạy OpMode đã chọn', 'Chạy riêng chương trình Tự động hoặc TeleOp đang chọn để thử nhanh.',
-      'Nhấn “Chạy mục đã chọn”. Trạng thái Trạm điều khiển và nhật ký sẽ cho biết chương trình đã bắt đầu.',
+      'Nhấn “Chạy mục đã chọn” để thử riêng OpMode đang chọn, không chạy toàn bộ trận. Theo dõi trạng thái và nhật ký; nhấn “Dừng” để kết thúc.',
       () => /đang chạy/i.test($('#dsStatus').textContent),
       { waitFor: true, timeout: 5000, mutatesRobot: true });
     clickStep('#btnStop', 'Dừng OpMode', 'Dừng chương trình đang chạy và ngắt các cơ cấu.',
@@ -258,12 +264,12 @@
       'Nhấn “Dừng”. Muốn bắt đầu lại từ đầu sân, dùng riêng nút “Đặt lại sân”.',
       () => $('#dsStatus').textContent.indexOf('Đã dừng.') === 0);
     studioStep('learn', 'Điều khiển và lập trình', 'Tạo chương trình bằng các khối FTC Blocks hoặc viết OnBotJava.',
-      'Mở “Điều khiển & lập trình”. Danh sách OpMode, trình soạn thảo và bản đồ phần cứng nằm trên cùng trang.');
+      'Tại đây tạo hoặc chọn OpMode, xem ví dụ và chuyển giữa FTC Blocks với OnBotJava. Chương trình dùng tên thiết bị đã cấu hình trong mục Lắp robot.');
     clickStep('#btnExamples', 'Xem chương trình ví dụ', 'Nạp chương trình mẫu để học cấu trúc mà không phải bắt đầu từ trang trắng.',
       'Mở “Ví dụ”. Bảng sẽ cho biết ngôn ngữ, chế độ và mô tả của từng chương trình.',
       () => !$('#exPanel').hidden);
     clickStep('#btnNewBlocks', 'Tạo FTC Blocks mới', 'Tạo một OpMode Blocks mới để bắt đầu xếp lệnh.',
-      'Nhấn “OpMode Blocks mới”. Chương trình mới sẽ được chọn trong danh sách; phần còn lại của hướng dẫn dùng chương trình tạm và sẽ khôi phục khi kết thúc.',
+      'Nhấn “OpMode Blocks mới” để tạo chương trình dạng khối. Chọn loại Tự động hoặc TeleOp ở phần thông tin chương trình; sau đó mở tab FTC Blocks để ghép lệnh. Chương trình tạm sẽ được khôi phục khi kết thúc hướng dẫn.',
       () => $('#filePath').textContent.indexOf('FTC Blocks') === 0,
       { mutatesRobot: true });
     add({
@@ -291,13 +297,13 @@
       mutatesRobot: true
     });
     clickStep('#tabBlocks', 'Mở FTC Blocks', 'FTC Blocks cho phép ghép lệnh bằng các khối trực quan.',
-      'Chọn FTC Blocks. Vùng làm việc hiện khối chương trình; bên cạnh là các nhóm lệnh.');
+      'Chọn FTC Blocks để mở vùng làm việc. Chọn nhóm lệnh ở cạnh vùng này, kéo khối vào canvas rồi nối khối theo thứ tự thực hiện.');
     blockCategoryStep('OpMode tuyến tính', 'Khối OpMode tuyến tính', 'Nhóm này chứa điểm bắt đầu chương trình, chờ START, vòng lặp hoạt động và thời gian.',
-      'Mở nhóm “OpMode tuyến tính” để xem các khối điều khiển vòng đời OpMode.');
+      'Mở nhóm này để tìm các khối khung chương trình. Một OpMode thường khởi tạo thiết bị, chờ START, chạy lệnh khi chương trình còn hoạt động rồi kết thúc an toàn.');
     blockCategoryStep('Tay cầm', 'Khối tay cầm', 'Đọc cần analog và các nút trên gamepad1 hoặc gamepad2.',
-      'Mở nhóm “Tay cầm” để xem khối đọc giá trị cần và trạng thái nút.');
+      'Mở nhóm “Tay cầm” để xem khối đọc cần và nút. Trong TeleOp, đưa giá trị đọc được vào điều kiện hoặc lệnh động cơ để robot phản hồi thao tác người lái.');
     blockCategoryStep('Bộ chấp hành', 'Khối bộ chấp hành', 'Gửi lệnh đến động cơ và servo đã cấu hình trong Lắp robot.',
-      'Mở nhóm “Bộ chấp hành”. Các nhóm con Động cơ DcMotor và Servo chứa lệnh riêng cho từng loại thiết bị.');
+      'Mở nhóm này để điều khiển thiết bị đã cấu hình và đặt tên trong Lắp robot. Chọn nhóm con Động cơ DcMotor hoặc Servo để tìm lệnh tương ứng.');
     blockCategoryStep('Động cơ DcMotor', 'Khối động cơ DcMotor', 'Điều khiển công suất, chiều quay, encoder và chế độ chạy động cơ.',
       'Mở nhóm con “Động cơ DcMotor” để xem lệnh đặt và đọc thuộc tính động cơ.');
     blockCategoryStep('Servo', 'Khối Servo', 'Đặt hoặc đọc vị trí servo trong khoảng giá trị hỗ trợ.',
@@ -329,7 +335,7 @@
       () => blockCount() > (stepBefore || 0),
       { capture: () => blockCount(), mutatesRobot: true, waitFor: true, timeout: 3000 });
     clickStep('#btnViewJava', 'Xem Java được tạo', 'Kiểm tra mã Java tương ứng mà không rời khỏi FTC Blocks.',
-      'Nhấn “Xem mã Java được tạo từ các khối”. Khung mã sẽ mở để bạn đối chiếu với các khối.',
+      'Nhấn “Xem mã Java được tạo từ các khối”. Khung mã chỉ để xem và đối chiếu cách các khối được chuyển thành mã; quay lại FTC Blocks để tiếp tục chỉnh sửa bằng khối.',
       () => !$('#genJava').hidden);
     clickStep('#tabJava', 'Chuyển sang OnBotJava', 'OnBotJava là lựa chọn nhập mã trực tiếp thay vì xếp khối.',
       'Chọn tab OnBotJava. Trình soạn thảo văn bản sẽ hiện ra; tab Blocks giúp quay lại các khối.');
@@ -370,13 +376,18 @@
   robotStudioSteps();
 
   const coreStepRoutes = [
-    ['Chọn chế độ trận đấu', { screen: 'watch' }],
-    ['Chọn liên minh của bạn', { screen: 'watch' }],
-    ['Tạo trận mẫu', { screen: 'watch' }],
-    ['Chạy kế hoạch', { screen: 'watch' }],
+    ['Strategy · sân mô phỏng chiến thuật', { screen: 'watch', studio: 'drive', fieldMode: 'strategy', camera: 'viewAngled' }],
+    ['Chọn chế độ trận đấu', { screen: 'watch', studio: 'drive', fieldMode: 'strategy', camera: 'viewAngled' }],
+    ['Chọn liên minh của bạn', { screen: 'watch', studio: 'drive', fieldMode: 'strategy' }],
+    ['Tạo trận mẫu', { screen: 'watch', studio: 'drive', fieldMode: 'strategy' }],
+    ['Chạy kế hoạch', { screen: 'watch', studio: 'drive', fieldMode: 'strategy' }],
     ['Bảng điểm chi tiết', { screen: 'scores' }],
+    ['Mở Strategy', { screen: 'edit' }],
     ['Thêm một hành động Strategy', { screen: 'edit' }],
+    ['FTC Blocks · sân mô phỏng robot', { screen: 'watch', studio: 'learn', fieldMode: 'ftc', blocks: true }],
+    ['Lắp ráp và cấu hình robot', { screen: 'watch', studio: 'build', fieldMode: 'ftc' }],
     ['Chọn mẫu robot dựng sẵn', { screen: 'watch', studio: 'build' }],
+    ['Trạm điều khiển robot', { screen: 'watch', studio: 'drive', fieldMode: 'ftc' }],
     ['Chọn vị trí xuất phát', { screen: 'watch', studio: 'drive' }],
     ['Chọn OpMode Tự động', { screen: 'watch', studio: 'drive' }],
     ['Chọn OpMode TeleOp', { screen: 'watch', studio: 'drive' }],
@@ -388,6 +399,7 @@
     ['Khối OpMode tuyến tính', { screen: 'watch', studio: 'learn', blocks: true }],
     ['Khối bộ chấp hành', { screen: 'watch', studio: 'learn', blocks: true }],
     ['Khối tay cầm', { screen: 'watch', studio: 'learn', blocks: true }],
+    ['Xem Java được tạo', { screen: 'watch', studio: 'learn', blocks: true }],
     ['Trợ giúp FTC', { screen: 'watch', studio: 'manual' }]
   ];
   const stepsByTitle = new Map(steps.map(step => [step.title, step]));
@@ -544,12 +556,17 @@
       if (screenButton && screenButton.getAttribute('aria-pressed') !== 'true' && root.BBEase) {
         root.BBEase.screen(route.screen, true);
       }
-      if (!route.studio) return;
-      const ftcButton = $('#watchPanel [data-field-mode="ftc"]');
-      if (ftcButton && document.body.dataset.fieldMode !== 'ftc') ftcButton.click();
-      if (document.body.dataset.studioView !== route.studio) {
+      if (route.studio && document.body.dataset.studioView !== route.studio) {
         const studioButton = $('.studio-tabs [data-view="' + route.studio + '"]');
         if (studioButton) studioButton.click();
+      }
+      if (route.fieldMode) {
+        const fieldButton = $('#watchPanel [data-field-mode="' + route.fieldMode + '"]');
+        if (fieldButton && document.body.dataset.fieldMode !== route.fieldMode) fieldButton.click();
+      }
+      if (route.camera) {
+        const cameraButton = $('#' + route.camera);
+        if (cameraButton) cameraButton.click();
       }
       if (route.blocks && $('#tabBlocks')) $('#tabBlocks').click();
     } finally {
@@ -818,11 +835,15 @@
     }
     detachHighlight();
     $$('.guide-target').forEach(element => element.classList.remove('guide-target'));
+    target = null;
     document.body.classList.remove('guide-active');
     document.documentElement.classList.remove('guide-instant');
     spotlight.hidden = true;
     card.hidden = true;
     skipAll.hidden = true;
+    welcome.close();
+    card.style.removeProperty('left');
+    card.style.removeProperty('top');
     const didReload = restoreRobotStateAndReload();
     if (!didReload) {
       restoreStrategy();
@@ -832,24 +853,6 @@
     }
     setPreference(isComplete ? 'done' : 'skipped');
     if (didReload) return;
-    if (!isComplete) {
-      welcome.close();
-      return;
-    }
-    showFinish(isComplete);
-  }
-
-  function showFinish(isComplete) {
-    welcome.innerHTML =
-      '<div class="guide-finish"><svg class="guide-bee" aria-hidden="true" viewBox="0 0 100 100"><use href="#i-bee"></use></svg>' +
-      '<p class="studio-kicker">FTC BIOBUZZ · ĐÃ XONG HƯỚNG DẪN</p><h1>' +
-      (isComplete ? 'Chúc mừng! Bạn đã hoàn thành hướng dẫn.' : 'Bạn có thể tiếp tục khám phá bất cứ lúc nào.') +
-      '</h1><p>' + (isComplete ?
-        'Bây giờ bạn đã biết cách dùng Strategy, sân mô phỏng và FTC Blocks. Các thay đổi thực hành trong tour đã được hoàn tác.' :
-        'Các thay đổi thực hành trong tour đã được hoàn tác. Nhấn “Hướng dẫn sử dụng” trên thanh điều hướng để bắt đầu lại từ đầu.') +
-      '</p><div class="guide-welcome-actions"><button type="button" class="btn guide-primary" id="guideFinishBtn">Quay lại website</button></div></div>';
-    welcome.showModal();
-    $('#guideFinishBtn', welcome).addEventListener('click', () => welcome.close());
   }
 
   function restoreAfterReload() {
@@ -873,7 +876,6 @@
       else if (typeof state.robotState === 'string') root.localStorage.setItem(ROBOT_STATE_KEY, state.robotState);
       if (state.strategy && root.BBUI) root.BBUI.importStrategy(state.strategy, { view: false });
       restoreNavigation();
-      if (state.finished) showFinish(true);
     } catch (error) {
       console.error('Không thể khôi phục kế hoạch sau khi tải lại trang.', error);
       const status = $('#status');
