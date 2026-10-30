@@ -1,0 +1,262 @@
+.guide-instant {
+  scroll-behavior: auto !important;
+}
+
+.guide-reopen {
+  border-color: color-mix(in srgb, var(--pollen) 52%, var(--line2));
+}
+
+.guide-welcome {
+  width: min(560px, calc(100vw - 28px));
+  max-width: none;
+  padding: clamp(20px, 4vw, 36px);
+  border: 1px solid var(--line2);
+  border-radius: 20px;
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 24px 80px #0009;
+}
+
+.guide-welcome::backdrop {
+  background: rgba(3, 6, 12, .78);
+  backdrop-filter: blur(5px);
+}
+
+.guide-welcome h1 {
+  margin: 0 0 10px;
+  font-size: clamp(1.4rem, 5vw, 2rem);
+}
+
+.guide-welcome p {
+  color: var(--ink-dim);
+}
+
+.guide-welcome-row {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+}
+
+.guide-welcome-bee,
+.guide-bee {
+  color: var(--pollen);
+  filter: drop-shadow(0 0 12px rgba(255, 190, 20, .5));
+}
+
+.guide-welcome-bee {
+  width: 88px;
+  height: 88px;
+  animation: guide-bee-hover 2.4s ease-in-out infinite;
+}
+
+.guide-welcome-actions,
+.guide-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.guide-welcome-actions {
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.guide-primary {
+  border-color: var(--pollen);
+  background: var(--pollen);
+  color: #221805;
+}
+
+.guide-primary:disabled {
+  opacity: .48;
+}
+
+.guide-skip-tour {
+  position: fixed;
+  z-index: 1102;
+  top: max(10px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  min-height: 42px;
+  border-color: var(--line2);
+  background: var(--panel);
+  box-shadow: 0 5px 22px #0007;
+}
+
+.guide-spotlight {
+  position: fixed;
+  z-index: 1100;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+.guide-spotlight path {
+  fill: rgba(3, 6, 12, .78);
+  fill-rule: evenodd;
+}
+
+.guide-target {
+  outline: 2px solid var(--pollen) !important;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--pollen) 20%, transparent),
+    0 0 26px color-mix(in srgb, var(--pollen) 55%, transparent) !important;
+  border-radius: 10px;
+  transition: outline-offset .2s ease, box-shadow .2s ease;
+}
+
+.guide-card {
+  position: fixed;
+  z-index: 1101;
+  width: min(420px, calc(100vw - 24px));
+  max-height: min(72vh, 590px);
+  overflow: auto;
+  padding: 18px;
+  border: 1px solid var(--line2);
+  border-radius: 18px;
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 18px 58px #0009, 0 0 0 1px color-mix(in srgb, var(--pollen) 20%, transparent);
+  transition: left .34s cubic-bezier(.2,.8,.2,1), top .34s cubic-bezier(.2,.8,.2,1);
+}
+
+.guide-card-head {
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.guide-bee {
+  width: 48px;
+  height: 48px;
+  animation: guide-bee-hover 2.4s ease-in-out infinite;
+}
+
+.guide-card h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+
+.guide-progress-label,
+.guide-step-copy {
+  color: var(--ink-dim);
+}
+
+.guide-progress-label {
+  margin: 12px 0 6px;
+  font-size: .78rem;
+}
+
+.guide-progress {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: var(--bg2);
+}
+
+.guide-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--pollen), var(--good));
+  transition: width .3s ease;
+}
+
+.guide-step-copy {
+  margin: 12px 0;
+  line-height: 1.55;
+}
+
+.guide-instruction {
+  margin: 10px 0;
+  padding: 11px 12px;
+  border-left: 3px solid var(--pollen);
+  border-radius: 6px;
+  background: var(--bg2);
+  color: var(--ink);
+  font-size: .9rem;
+}
+
+.guide-result {
+  min-height: 1.3em;
+  margin: 8px 0;
+  color: var(--good);
+  font-size: .86rem;
+}
+
+.guide-result[data-state="waiting"] {
+  color: var(--warn);
+}
+
+.guide-controls {
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.guide-controls .guide-controls-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.guide-finish {
+  text-align: center;
+}
+
+.guide-finish .guide-bee {
+  width: 76px;
+  height: 76px;
+  margin: 4px auto 12px;
+}
+
+@keyframes guide-bee-hover {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-5px) rotate(3deg); }
+}
+
+html[data-theme="light"] .guide-welcome,
+html[data-theme="light"] .guide-card {
+  background: #fffdf7;
+  border-color: #dfc66e;
+}
+
+@media (max-width: 700px) {
+  .guide-welcome-row {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .guide-welcome-bee {
+    width: 62px;
+    height: 62px;
+  }
+
+  .guide-card {
+    max-height: 58vh;
+    padding: 14px;
+  }
+
+  .guide-controls {
+    position: sticky;
+    bottom: -14px;
+    padding: 10px 0 0;
+    background: var(--panel);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide-welcome-bee,
+  .guide-bee {
+    animation: none;
+  }
+
+  .guide-card,
+  .guide-progress span {
+    transition: none;
+  }
+}
