@@ -857,6 +857,169 @@ body[data-field-mode="strategy"] #watchPanel .shared-field-layout {
   grid-template-columns: minmax(0, 1fr);
 }
 
+body[data-field-mode="strategy"] #watchPanel .field-overlay-tools {
+  display: none;
+}
+
+body[data-field-mode="ftc"] #watchPanel .mobile-field-tools {
+  display: none !important;
+}
+
+#watchPanel .field-overlay-tools {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 12;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: calc(100% - 20px);
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--panel) 90%, transparent);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .28);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity .16s ease, transform .16s ease;
+}
+
+#watchPanel .board:hover .field-overlay-tools,
+#watchPanel .field-overlay-tools:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+#watchPanel .field-overlay-tools .btn {
+  min-width: 40px;
+  min-height: 38px;
+  padding: 6px 10px;
+}
+
+#watchPanel .field-overlay-tools output {
+  min-width: 46px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  font-size: .75rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+#watchPanel .field-overlay-tools .field-zoom-hint {
+  padding-inline: 4px;
+  color: var(--ink-dim);
+  font-size: .66rem;
+  white-space: nowrap;
+}
+
+#watchPanel #field {
+  cursor: grab;
+  touch-action: none;
+}
+
+#watchPanel #field.is-panning {
+  cursor: grabbing;
+}
+
+@media (hover: none) {
+  #watchPanel .field-overlay-tools {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+}
+
+#watchPanel .board-head > .shared-field-mode {
+  margin: 6px 0 0;
+}
+
+#watchPanel .fullscreen-toggle[aria-pressed="true"] {
+  border-color: var(--pollen);
+  background: var(--pollen);
+  color: #181205;
+}
+
+#watchPanel .board-wrap:fullscreen,
+#watchPanel .board-wrap.is-expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  box-sizing: border-box;
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  max-height: none;
+  margin: 0;
+  padding: clamp(8px, 1vw, 16px);
+  overflow: hidden;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 6px;
+  border: 0;
+  border-radius: 0;
+  background: var(--bg);
+}
+
+#watchPanel .board-wrap:fullscreen > :not(.board-head):not(.shared-field-layout),
+#watchPanel .board-wrap.is-expanded > :not(.board-head):not(.shared-field-layout) {
+  display: none !important;
+}
+
+#watchPanel .board-wrap:fullscreen .board-head,
+#watchPanel .board-wrap.is-expanded .board-head {
+  display: none;
+}
+
+#watchPanel .board-wrap:fullscreen .field-zoom-hint,
+#watchPanel .board-wrap.is-expanded .field-zoom-hint {
+  display: none;
+}
+
+#watchPanel .field-overlay-tools #fullscreenStatus {
+  max-width: min(70vw, 320px);
+  color: #ff8e88;
+  font-size: .68rem;
+  overflow-wrap: anywhere;
+}
+
+#watchPanel .board-wrap:fullscreen .shared-field-layout,
+#watchPanel .board-wrap.is-expanded .shared-field-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#watchPanel .board-wrap:fullscreen .shared-field-layout > #board,
+#watchPanel .board-wrap.is-expanded .shared-field-layout > #board {
+  display: grid;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+}
+
+#watchPanel .board-wrap:fullscreen #fieldWrap,
+#watchPanel .board-wrap.is-expanded #fieldWrap {
+  width: min(100%, calc(100vh - 16px), calc(100vw - 16px));
+  height: min(100%, calc(100vh - 16px), calc(100vw - 16px));
+  max-width: 100%;
+  max-height: none;
+  aspect-ratio: 1;
+  margin: auto;
+}
+
 @media (min-width: 701px) {
   .topbar {
     display: grid;
@@ -1513,6 +1676,51 @@ body[data-field-mode="ftc"] #watchPanel .shared-field-score .total-score-card st
 
   body[data-field-mode="ftc"] #watchPanel .shared-field-layout {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  #watchPanel .board-wrap:fullscreen,
+  #watchPanel .board-wrap.is-expanded {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 6px;
+    padding: 6px;
+  }
+
+  #watchPanel .board-wrap:fullscreen .shared-field-layout,
+  #watchPanel .board-wrap.is-expanded .shared-field-layout {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  #watchPanel .board-wrap:fullscreen .board-head h2,
+  #watchPanel .board-wrap.is-expanded .board-head h2 {
+    font-size: .82rem;
+  }
+
+  #watchPanel .board-wrap:fullscreen #fieldWrap,
+  #watchPanel .board-wrap.is-expanded #fieldWrap {
+    width: min(100%, calc(100vh - 16px), calc(100vw - 16px));
+    height: min(100%, calc(100vh - 16px), calc(100vw - 16px));
+  }
+
+  #watchPanel .field-overlay-tools {
+    top: 6px;
+    right: 6px;
+    left: 6px;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px;
+  }
+
+  #watchPanel .field-overlay-tools .btn {
+    min-width: 36px;
+    min-height: 34px;
+    padding: 4px 7px;
+    font-size: .68rem;
+  }
+
+  #watchPanel .field-overlay-tools .field-zoom-hint {
+    display: none;
   }
 
   #watchPanel .dashboard-sidebar > .file-bar {

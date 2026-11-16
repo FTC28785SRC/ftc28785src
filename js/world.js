@@ -1127,11 +1127,16 @@ function drawRobot(ctx, cfg, st, col, pick) {
   for (let i = 0; i < held.length; i++) drawBall(ctx, -hl + 5.2 + i * Math.min(2.6, (cfg.length - 8.4) / 3.2), hw - 3.9, 1.15, held[i], col);
 }
 
-function drawField(ctx, w, px, col) {
+function drawField(ctx, w, px, col, view) {
   const cfg = w.cfg, M = 7, k = px / (FIELD + 2 * M);
+  const zoom = view ? view.zoom : 1;
+  const anchorX = (view ? view.anchorX : 0.5) * px, anchorY = (view ? view.anchorY : 0.5) * px;
+  const panX = (view ? view.panX : 0) * px, panY = (view ? view.panY : 0) * px;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = col.bg; ctx.fillRect(0, 0, px, px);
-  ctx.setTransform(k, 0, 0, -k, M * k, px - M * k);
+  ctx.setTransform(k * zoom, 0, 0, -k * zoom,
+    M * k * zoom + (1 - zoom) * anchorX + panX,
+    (px - M * k) * zoom + (1 - zoom) * anchorY + panY);
   ctx.fillStyle = col.tile; ctx.fillRect(0, 0, FIELD, FIELD);
   ctx.strokeStyle = col.tileLine; ctx.lineWidth = 0.35; ctx.beginPath();
   for (let i = 1; i < 6; i++) { ctx.moveTo(i * 24, 0); ctx.lineTo(i * 24, FIELD); ctx.moveTo(0, i * 24); ctx.lineTo(FIELD, i * 24); }

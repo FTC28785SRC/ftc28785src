@@ -8,7 +8,7 @@
   stage.setAttribute('aria-label', 'Xưởng robot FTC');
   stage.innerHTML =
     '<nav class="studio-tabs" aria-label="Các mục trong Xưởng robot FTC">' +
-      '<button type="button" class="tab btn" data-view="drive">Trạm điều khiển</button>' +
+      '<button type="button" class="tab btn" data-view="drive">Điều khiển robot</button>' +
       '<button type="button" class="tab btn" data-view="build">Lắp robot</button>' +
       '<button type="button" class="tab btn" data-view="learn">Điều khiển &amp; lập trình</button>' +
       '<button type="button" class="tab btn" data-view="manual">Trợ giúp</button>' +
@@ -36,7 +36,7 @@
             '<p id="scoreHint" class="hint"></p><table class="score-breakdown"><tbody id="scoreBody"></tbody></table><p id="rpHint" class="hint"></p>' +
           '</section>' +
           '<aside class="studio-card driver-station">' +
-            '<header class="driver-station-head"><h2>Trạm điều khiển</h2><p id="dsStatus" role="status">Sẵn sàng</p></header>' +
+            '<header class="driver-station-head"><h2>Tay cầm ảo</h2><p id="dsStatus" role="status">Sẵn sàng</p></header>' +
             '<section class="driver-hud" aria-label="Điều khiển robot">' +
             '<div class="controller-select"><button type="button" class="btn" data-pt="0">Tay cầm 1</button><button type="button" class="btn" data-pt="1">Tay cầm 2</button><button type="button" class="btn" id="btnSwapPads">Đổi tay cầm</button><span id="padStatus"></span></div>' +
             '<div class="gamepad">' +
@@ -103,6 +103,7 @@
     '<div id="countOverlay" hidden><strong id="countNum"></strong></div><div id="toast" role="status" hidden></div>';
 
   var boardWrap = document.querySelector('#watchPanel .board-wrap');
+  var boardHead = boardWrap && boardWrap.querySelector('.board-head');
   var board = document.querySelector('#watchPanel .board');
   var fieldWrap = stage.querySelector('#fieldWrap');
   var fieldSvg = document.getElementById('fieldSvg');
@@ -112,7 +113,7 @@
   var driveCard = driveLayout.firstElementChild;
   var driverStation = driveLayout.querySelector('aside');
   var fieldControls = driveCard.querySelector('.studio-toolbar');
-  if (!boardWrap || !board || !fieldWrap || !fieldSvg) {
+  if (!boardWrap || !boardHead || !board || !fieldWrap || !fieldSvg) {
     throw new Error('Không thể tích hợp Xưởng robot FTC: thiếu sân ở mục Xem trận đấu.');
   }
   if (!driveLayout || !driveToolbar || !driveCard || !driverStation || !fieldControls) {
@@ -126,15 +127,28 @@
   fieldMode.innerHTML =
     '<strong>Sân đấu dùng chung</strong>' +
     '<button type="button" class="btn" data-field-mode="ftc" aria-pressed="true">Robot FTC + điều khiển</button>' +
-    '<button type="button" class="btn" data-field-mode="strategy" aria-pressed="false">Phát chiến lược</button>' +
-    '<span>Đổi chế độ hiển thị ngay tại mục Xem trận đấu.</span>';
+    '<button type="button" class="btn" data-field-mode="strategy" aria-pressed="false">Phát chiến lược</button>';
+  var fieldTools = document.createElement('div');
+  fieldTools.className = 'field-overlay-tools';
+  fieldTools.setAttribute('role', 'group');
+  fieldTools.setAttribute('aria-label', 'Công cụ xem sân FTC');
+  fieldTools.innerHTML =
+    '<button type="button" class="btn" id="fieldZoomOut" aria-label="Thu nhỏ sân" title="Thu nhỏ">−</button>' +
+    '<output id="fieldZoomValue" aria-label="Mức thu phóng">100%</output>' +
+    '<button type="button" class="btn" id="fieldZoomIn" aria-label="Phóng to sân" title="Phóng to">+</button>' +
+    '<button type="button" class="btn" id="fieldZoomReset" aria-label="Đặt lại vị trí và độ thu phóng" title="Đặt lại góc nhìn">Đặt lại</button>' +
+    '<span class="field-zoom-hint">Cuộn để phóng to · kéo để di chuyển</span>' +
+    '<button type="button" class="btn fullscreen-toggle" id="toggleFieldFullscreen" aria-pressed="false">⛶ Toàn màn hình</button>' +
+    '<span id="fullscreenStatus" role="status" aria-live="polite" hidden></span>';
   var scoreHeading = document.createElement('h2');
   scoreHeading.textContent = 'Điểm FTC trực tiếp';
   var plannerField = document.createElement('div');
   plannerField.id = 'plannerField';
   plannerField.appendChild(fieldSvg);
+  boardHead.appendChild(fieldMode);
   board.appendChild(plannerField);
   board.appendChild(fieldWrap);
+  board.appendChild(fieldTools);
   var sharedFieldLayout = document.createElement('div');
   sharedFieldLayout.className = 'shared-field-layout';
   var liveScore = document.createElement('div');
@@ -151,12 +165,10 @@
   dashboardScoreboard.appendChild(liveScore);
   boardWrap.insertBefore(sharedFieldLayout, board);
   sharedFieldLayout.appendChild(board);
-  driveCard.remove();
-  driveLayout.replaceChildren(driverStation);
   driveView.insertBefore(driveToolbar, driveLayout);
+  driveView.insertBefore(fieldControls, driveLayout);
+  driveCard.remove();
   driveView.classList.add('integrated-station');
-  boardWrap.insertBefore(fieldMode, sharedFieldLayout);
-  boardWrap.insertBefore(fieldControls, sharedFieldLayout);
   var watchPanel = document.querySelector('#watchPanel');
   if (!watchPanel) {
     throw new Error('Không thể đặt Trạm điều khiển: thiếu khu vực Xem trận đấu.');
@@ -173,6 +185,52 @@
   if (welcome) welcome.remove();
   document.body.dataset.fieldMode = 'ftc';
   document.body.dataset.appView = 'integrated';
+
+  var fullscreenButton = fieldTools.querySelector('#toggleFieldFullscreen');
+  var fullscreenStatus = fieldTools.querySelector('#fullscreenStatus');
+  function showFullscreenError(message) {
+    fullscreenStatus.textContent = message;
+    fullscreenStatus.hidden = false;
+  }
+  function syncFullscreenLayout() {
+    var expanded = document.fullscreenElement === boardWrap || boardWrap.classList.contains('is-expanded');
+    fullscreenButton.setAttribute('aria-pressed', String(expanded));
+    fullscreenButton.textContent = expanded ? 'Thu nhỏ' : '⛶ Toàn màn hình';
+    fullscreenStatus.hidden = true;
+    window.dispatchEvent(new Event('bbz-resize-field'));
+  }
+  fullscreenButton.addEventListener('click', function () {
+    if (document.fullscreenElement === boardWrap) {
+      document.exitFullscreen().then(syncFullscreenLayout).catch(function (error) {
+        showFullscreenError('Không thể thoát chế độ toàn màn hình: ' + error.message);
+      });
+      return;
+    }
+    if (boardWrap.classList.contains('is-expanded')) {
+      boardWrap.classList.remove('is-expanded');
+      syncFullscreenLayout();
+      return;
+    }
+    if (document.fullscreenElement) {
+      showFullscreenError('Hãy thoát chế độ toàn màn hình hiện tại trước.');
+      return;
+    }
+    if (boardWrap.requestFullscreen) {
+      boardWrap.requestFullscreen().then(syncFullscreenLayout).catch(function (error) {
+        showFullscreenError('Không thể mở toàn màn hình: ' + error.message);
+      });
+      return;
+    }
+    boardWrap.classList.add('is-expanded');
+    syncFullscreenLayout();
+  });
+  document.addEventListener('fullscreenchange', syncFullscreenLayout);
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && boardWrap.classList.contains('is-expanded') && !document.fullscreenElement) {
+      boardWrap.classList.remove('is-expanded');
+      syncFullscreenLayout();
+    }
+  });
 
   function setFieldMode(mode) {
     document.body.dataset.fieldMode = mode;

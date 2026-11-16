@@ -2319,6 +2319,74 @@ function resizeField() {
   const px = Math.round(Math.min(1400, w * Math.min(2, window.devicePixelRatio || 1)));
   if (cv.width !== px) { cv.width = px; cv.height = px; }
 }
+const fieldView = { zoom: 1, anchorX: 0.5, anchorY: 0.5, panX: 0, panY: 0 };
+function clampFieldPan() {
+  const limit = (fieldView.zoom - 1) * 0.45;
+  fieldView.panX = BBZ.clamp(fieldView.panX, -limit, limit);
+  fieldView.panY = BBZ.clamp(fieldView.panY, -limit, limit);
+}
+function updateFieldViewControls() {
+  const value = $('fieldZoomValue'), zoomIn = $('fieldZoomIn'), zoomOut = $('fieldZoomOut'), reset = $('fieldZoomReset');
+  if (!value || !zoomIn || !zoomOut || !reset) return;
+  value.textContent = Math.round(fieldView.zoom * 100) + '%';
+  zoomIn.disabled = fieldView.zoom >= 4;
+  zoomOut.disabled = fieldView.zoom <= 1;
+  reset.disabled = fieldView.zoom === 1 && fieldView.panX === 0 && fieldView.panY === 0;
+}
+function zoomFieldAt(x, y, factor) {
+  const oldZoom = fieldView.zoom, zoom = BBZ.clamp(oldZoom * factor, 1, 4);
+  if (zoom === oldZoom) return;
+  const ratio = zoom / oldZoom;
+  fieldView.panX = ratio * (fieldView.panX + (1 - oldZoom) * (fieldView.anchorX - x));
+  fieldView.panY = ratio * (fieldView.panY + (1 - oldZoom) * (fieldView.anchorY - y));
+  fieldView.zoom = zoom;
+  fieldView.anchorX = x;
+  fieldView.anchorY = y;
+  clampFieldPan();
+  updateFieldViewControls();
+}
+function wireFieldView() {
+  const canvas = $('field'), zoomIn = $('fieldZoomIn'), zoomOut = $('fieldZoomOut'), reset = $('fieldZoomReset');
+  if (!canvas || !zoomIn || !zoomOut || !reset) return;
+  const point = (event) => {
+    const rect = canvas.getBoundingClientRect();
+    return { x: BBZ.clamp((event.clientX - rect.left) / rect.width, 0, 1), y: BBZ.clamp((event.clientY - rect.top) / rect.height, 0, 1) };
+  };
+  zoomIn.addEventListener('click', () => zoomFieldAt(0.5, 0.5, 1.25));
+  zoomOut.addEventListener('click', () => zoomFieldAt(0.5, 0.5, 0.8));
+  reset.addEventListener('click', () => {
+    fieldView.zoom = 1; fieldView.anchorX = 0.5; fieldView.anchorY = 0.5; fieldView.panX = 0; fieldView.panY = 0;
+    updateFieldViewControls();
+  });
+  canvas.addEventListener('wheel', (event) => {
+    event.preventDefault();
+    const p = point(event);
+    zoomFieldAt(p.x, p.y, Math.exp(-event.deltaY * 0.0015));
+  }, { passive: false });
+  let drag = null;
+  const stopDrag = () => { drag = null; canvas.classList.remove('is-panning'); };
+  canvas.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0 || fieldView.zoom <= 1) return;
+    drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+    canvas.classList.add('is-panning');
+    try { canvas.setPointerCapture(event.pointerId); } catch (error) { /* pointer capture is optional */ }
+    event.preventDefault();
+  });
+  canvas.addEventListener('pointermove', (event) => {
+    if (!drag || drag.id !== event.pointerId) return;
+    const rect = canvas.getBoundingClientRect();
+    fieldView.panX += (event.clientX - drag.x) / rect.width;
+    fieldView.panY += (event.clientY - drag.y) / rect.height;
+    drag.x = event.clientX; drag.y = event.clientY;
+    clampFieldPan();
+    updateFieldViewControls();
+    event.preventDefault();
+  });
+  canvas.addEventListener('pointerup', stopDrag);
+  canvas.addEventListener('pointercancel', stopDrag);
+  canvas.addEventListener('lostpointercapture', stopDrag);
+  updateFieldViewControls();
+}
 let last = 0, acc = 0, hudAt = 0;
 function frame(ts) {
   window.requestAnimationFrame(frame);
@@ -2330,7 +2398,7 @@ function frame(ts) {
   if (n === 30) acc = 0;
   if (document.body.dataset.fieldMode === 'ftc' && $('fieldWrap').clientWidth) {
     if (!col) readColors();
-    BBZ.drawField($('field').getContext('2d'), world, $('field').width, col);
+    BBZ.drawField($('field').getContext('2d'), world, $('field').width, col, fieldView);
     if (ts - hudAt > 100) { hudAt = ts; updateHud(); }
   }
 }
@@ -2376,7 +2444,7 @@ async function init() {
   }
   readColors();
   world = new BBZ.World(state.robot);
-  wireInput(); wireEditor(); wireStation(); wireBuild();
+  wireInput(); wireEditor(); wireStation(); wireBuild(); wireFieldView();
   document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => showView(t.dataset.view)));
   renderProgramLists(); renderEditor(); renderStation(); rebuildHw(); renderLog(); clearError();
   showView((window.location.hash || '').replace('#', '') || 'drive', true);
